@@ -12,6 +12,8 @@ export class HomeComponent implements OnInit {
   public innerHeight: any;
   public triangle: any;
 
+  public title: string;
+
   constructor(private router: Router) {
     router.events.subscribe((val) => {
         // see also

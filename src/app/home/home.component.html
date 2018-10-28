@@ -1,24 +1,71 @@
 <!-- <div id="triangle" class="triangle"></div> -->
 <!-- <img id="img-1" class="img-1 img-fluid" src="../../assets/mountains.jpg"> -->
-<!-- <img id="triangle-img-2" class="triangle-img-2" src="../../assets/rural.jpg"> -->
+  <!-- <img id="triangle-img-2" class="triangle-img-2" src="../../assets/rural.jpg"> -->
 <!-- <div id="triangle2" class="triangle2"></div> -->
+<title>JobTrakMe</title>
 <div class="cutoff"></div>
 <div class="container-fluid home d-flex align-items-center">
-  <div class="align-items-center action-area">
-    <div class="container-fluid col-12 home-title">
-      <div class="row justify-content-center">
-        <h1>Jobtrakr</h1>
+  <div class="row col-12 outer">
+    <div class="align-items-center description-area-sm justify-content-center col-12 col-md-6">
+      <div class="container-fluid col-12">
+        <h1 id="logoTitle" class="logo-title">J</h1>
+      </div>
+      <!-- <img id="logo" class="" src="../../assets/logo-3.png"> -->
+    </div>
+    <div class="align-items-center action-area col-12 col-md-6">
+      <div class="container-fluid col-12 home-title">
+        <div class="row justify-content-center">
+          <h1>Sign Up</h1>
+        </div>
+      </div>
+      <div class="container-fluid col-12 home-buttons">
+        <form>
+          <div class="form-group">
+            <input id="emailInput" type="email" class="form-control" placeholder="E-mail">
+          </div>
+          <div class="form-group">
+            <input id="passwordInput" type="password" class="form-control" placeholder="Password">
+          </div>
+          <div class="form-group">
+            <input id="rePasswordInput" type="password" class="form-control" placeholder="Re-enter Password">
+          </div>
+          <div class="row">
+            <div class="form-group col-12 col-sm-6">
+              <input id="firstNameInput" type="text" class="form-control" placeholder="First Name">
+            </div>
+            <div class="form-group col-12 col-sm-6">
+              <input id="lastNameInput" type="text" class="form-control" placeholder="Last Name">
+            </div>
+          </div>
+        </form>
+        <div class="row justify-content-center">
+          <button routerLink="/login" class="btn btn-outline-light col-12 col-md-8">Login</button>
+        </div>
+        <!-- <div class="row justify-content-center">
+          <button routerLink="/signup" class="btn btn-outline-light col-12 col-sm-10">Sign Up</button>
+        </div> -->
+        <div class="row justify-content-center">
+          <button routerLink="/" class="btn btn-outline-light col-12 col-md-8">Demo</button>
+        </div>
       </div>
     </div>
-    <div class="container-fluid col-12 home-buttons">
-      <div class="row justify-content-center">
-        <button routerLink="/login" class="btn btn-outline-light col-12 col-sm-10">Login</button>
+    <div class="align-items-center description-area-md justify-content-center col-12 col-md-6">
+      <div class="col-12">
+        <h1 id="logoTitle" class="logo-title">J</h1>
       </div>
-      <div class="row justify-content-center">
-        <button routerLink="/signup" class="btn btn-outline-light col-12 col-sm-10">Sign Up</button>
-      </div>
-      <div class="row justify-content-center">
-        <button routerLink="/" class="btn btn-outline-light col-12 col-sm-10">Demo</button>
+      <div class="info">
+        <div class="row">
+          <fa-icon class="offset-3 col-2" icon="layer-group" size="2x"></fa-icon>
+          <h4 class="col-6">Track your applications.</h4>
+        </div>
+        <div class="row">
+          <fa-icon class="offset-3 col-2" icon="user-tie" size="2x"></fa-icon>
+          <h4 class="col-6">Track your interviews.</h4>
+        </div>
+        <div class="row">
+          <fa-icon class="offset-3 col-2" icon="smile-beam" size="2x"></fa-icon>
+          <h4 class="col-6">Track your life.</h4>
+        </div>
       </div>
     </div>
   </div>

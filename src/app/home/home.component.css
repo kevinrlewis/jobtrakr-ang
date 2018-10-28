@@ -1,22 +1,85 @@
+::placeholder {
+  color: #FFFFFF;
+  opacity: 0.65;
+}
+
+/* fa-icon {
+  text-align: right;
+} */
+
+.outer {
+  margin: 0;
+}
+
+.info > .row {
+  margin-bottom: 2rem;
+}
+
+.info > .row > fa-icon {
+  border-right: 2px solid #FFFFFF;
+  text-align: right;
+}
+
+.info > .row > h4 {
+  font-size: 125%;
+}
+
+.logo-title {
+  color: #FFFFFF;
+  font-family: 'adamas-regular';
+  /* position: absolute; */
+}
+
 .action-area {
-  background-color: rgb(54, 73, 78, 0.65);
-  /*border-radius: 0.25em;*/
-  /*width: 50%;*/
-  height: 100%
+  background-color: rgb(54, 73, 78, 0.25);
+  height: 100%;
+}
+
+.outer {
+  height: 100%;
+}
+
+.description-area-md {
+  background-color: rgb(54, 73, 78, 1);
+}
+
+.form-control {
+  border: 0;
+  border-bottom: 1px solid #FFFFFF;
+  border-radius: 0;
+  background-color: transparent;
+  color: #FFFFFF;
+}
+
+.form-control:focus {
+  box-shadow: -0.2rem 0 0 0 rgba(0,255,0,.25)
+}
+
+form > .form-group {
+  margin-left: 0;
+  margin-right: 0;
+}
+
+fa-icon {
+  color: #FFFFFF;
 }
 
 .home-title {
   color: #FFFFFF;
+  margin-top: 2rem;
 }
-/*
-.cutoff {
-  position: fixed;
-  left: 0;
-  height: 100%;
-  width: 40%;
-  background-color: #36494E;
-  z-index: -1;
-}*/
+
+.btn {
+  border-radius: 0;
+}
+
+.info {
+  text-align: left;
+}
+
+.info > p {
+  font-size: 200%;
+}
 
 @media (max-width: 576px) {
   .home {
@@ -30,13 +93,30 @@
 
   .action-area {
     width: 100%;
+    /* margin-top: 50%; */
+  }
+
+  .logo-title {
+    top: 50%;
+    transform: translateY(15%);
+    font-size: 1500%;
+  }
+
+  .description-area-sm {
+    display: block;
+    text-align: center;
+  }
+
+  .description-area-md {
+    display: none;
   }
 }
 
 /*sm*/
 @media (min-width: 576px) {
   .home {
-    height: 100%;
+    width: 100%;
+    /*padding: 0;*/
   }
 
   .home-buttons>div {
@@ -44,13 +124,56 @@
   }
 
   .action-area {
-    width: 50%;
+    width: 100%;
+    /* margin-top: 50%; */
+  }
+
+  .logo-title {
+    top: 50%;
+    transform: translateY(15%);
+    font-size: 1800%;
+  }
+
+  .description-area-sm {
+    display: block;
+    text-align: center;
+  }
+
+  .description-area-md {
+    display: none;
+  }
+
+  .description-area-md * {
+    color: #FFFFFF;
   }
 }
 
 /*md*/
 @media (min-width: 768px) {
+  .home {
+    height: 100%;
+    width: 100%;
+  }
 
+  .action-area {
+    width: 100%;
+    margin-top: 0;
+  }
+
+  .description-area-sm {
+    display: none;
+  }
+
+  .description-area-md {
+    display: block;
+    width: 50%;
+    height: 100%;
+    text-align: center;
+  }
+
+  .logo-title {
+    font-size: 2000%;
+  }
 }
 
 /*lg*/
