@@ -19,34 +19,36 @@
         </div>
       </div>
       <div class="container-fluid col-12 home-buttons">
-        <form>
+        <form [formGroup]="signupForm" (ngSubmit)="onSubmit()">
           <div class="form-group">
-            <input id="emailInput" type="email" class="form-control" placeholder="E-mail">
+            <input id="email" type="text" class="form-control" placeholder="E-mail" formControlName="email">
           </div>
           <div class="form-group">
-            <input id="passwordInput" type="password" class="form-control" placeholder="Password">
+            <input id="passwordInput" type="password" class="form-control" placeholder="Password" formControlName="password">
           </div>
           <div class="form-group">
-            <input id="rePasswordInput" type="password" class="form-control" placeholder="Re-enter Password">
+            <input id="rePasswordInput" type="password" class="form-control" placeholder="Re-enter Password" formControlName="rePassword">
           </div>
           <div class="row">
             <div class="form-group col-12 col-sm-6">
-              <input id="firstNameInput" type="text" class="form-control" placeholder="First Name">
+              <input id="firstNameInput" type="text" class="form-control" placeholder="First Name" formControlName="firstName">
             </div>
             <div class="form-group col-12 col-sm-6">
-              <input id="lastNameInput" type="text" class="form-control" placeholder="Last Name">
+              <input id="lastNameInput" type="text" class="form-control" placeholder="Last Name" formControlName="lastName">
             </div>
           </div>
+          <div class="row justify-content-center">
+            <button type="submit" class="btn btn-outline-light col-12 col-md-8">Sign Up</button>
+          </div>
+          <p style="color: white;">Form Status: {{ signupForm.status }}</p>
+          <hr style="background-color: #FFFFFF;">
+          <div class="row justify-content-center" style="padding-bottom: 1rem;">
+            <button routerLink="/login" class="btn btn-outline-light col-12 col-md-8">Login</button>
+          </div>
+          <div class="row justify-content-center">
+            <button routerLink="/" class="btn btn-outline-light col-12 col-md-8">Demo</button>
+          </div>
         </form>
-        <div class="row justify-content-center">
-          <button routerLink="/login" class="btn btn-outline-light col-12 col-md-8">Login</button>
-        </div>
-        <!-- <div class="row justify-content-center">
-          <button routerLink="/signup" class="btn btn-outline-light col-12 col-sm-10">Sign Up</button>
-        </div> -->
-        <div class="row justify-content-center">
-          <button routerLink="/" class="btn btn-outline-light col-12 col-md-8">Demo</button>
-        </div>
       </div>
     </div>
     <div class="align-items-center description-area-md justify-content-center col-12 col-md-6">
@@ -56,11 +58,11 @@
       <div class="info">
         <div class="row">
           <fa-icon class="offset-3 col-2" icon="layer-group" size="2x"></fa-icon>
-          <h4 class="col-6">Track your applications.</h4>
+          <h4 class="col-6">Track your job applications.</h4>
         </div>
         <div class="row">
           <fa-icon class="offset-3 col-2" icon="user-tie" size="2x"></fa-icon>
-          <h4 class="col-6">Track your interviews.</h4>
+          <h4 class="col-6">Track your job interviews.</h4>
         </div>
         <div class="row">
           <fa-icon class="offset-3 col-2" icon="smile-beam" size="2x"></fa-icon>
