@@ -8,6 +8,14 @@ a:hover {
   text-decoration: none;
 }
 
+.title {
+  color: #FFFFFF;
+  font-family: 'monospace';
+  text-align: center;
+  transform: translateY(-50%);
+  font-size: 300%;
+}
+
 .logo-title {
   color: #FFFFFF;
   font-family: 'adamas-regular';
@@ -49,14 +57,20 @@ a:hover {
 /*sm*/
 @media (min-width: 576px) {
   .logo-title {
-    font-size: 1800%;
+    font-size: 1500%;
+  }
+  .logo {
+    padding-top: 15%;
   }
 }
 
 /*md*/
 @media (min-width: 768px) {
   .logo-title {
-    font-size: 2000%;
+    font-size: 1500%;
+  }
+  .logo {
+    padding-top: 10%;
   }
 }
 
