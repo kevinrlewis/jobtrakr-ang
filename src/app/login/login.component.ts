@@ -14,6 +14,10 @@ export class LoginComponent implements OnInit {
   email:string;
   password:string;
 
+  displayMessage:boolean;
+  validationMessage:string[];
+
+
   constructor(private router: Router, private fb: FormBuilder, private http: HttpClient) {
     router.events.subscribe((val) => {
         // document.body.style.background = 'rgb(54, 73, 78, 1)';
@@ -32,7 +36,38 @@ export class LoginComponent implements OnInit {
 
   onSubmit() {
     // validate form
-    console.log(this.loginForm.value);
-    // attempt to login
+    // console.log(this.loginForm.value);
+    var validated = this.validateLoginForm(this.loginForm);
+    console.log(validated);
+
+    //if valid, attempt to login
+    if (validated.status) {
+      // attempt to login
+    } else {
+      // display message
+      this.displayMessage = true;
+      this.validationMessage = validated.message;
+    }
+  }
+
+  validateLoginForm(l:FormGroup) {
+    // variables to return
+    let messageList: Array<string> = [];
+    let status: boolean = true;
+
+    // check if the email is invalid
+    if (l.get('email').invalid) {
+      status = false;
+      messageList.push('Email invalid.');
+    }
+
+    // check if password is invalid
+    if (l.get('password').invalid) {
+      status = false;
+      messageList.push('Password invalid.');
+    }
+
+    // return object
+    return { status: status, message: messageList };
   }
 }
