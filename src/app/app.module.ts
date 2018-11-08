@@ -20,10 +20,18 @@ import { PageNotFoundComponent } from './pagenotfound/pagenotfound.component';
 import { ProfileComponent } from './profile/profile.component';
 import { HomeComponent } from './home/home.component';
 
+import { AuthGuard } from './auth/auth.guard';
+
 const appRoutes: Routes = [
   { path: '', component: HomeComponent, data: { title: 'JobTrakMe' } },
   { path: 'login', component: LoginComponent },
-  { path: 'profile/:id', component: ProfileComponent },
+  { path: 'profile/:id',
+    component: ProfileComponent,
+    // children: [
+    //   { path: '', pathMatch: 'full'}
+    // ],
+    // canActivate: [AuthGuard]
+  },
   { path: '**', component: PageNotFoundComponent }
 ];
 
