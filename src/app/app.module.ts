@@ -23,16 +23,18 @@ import { HomeComponent } from './home/home.component';
 
 import { AuthGuard } from './auth/auth.guard';
 import { AuthService } from './auth/auth.service';
+import { CookieService } from 'ngx-cookie-service';
+import { JwtHelperService } from '@auth0/angular-jwt';
 
 const appRoutes: Routes = [
   { path: '', component: HomeComponent, data: { title: 'JobTrakMe' } },
   { path: 'login', component: LoginComponent },
   { path: 'profile/:id',
     component: ProfileComponent,
-    // children: [
-    //   { path: '', pathMatch: 'full'}
-    // ],
-    // canActivate: [AuthGuard]
+    children: [
+      { path: '', redirectTo: '', pathMatch: 'full'}
+    ],
+    canActivate: [AuthGuard]
   },
   { path: '**', component: PageNotFoundComponent }
 ];
@@ -63,7 +65,7 @@ library.add(faSmileBeam);
     ReactiveFormsModule,
     // HttpModule
   ],
-  providers: [AuthService],
+  providers: [AuthService, CookieService, JwtHelperService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

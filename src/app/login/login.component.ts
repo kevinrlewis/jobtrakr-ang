@@ -3,6 +3,7 @@ import { Router, RouterEvent, NavigationEnd } from '@angular/router';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { AuthService } from './../auth/auth.service';
+import { CookieService } from 'ngx-cookie-service';
 
 @Component({
   selector: 'app-login',
@@ -19,7 +20,7 @@ export class LoginComponent implements OnInit {
   validationMessage:string[];
 
 
-  constructor(private router: Router, private fb: FormBuilder, private http: HttpClient, public auth: AuthService) {
+  constructor(private router: Router, private fb: FormBuilder, private http: HttpClient, public auth: AuthService, private cookieService: CookieService) {
     router.events.subscribe((val) => {
         // document.body.style.background = 'rgb(54, 73, 78, 1)';
         document.body.style.background = 'url(\'../../assets/mountains.jpg\') no-repeat center center fixed';
@@ -45,7 +46,9 @@ export class LoginComponent implements OnInit {
       // attempt to login
       var loginAttempt = this.auth.login(this.loginForm.get('email').value, this.loginForm.get('password').value);
       loginAttempt.subscribe(data => {
-        console.log(data);
+        // console.log(data);
+        // navigate to profile url based on their id
+        this.router.navigateByUrl('/profile/' + data.id.toString());
       });
     } else {
       // display message

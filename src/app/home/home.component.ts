@@ -1,7 +1,16 @@
 import { Component, OnInit, HostListener } from '@angular/core';
 import { Router, RouterEvent, NavigationEnd } from '@angular/router';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpClientModule, HttpHeaders } from '@angular/common/http';
+
+const httpOptions = {
+  headers: new HttpHeaders({
+    'Content-Type': 'application/json',
+    // 'Access-Control-Allow-Credentials': 'true'
+  }),
+  // withCredentials: true,
+  // credentials: 'include'
+};
 
 @Component({
   selector: 'app-home',
@@ -25,8 +34,6 @@ export class HomeComponent implements OnInit {
   firstname:string;
   lastname:string;
 
-  attempt:signupObject;
-
   displayMessage:boolean;
   validationMessage:string[];
 
@@ -37,7 +44,7 @@ export class HomeComponent implements OnInit {
       document.body.style.background = 'url(\'../../assets/mountains.jpg\') no-repeat center center fixed';
       document.body.style.backgroundSize = 'cover';
       document.body.style.height = '100%';
-      console.log(val instanceof NavigationEnd);
+      // console.log(val instanceof NavigationEnd);
     });
   }
 
@@ -59,8 +66,9 @@ export class HomeComponent implements OnInit {
     console.log(validated);
     // if valid, attempt to signup
     if (validated.status) {
+      // console.log(this.signupForm.get('email').value);
       // attempt to sign up
-      this.signUp(this.signupForm.value);
+      this.signUp(this.signupForm.get('email').value, this.signupForm.get('password').value, this.signupForm.get('firstName').value, this.signupForm.get('lastName').value);
     } else {
       // display message
       this.displayMessage = true;
@@ -109,16 +117,28 @@ export class HomeComponent implements OnInit {
     return { status: status, message: messageList };
   }
 
-  private signUp(formValues:object) {
-    // console.log(formValues);
+  private signUp(email:string, password:string, firstname:string, lastname:string) {
+    // console.log(email, password, firstname, lastname);
     // call api
+    this.http.post<SignUpResponse>(
+      'api/signup',
+      {
+        'email': email,
+        'password': password,
+        'firstname': firstname,
+        'lastname': lastname
+      },
+      httpOptions
+    )
+      .subscribe(data => {
+        console.log(data);
+      });
   }
 }
 
-export interface signupObject {
+export interface SignUpResponse {
   email: string,
   password: string,
-  repassword: string,
   firstname: string,
   lastname: string
 }

@@ -1,42 +1,57 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpClientModule, HttpHeaders } from '@angular/common/http';
-// import { JwtHelper } from '@auth0/angular-jwt';
+import { JwtHelperService } from '@auth0/angular-jwt';
+import { CookieService } from 'ngx-cookie-service';
+import * as jwt_decode from "jwt-decode";
 
 const httpOptions = {
   headers: new HttpHeaders({
-    'Content-Type': 'application/json'
-  })
+    'Content-Type': 'application/json',
+    // 'Access-Control-Allow-Credentials': 'true'
+  }),
+  // withCredentials: true,
+  // credentials: 'include'
 };
 
 @Injectable()
 export class AuthService {
 
-  constructor(private http: HttpClient) {}
+  jwtHelper:JwtHelperService;
+
+  constructor(private http: HttpClient, private cookieService: CookieService) {
+    this.jwtHelper = new JwtHelperService();
+  }
 
   // ...
-  // public isAuthenticated(): boolean {
-  //
-  //   const token = localStorage.getItem('token');
-  //
-  //   // Check whether the token is expired and return
-  //   // true or false
-  //   // return !this.jwtHelper.isTokenExpired(token);
-  //   return true;
-  // }
+  public isAuthenticated(): boolean {
+
+    // get token
+    const token = this.cookieService.get('SESSIONID');
+
+    // check if token is null, empty, or undefined
+    if(token === null || token === "" || token === undefined) {
+      return false;
+    }
+
+    // check and return if the token has expired
+    return !this.jwtHelper.isTokenExpired(token);
+  }
 
   public login(email:string, password:string) {
     // look into piping for error handling
     return this.http.post<LoginResponse>(
-      'http://localhost:3000/api/login',
+      '/api/login',
       {
         'email': email,
         'password': password
-      }
+      },
+      httpOptions
     );
   }
 
 }
 
 interface LoginResponse {
-  message: string
+  message: string,
+  id: number
 }
