@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router, RouterEvent, NavigationEnd } from '@angular/router';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
+import { AuthService } from './../auth/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -18,7 +19,7 @@ export class LoginComponent implements OnInit {
   validationMessage:string[];
 
 
-  constructor(private router: Router, private fb: FormBuilder, private http: HttpClient) {
+  constructor(private router: Router, private fb: FormBuilder, private http: HttpClient, public auth: AuthService) {
     router.events.subscribe((val) => {
         // document.body.style.background = 'rgb(54, 73, 78, 1)';
         document.body.style.background = 'url(\'../../assets/mountains.jpg\') no-repeat center center fixed';
@@ -38,11 +39,14 @@ export class LoginComponent implements OnInit {
     // validate form
     // console.log(this.loginForm.value);
     var validated = this.validateLoginForm(this.loginForm);
-    console.log(validated);
 
     //if valid, attempt to login
     if (validated.status) {
       // attempt to login
+      var loginAttempt = this.auth.login(this.loginForm.get('email').value, this.loginForm.get('password').value);
+      loginAttempt.subscribe(data => {
+        console.log(data);
+      });
     } else {
       // display message
       this.displayMessage = true;

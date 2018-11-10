@@ -4,6 +4,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
+// import { HttpModule } from '@angular/http';
 
 // icons
 import { library } from '@fortawesome/fontawesome-svg-core';
@@ -21,6 +22,7 @@ import { ProfileComponent } from './profile/profile.component';
 import { HomeComponent } from './home/home.component';
 
 import { AuthGuard } from './auth/auth.guard';
+import { AuthService } from './auth/auth.service';
 
 const appRoutes: Routes = [
   { path: '', component: HomeComponent, data: { title: 'JobTrakMe' } },
@@ -58,9 +60,10 @@ library.add(faSmileBeam);
     FontAwesomeModule,
     HttpClientModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    // HttpModule
   ],
-  providers: [],
+  providers: [AuthService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
