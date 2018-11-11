@@ -21,8 +21,8 @@ export class ProfileComponent implements OnInit {
   }
 
   ngOnInit() {
-    // const token = this.cookieService.get('SESSIONID');
-    // console.log("cookies: ", this.cookieService.getAll());
+    const token = this.cookieService.get('SESSIONID');
+    console.log("cookies: ", this.cookieService.getAll());
   }
 
 }

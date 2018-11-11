@@ -30,8 +30,11 @@ export class AuthService {
 
     // check if token is null, empty, or undefined
     if(token === null || token === "" || token === undefined) {
+      console.log('token is null, empty, or undefined');
       return false;
     }
+
+    console.log('isTokenExpired: ', this.jwtHelper.isTokenExpired(token))
 
     // check and return if the token has expired
     return !this.jwtHelper.isTokenExpired(token);

@@ -132,13 +132,17 @@ export class HomeComponent implements OnInit {
     )
       .subscribe(data => {
         console.log(data);
+        console.log('/profile/' + data.data.user_id.toString());
+        this.router.navigateByUrl('/profile/' + data.data.user_id.toString());
       });
   }
 }
 
 export interface SignUpResponse {
-  email: string,
-  password: string,
-  firstname: string,
-  lastname: string
+  message: string,
+  data: {
+    user_id: string,
+    firstname: string,
+    lastname: string
+  }
 }

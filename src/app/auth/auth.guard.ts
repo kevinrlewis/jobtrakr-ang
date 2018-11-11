@@ -14,12 +14,14 @@ export class AuthGuard implements CanActivate {
 
   canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
     const token = this.cookieService.get('SESSIONID');
-    // console.log(parseInt(next.url[1].path), ' !== ', parseInt(jwt_decode(token).sub));
+
+    console.log('isAuthenticated: ', this.auth.isAuthenticated());
     if (!this.auth.isAuthenticated()) {
       this.router.navigate(['login']);
       return false;
     }
 
+    console.log(next.url[1].path, ' !== ', jwt_decode(token).sub);
     if(next.url[1].path !== jwt_decode(token).sub) {
       this.router.navigate(['profile/' + jwt_decode(token).sub])
       return false;
