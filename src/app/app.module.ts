@@ -22,13 +22,17 @@ import { ProfileComponent } from './profile/profile.component';
 import { HomeComponent } from './home/home.component';
 
 import { AuthGuard } from './auth/auth.guard';
+import { LoginGuard } from './login/login.guard';
 import { AuthService } from './auth/auth.service';
 import { CookieService } from 'ngx-cookie-service';
 import { JwtHelperService } from '@auth0/angular-jwt';
 
 const appRoutes: Routes = [
   { path: '', component: HomeComponent, data: { title: 'JobTrakMe' } },
-  { path: 'login', component: LoginComponent },
+  { path: 'login',
+    component: LoginComponent,
+    canActivate: [LoginGuard]
+  },
   { path: 'profile/:id',
     component: ProfileComponent,
     children: [

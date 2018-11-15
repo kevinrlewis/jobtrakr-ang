@@ -1,33 +1,26 @@
 import { Injectable } from '@angular/core';
 import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, Router } from '@angular/router';
 import { Observable } from 'rxjs';
-import { AuthService } from './auth.service';
+import { AuthService } from './../auth/auth.service';
 import { CookieService } from 'ngx-cookie-service';
 import * as jwt_decode from "jwt-decode";
 
 @Injectable({
   providedIn: 'root'
 })
-export class AuthGuard implements CanActivate {
+export class LoginGuard implements CanActivate {
 
   constructor(public router: Router, private auth: AuthService, private cookieService: CookieService) {}
 
   canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
     const token = this.cookieService.get('SESSIONID');
 
-    // verify that the user is authenticated
-    // if not authenticated then redirect to login page
-    if (!this.auth.isAuthenticated()) {
-      this.router.navigate(['login']);
-      return false;
-    }
-
-    // if the path does not equal the json web token then
-    // redirect to the correct profile
-    if(next.url[1].path !== jwt_decode(token).sub) {
+    // console.log('profile/' + jwt_decode(token).sub);
+    if(this.auth.isAuthenticated()) {
       this.router.navigate(['profile/' + jwt_decode(token).sub]);
       return false;
     }
+
     return true;
   }
 }
