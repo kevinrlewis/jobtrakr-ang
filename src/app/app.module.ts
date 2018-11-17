@@ -26,6 +26,10 @@ import { LoginGuard } from './login/login.guard';
 import { AuthService } from './auth/auth.service';
 import { CookieService } from 'ngx-cookie-service';
 import { JwtHelperService } from '@auth0/angular-jwt';
+import { OpportunitiesComponent } from './profile/opportunities/opportunities.component';
+import { PhonescreensComponent } from './profile/phonescreens/phonescreens.component';
+import { InterviewsComponent } from './profile/interviews/interviews.component';
+import { OffersComponent } from './profile/offers/offers.component';
 
 const appRoutes: Routes = [
   { path: '', component: HomeComponent, data: { title: 'JobTrakMe' } },
@@ -55,7 +59,11 @@ library.add(faSmileBeam);
     LoginComponent,
     PageNotFoundComponent,
     ProfileComponent,
-    HomeComponent
+    HomeComponent,
+    OpportunitiesComponent,
+    PhonescreensComponent,
+    InterviewsComponent,
+    OffersComponent
   ],
   imports: [
     BrowserModule,

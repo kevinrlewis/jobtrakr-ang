@@ -27,18 +27,25 @@ export class ProfileComponent implements OnInit {
   firstname: string;
   lastname: string;
 
+  opportunities_active: boolean;
+  phone_screens_active: boolean;
+  interviews_active: boolean;
+  offers_active: boolean;
+
   constructor(private http: HttpClient, private cookieService: CookieService, private router: Router) {
     router.events.subscribe((val) => {
         // document.body.style.background = 'rgb(54, 73, 78, 1)';
-        document.body.style.background = 'url(\'../../assets/mountains.jpg\') no-repeat center center fixed';
-        document.body.style.backgroundSize = 'cover';
-        document.body.style.height = '100%';
+        // document.body.style.background = 'url(\'../../assets/mountains.jpg\') no-repeat center center fixed';
+        // document.body.style.backgroundSize = 'cover';
+        // document.body.style.height = '100%';
     });
   }
 
   ngOnInit() {
     const token = this.cookieService.get('SESSIONID');
     // console.log("cookies: ", this.cookieService.getAll());
+
+    this.setInitVariables();
 
     this.id = jwt_decode(token).sub.toString();
 
@@ -52,6 +59,26 @@ export class ProfileComponent implements OnInit {
       this.firstname = data.data.firstname;
       this.lastname = data.data.lastname
     });
+  }
+
+  setInitVariables() {
+    this.opportunities_active = false;
+    this.phone_screens_active = false;
+    this.interviews_active = false;
+    this.offers_active = false;
+  }
+
+  toggleOpportunitiesActive() {
+    this.opportunities_active = !this.opportunities_active;
+    console.log('opportunities_active: ', this.opportunities_active);
+  }
+
+  togglePhoneScreensActive() {
+    this.phone_screens_active = !this.phone_screens_active;
+  }
+
+  isSubComponentActive() {
+    return (this.opportunities_active || this.phone_screens_active || this.interviews_active || this.offers_active);
   }
 
 }
