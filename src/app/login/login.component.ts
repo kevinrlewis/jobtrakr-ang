@@ -48,7 +48,7 @@ export class LoginComponent implements OnInit {
       loginAttempt.subscribe(data => {
         // console.log(data);
         // navigate to profile url based on their id
-        this.router.navigateByUrl('/profile/' + data.id.toString());
+        this.router.navigateByUrl('/manage/' + data.id.toString());
       });
     } else {
       // display message

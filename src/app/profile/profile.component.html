@@ -1,36 +1,14 @@
 <div class="container">
-  <div class="row">
-    <h4 class="title col-12">JobTrakMe</h4>
-  </div>
-  <div class="row">
-    <h5 class="col-4">{{firstname}} {{lastname}}</h5>
-    <button class="btn offset-6 col-2">Logout</button>
-  </div>
+  <app-headerbar [name]="firstname + ' ' + lastname"></app-headerbar>
   <br>
-  <app-opportunities *ngIf="opportunities_active"></app-opportunities>
-  <app-phonescreens *ngIf="phone_screens_active"></app-phonescreens>
-  <app-interviews *ngIf="interviews_active"></app-interviews>
-  <app-offers *ngIf="offers_active"></app-offers>
-  <div class="buttons-section" *ngIf="!isSubComponentActive()">
-    <div class="row section-button">
-      <button class="btn col-12" (click)="toggleOpportunitiesActive()">
-        <span>Opportunities</span>
-      </button>
+  <div class="sharing settings">
+    <div class="row">
+      <h3>Sharing</h3>
     </div>
-    <div class="row section-button">
-      <button class="btn col-12">
-        <span>Phone Screens</span>
-      </button>
-    </div>
-    <div class="row section-button">
-      <button class="btn col-12">
-        <span>Interviews</span>
-      </button>
-    </div>
-    <div class="row section-button">
-      <button class="btn col-12">
-        <span>Offers</span>
-      </button>
+  </div>
+  <div class="edit settings">
+    <div class="row">
+      <h3>Edit Profile</h3>
     </div>
   </div>
 </div>

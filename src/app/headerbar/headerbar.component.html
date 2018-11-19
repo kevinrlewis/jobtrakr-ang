@@ -1,0 +1,20 @@
+<div class="row">
+  <h4 class="title col-12">JobTrakMe</h4>
+</div>
+<div class="row nav-row">
+  <nav class="navbar col-12">
+    <a class="navbar-brand name">{{name}}</a>
+    <!-- <small>{{name}}</small> -->
+    <ul class="nav justify-content-end">
+      <li class="nav-item active">
+        <a class="nav-link" (click)="manageClick()">Manage</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" (click)="settingsClick()">Settings</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" (click)="logoutClick()">Logout</a>
+      </li>
+    </ul>
+  </nav>
+</div>

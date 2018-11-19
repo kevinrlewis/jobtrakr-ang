@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { PhonescreensComponent } from './phonescreens.component';
+import { HeaderbarComponent } from './headerbar.component';
 
-describe('PhonescreensComponent', () => {
-  let component: PhonescreensComponent;
-  let fixture: ComponentFixture<PhonescreensComponent>;
+describe('HeaderbarComponent', () => {
+  let component: HeaderbarComponent;
+  let fixture: ComponentFixture<HeaderbarComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ PhonescreensComponent ]
+      declarations: [ HeaderbarComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(PhonescreensComponent);
+    fixture = TestBed.createComponent(HeaderbarComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

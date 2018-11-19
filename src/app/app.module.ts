@@ -6,15 +6,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 // import { HttpModule } from '@angular/http';
 
-// icons
-import { library } from '@fortawesome/fontawesome-svg-core';
-import { faUser } from '@fortawesome/free-solid-svg-icons';
-import { faMountain } from '@fortawesome/free-solid-svg-icons';
-import { faLayerGroup } from '@fortawesome/free-solid-svg-icons';
-import { faUserTie } from '@fortawesome/free-solid-svg-icons';
-import { faSmileBeam } from '@fortawesome/free-solid-svg-icons';
-
-
 import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
 import { PageNotFoundComponent } from './pagenotfound/pagenotfound.component';
@@ -26,10 +17,12 @@ import { LoginGuard } from './login/login.guard';
 import { AuthService } from './auth/auth.service';
 import { CookieService } from 'ngx-cookie-service';
 import { JwtHelperService } from '@auth0/angular-jwt';
-import { OpportunitiesComponent } from './profile/opportunities/opportunities.component';
-import { PhonescreensComponent } from './profile/phonescreens/phonescreens.component';
-import { InterviewsComponent } from './profile/interviews/interviews.component';
-import { OffersComponent } from './profile/offers/offers.component';
+import { OpportunitiesComponent } from './manage/opportunities/opportunities.component';
+import { InterviewsComponent } from './manage/interviews/interviews.component';
+import { OffersComponent } from './manage/offers/offers.component';
+import { ManageComponent } from './manage/manage.component';
+import { AppliedComponent } from './manage/applied/applied.component';
+import { HeaderbarComponent } from './headerbar/headerbar.component';
 
 const appRoutes: Routes = [
   { path: '', component: HomeComponent, data: { title: 'JobTrakMe' } },
@@ -44,14 +37,15 @@ const appRoutes: Routes = [
     ],
     canActivate: [AuthGuard]
   },
+  { path: 'manage/:id',
+    component: ManageComponent,
+    children: [
+      { path: '', redirectTo: '', pathMatch: 'full'}
+    ],
+    canActivate: [AuthGuard]
+  },
   { path: '**', component: PageNotFoundComponent }
 ];
-
-library.add(faUser);
-library.add(faMountain);
-library.add(faLayerGroup);
-library.add(faUserTie);
-library.add(faSmileBeam);
 
 @NgModule({
   declarations: [
@@ -61,9 +55,11 @@ library.add(faSmileBeam);
     ProfileComponent,
     HomeComponent,
     OpportunitiesComponent,
-    PhonescreensComponent,
     InterviewsComponent,
-    OffersComponent
+    OffersComponent,
+    ManageComponent,
+    AppliedComponent,
+    HeaderbarComponent
   ],
   imports: [
     BrowserModule,

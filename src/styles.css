@@ -2,3 +2,7 @@
 .btn {
   border-radius: 0;
 }
+
+a {
+  cursor: pointer;
+}

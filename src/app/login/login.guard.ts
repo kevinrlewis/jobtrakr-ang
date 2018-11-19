@@ -17,7 +17,7 @@ export class LoginGuard implements CanActivate {
 
     // console.log('profile/' + jwt_decode(token).sub);
     if(this.auth.isAuthenticated()) {
-      this.router.navigate(['profile/' + jwt_decode(token).sub]);
+      this.router.navigate(['manage/' + jwt_decode(token).sub]);
       return false;
     }
 

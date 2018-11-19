@@ -1,0 +1,41 @@
+<div class="container">
+  <app-headerbar [name]="firstname + ' ' + lastname"></app-headerbar>
+  <!-- <div class="row">
+    <h5 class="col-4">{{firstname}} {{lastname}}
+      <a class="btn btn-sm btn-outline-info" (click)="settingsClicked()">settings</a>
+    </h5>
+    <button class="btn btn-outline-danger offset-6 col-2">Logout</button>
+  </div> -->
+  <app-opportunities *ngIf="opportunities_active"></app-opportunities>
+  <app-applied *ngIf="applied_active"></app-applied>
+  <app-interviews *ngIf="interviews_active"></app-interviews>
+  <app-offers *ngIf="offers_active"></app-offers>
+  <div class="options row justify-content-end" *ngIf="!isSubComponentActive()">
+    <!-- <a class="offset-10 col-1 text-right">buttons</a>
+    <a class="col-1 text-left">plan</a> -->
+    <a class="col-auto text-right"><fa-icon [icon]="faBars"></fa-icon></a>
+    <a class="col-auto text-left"><fa-icon [icon]="faTh"></fa-icon></a>
+  </div>
+  <div class="buttons-section" *ngIf="!isSubComponentActive() || show_buttons">
+    <div class="row section-button">
+      <button class="btn col-12" (click)="toggleOpportunitiesActive()">
+        <span id="opportunitiesSpan">Opportunities</span>
+      </button>
+    </div>
+    <div class="row section-button">
+      <button class="btn col-12" (click)="toggleAppliedActive()">
+        <span id="appliedSpan">Applied</span>
+      </button>
+    </div>
+    <div class="row section-button">
+      <button class="btn col-12" (click)="toggleInterviewsActive()">
+        <span id="interviewsSpan">Interviews</span>
+      </button>
+    </div>
+    <div class="row section-button">
+      <button class="btn col-12" (click)="toggleOffersActive()">
+        <span id="offersSpan">Offers</span>
+      </button>
+    </div>
+  </div>
+</div>

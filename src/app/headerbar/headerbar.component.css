@@ -1,0 +1,24 @@
+.title {
+  /* color: #FFFFFF; */
+  font-family: 'monospace';
+  text-align: center;
+  margin-top: 1rem;
+  /* border-bottom: 1px solid #000000; */
+}
+
+.name {
+  font-family: 'monospace';
+}
+
+.nav-row {
+  border-bottom: 1px solid #000000;
+  margin-bottom: 0.5rem;
+}
+
+.navbar {
+  padding: 0;
+}
+
+.nav-link:hover {
+  cursor: pointer;
+}

@@ -132,8 +132,8 @@ export class HomeComponent implements OnInit {
     )
       .subscribe(data => {
         console.log(data);
-        console.log('/profile/' + data.data.user_id.toString());
-        this.router.navigateByUrl('/profile/' + data.data.user_id.toString());
+        console.log('/manage/' + data.data.user_id.toString());
+        this.router.navigateByUrl('/manage/' + data.data.user_id.toString());
       });
   }
 }

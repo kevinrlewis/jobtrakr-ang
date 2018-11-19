@@ -1,0 +1,101 @@
+.options > a {
+  padding: 0.25rem;
+}
+
+.options > .text-right {
+  border-right: 1px solid #000000;
+}
+
+.section-button {
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+  height: 100px;
+}
+
+.section-button > .btn {
+  text-align: left;
+  vertical-align: text-top;
+  position: relative;
+  align-items: flex-start;
+  border: 0;
+}
+
+.section-button > .btn > span {
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding: 1rem;
+  font-size: 150%;
+}
+
+.section-button > .btn:hover > span {
+  color: #000000!important;
+  background: #FFFFFF;
+  background-image: none!important;
+  border: 1px solid #000000;
+}
+
+fa-icon {
+  color: black;
+}
+
+#opportunitiesSpan {
+  background-image: url('./../../assets/buttons/btn1.jpg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: right 0% bottom 46%;
+  height: 100px;
+  width: inherit;
+  color: #FFFFFF;
+}
+
+#appliedSpan {
+  background-image: url('./../../assets/buttons/btn2.jpg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: right 0% bottom 46%;
+  height: 100px;
+  width: inherit;
+  color: #FFFFFF;
+}
+
+#interviewsSpan {
+  background-image: url('./../../assets/buttons/btn3.jpg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: right 0% bottom 0%;
+  height: 100px;
+  width: inherit;
+  color: #FFFFFF;
+}
+
+#offersSpan {
+  background-image: url('./../../assets/buttons/btn4.jpg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: right 0% bottom 46%;
+  height: 100px;
+  width: inherit;
+  color: #FFFFFF;
+}
+
+/*xs*/
+@media (max-width: 576px) {
+}
+
+/*sm*/
+@media (min-width: 576px) {
+}
+
+/*md*/
+@media (min-width: 768px) {
+}
+
+/*lg*/
+@media (min-width: 992px) {
+
+}
+
+/*xlg*/
+@media (min-width: 1200px) { }

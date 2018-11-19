@@ -27,12 +27,11 @@ export class ProfileComponent implements OnInit {
   firstname: string;
   lastname: string;
 
-  opportunities_active: boolean;
-  phone_screens_active: boolean;
-  interviews_active: boolean;
-  offers_active: boolean;
+  token: string;
 
   constructor(private http: HttpClient, private cookieService: CookieService, private router: Router) {
+    this.id = this.email = this.firstname = this.lastname = "";
+
     router.events.subscribe((val) => {
         // document.body.style.background = 'rgb(54, 73, 78, 1)';
         // document.body.style.background = 'url(\'../../assets/mountains.jpg\') no-repeat center center fixed';
@@ -42,12 +41,10 @@ export class ProfileComponent implements OnInit {
   }
 
   ngOnInit() {
-    const token = this.cookieService.get('SESSIONID');
+    this.token = this.cookieService.get('SESSIONID');
     // console.log("cookies: ", this.cookieService.getAll());
 
-    this.setInitVariables();
-
-    this.id = jwt_decode(token).sub.toString();
+    this.id = jwt_decode(this.token).sub.toString();
 
     this.http.get<GetUserResponse>(
       '/api/user/id/' + this.id,
@@ -59,26 +56,6 @@ export class ProfileComponent implements OnInit {
       this.firstname = data.data.firstname;
       this.lastname = data.data.lastname
     });
-  }
-
-  setInitVariables() {
-    this.opportunities_active = false;
-    this.phone_screens_active = false;
-    this.interviews_active = false;
-    this.offers_active = false;
-  }
-
-  toggleOpportunitiesActive() {
-    this.opportunities_active = !this.opportunities_active;
-    console.log('opportunities_active: ', this.opportunities_active);
-  }
-
-  togglePhoneScreensActive() {
-    this.phone_screens_active = !this.phone_screens_active;
-  }
-
-  isSubComponentActive() {
-    return (this.opportunities_active || this.phone_screens_active || this.interviews_active || this.offers_active);
   }
 
 }
