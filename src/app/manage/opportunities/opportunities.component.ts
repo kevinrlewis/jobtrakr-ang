@@ -21,10 +21,18 @@ export class OpportunitiesComponent implements OnInit {
   companyName: string;
   jobTitle: string;
   link: string;
+  notes: string;
 
   token: string;
 
-  constructor(private router: Router, private cookieService: CookieService, private fb: FormBuilder) { }
+  constructor(private router: Router, private cookieService: CookieService, private fb: FormBuilder) {
+    router.events.subscribe((val) => {
+        // document.body.style.background = 'rgb(54, 73, 78, 1)';
+        // document.body.style.background = 'url(\'../../../assets/buttons/btn1.jpg\') no-repeat center center fixed';
+        // document.body.style.backgroundSize = 'cover';
+        // document.body.style.height = '100%';
+    });
+  }
 
   ngOnInit() {
     this.token = this.cookieService.get('SESSIONID');
@@ -32,9 +40,11 @@ export class OpportunitiesComponent implements OnInit {
       'companyname': [this.companyName, [Validators.required]],
       'jobtitle': [this.jobTitle, [Validators.required]],
       'link': [this.link, [Validators.required]],
+      'notes': [this.notes, []],
     });
   }
 
+  // when the user clicks the x button, navigate back to the manage component
   close() {
     this.router.navigate(['manage/' + jwt_decode(this.token).sub]);
   }

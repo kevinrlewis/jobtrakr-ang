@@ -3,6 +3,9 @@ import { Router, RouterEvent, NavigationEnd } from '@angular/router';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { HttpClient, HttpClientModule, HttpHeaders } from '@angular/common/http';
 
+// icons
+import { faLayerGroup, faUserTie, faSmileBeam } from '@fortawesome/free-solid-svg-icons';
+
 const httpOptions = {
   headers: new HttpHeaders({
     'Content-Type': 'application/json',
@@ -18,6 +21,10 @@ const httpOptions = {
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit {
+
+  faLayerGroup = faLayerGroup;
+  faUserTie = faUserTie;
+  faSmileBeam = faSmileBeam;
 
   // public innerWidth: any;
   // public innerHeight: any;

@@ -18,24 +18,29 @@ export class HeaderbarComponent implements OnInit {
   constructor(private cookieService: CookieService, private router: Router) { }
 
   ngOnInit() {
+    // initialize the token from the cookie
     this.token = this.cookieService.get('SESSIONID');
   }
 
+  // handle a click when the user wants to go to manage
   manageClick() {
     this.router.navigate(['manage/' + jwt_decode(this.token).sub]);
   }
 
+  // handle a click when the user wants to navigate to settings
   settingsClick() {
     this.router.navigate(['profile/' + jwt_decode(this.token).sub]);
   }
 
+  // handle a click when user clicks their name
+  navbarBrandClick() {
+    this.router.navigate(['manage/' + jwt_decode(this.token).sub]);
+  }
+
+  // handle button click when user is trying to logout
   logoutClick() {
-    console.log('deleting cookie...');
-    // this.cookieService.delete('SESSIONID', '/', '/');
-    // this.cookieService.deleteAll('../');
-    this.cookieService.set('SESSIONID', '', new Date("Thu, 01 Jan 1970 00:00:01 GMT"));
-    console.log('cookie deleted...');
-    console.log('cookie: ', this.cookieService.get('SESSIONID'));
+    this.cookieService.delete('SESSIONID', '/');
+    this.router.navigate(['/login']);
   }
 
 }
