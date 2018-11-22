@@ -25,6 +25,9 @@ export class OpportunitiesComponent implements OnInit {
 
   token: string;
 
+  // display toggles
+  displayAddForm = false;;
+
   constructor(private router: Router, private cookieService: CookieService, private fb: FormBuilder) {
     router.events.subscribe((val) => {
         // document.body.style.background = 'rgb(54, 73, 78, 1)';

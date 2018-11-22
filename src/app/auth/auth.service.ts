@@ -39,6 +39,7 @@ export class AuthService {
   }
 
   public login(email:string, password:string) {
+    console.log('logging in...');
     // look into piping for error handling
     return this.http.post<LoginResponse>(
       '/api/login',

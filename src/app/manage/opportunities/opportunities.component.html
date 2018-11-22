@@ -10,6 +10,9 @@
   <p class="col-12">Add job opportunities that you are interested in.</p>
 </div>
 <div class="row">
+  <button class="col-12 btn btn-outline-success">Add</button>
+</div>
+<div class="row" *ngIf="displayAddForm">
   <div class="container op-area">
     <div class="row add-opportunities">
       <form [formGroup]="addOpportunityForm" class="col-12">

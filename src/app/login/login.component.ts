@@ -17,7 +17,10 @@ export class LoginComponent implements OnInit {
   password:string;
 
   displayMessage:boolean;
-  validationMessage:string[];
+  displayErrorMessage:boolean;
+  validationMessage = [];
+  errorMessage = [];
+  errorLink:string;
 
 
   constructor(private router: Router, private fb: FormBuilder, private http: HttpClient, public auth: AuthService, private cookieService: CookieService) {
@@ -44,15 +47,24 @@ export class LoginComponent implements OnInit {
     //if valid, attempt to login
     if (validated.status) {
       // attempt to login
-      var loginAttempt = this.auth.login(this.loginForm.get('email').value, this.loginForm.get('password').value);
-      loginAttempt.subscribe(data => {
-        // console.log(data);
+      this.auth.login(
+        this.loginForm.get('email').value,
+        this.loginForm.get('password').value
+      ).subscribe(data => {
+        console.log("DATA:", data);
         // navigate to profile url based on their id
         this.router.navigateByUrl('/manage/' + data.id.toString());
+      }, error => {
+        console.log("ERROR:", error);
+        this.displayErrorMessage = true;
+        this.displayMessage = false;
+        this.errorMessage.push(error.error.message);
+        this.errorLink = 'signup';
       });
     } else {
       // display message
       this.displayMessage = true;
+      this.displayErrorMessage = false;
       this.validationMessage = validated.message;
     }
   }

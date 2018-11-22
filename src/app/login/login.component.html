@@ -7,6 +7,14 @@
       </li>
     </div>
   </div>
+  <div class="justify-content-center row" *ngIf="displayErrorMessage">
+    <div class="alert alert-danger col-8 col-sm-6 col-lg-4">
+      <li class="" *ngFor="let message of errorMessage">
+        {{message}}
+        <a href="/">({{errorLink}})</a>
+      </li>
+    </div>
+  </div>
 </div>
 <div class="container-fluid area col-10 col-sm-8 col-lg-6">
   <a href="/">
