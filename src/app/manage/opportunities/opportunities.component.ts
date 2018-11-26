@@ -22,6 +22,7 @@ export class OpportunitiesComponent implements OnInit {
   jobTitle: string;
   link: string;
   notes: string;
+  opportunities_files: string;
 
   token: string;
 
@@ -37,6 +38,8 @@ export class OpportunitiesComponent implements OnInit {
     });
   }
 
+
+
   ngOnInit() {
     this.token = this.cookieService.get('SESSIONID');
     this.addOpportunityForm = this.fb.group({
@@ -44,12 +47,57 @@ export class OpportunitiesComponent implements OnInit {
       'jobtitle': [this.jobTitle, [Validators.required]],
       'link': [this.link, [Validators.required]],
       'notes': [this.notes, []],
+      'opportunitiesFiles': [this.opportunities_files, []],
     });
+  }
+
+  onAddSubmit() {
+    // validate form
+    // console.log(this.loginForm.value);
+    var validated = this.validateAddForm(this.addOpportunityForm);
+
+
+    if(validated.status) {
+      // call function to push job to array / new array
+      // on page refresh / page change the new array should be pushed to the database
+      // or an asynchronous call should be made to send the job to the database while
+      // also showing it on the website
+      console.log(this.addOpportunityForm);
+    }
+  }
+
+  onFileChange(event) {
+    console.log(event.target.files);
   }
 
   // when the user clicks the x button, navigate back to the manage component
   close() {
     this.router.navigate(['manage/' + jwt_decode(this.token).sub]);
+  }
+
+  toggleAddForm() {
+    this.displayAddForm = !this.displayAddForm;
+  }
+
+  validateAddForm(l:FormGroup) {
+    // variables to return
+    let messageList: Array<string> = [];
+    let status: boolean = true;
+
+    // // check if the email is invalid
+    // if (l.get('email').invalid) {
+    //   status = false;
+    //   messageList.push('Email invalid.');
+    // }
+    //
+    // // check if password is invalid
+    // if (l.get('password').invalid) {
+    //   status = false;
+    //   messageList.push('Password invalid.');
+    // }
+
+    // return object
+    return { status: status, message: messageList };
   }
 
 }
