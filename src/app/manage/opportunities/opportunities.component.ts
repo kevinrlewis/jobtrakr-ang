@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, HostListener } from '@angular/core';
 import { CookieService } from 'ngx-cookie-service';
 import * as jwt_decode from "jwt-decode";
 import { Router, RouterEvent, NavigationEnd, ActivatedRoute } from '@angular/router';
@@ -29,7 +29,7 @@ export class OpportunitiesComponent implements OnInit {
   // display toggles
   displayAddForm = false;;
 
-  constructor(private router: Router, private cookieService: CookieService, private fb: FormBuilder) {
+  constructor(private router: Router, private cookieService: CookieService, private fb: FormBuilder, private http: HttpClient) {
     router.events.subscribe((val) => {
         // document.body.style.background = 'rgb(54, 73, 78, 1)';
         // document.body.style.background = 'url(\'../../../assets/buttons/btn1.jpg\') no-repeat center center fixed';
@@ -67,7 +67,29 @@ export class OpportunitiesComponent implements OnInit {
   }
 
   onFileChange(event) {
+    var httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'multipart/form-data',
+        // 'Access-Control-Allow-Credentials': 'true'
+      }),
+    };
+
+    // let reader = new FileReader();
     console.log(event.target.files);
+    var filesArray = event.target.files;
+    for(var i = 0; i < filesArray.length; i++) {
+      let formData: FormData = new FormData();
+      var file = filesArray[i];
+      formData.append('files', file);
+
+      this.http.post<UploadResponse>(
+        'api/upload',
+        formData
+      )
+        .subscribe(data => {
+          console.log("UPLOAD DATA:", data);
+        });
+    }
   }
 
   // when the user clicks the x button, navigate back to the manage component
@@ -100,4 +122,8 @@ export class OpportunitiesComponent implements OnInit {
     return { status: status, message: messageList };
   }
 
+}
+
+export interface UploadResponse {
+  message: string
 }
