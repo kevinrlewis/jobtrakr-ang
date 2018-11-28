@@ -29,6 +29,7 @@ export class ManageComponent implements OnInit {
   faTh = faTh;
 
   // @Input() email: string;
+  user: object;
   id: string;
   email: string;
   firstname: string;
@@ -85,10 +86,11 @@ export class ManageComponent implements OnInit {
       httpOptions
     ).subscribe(data => {
       console.log(data);
+      this.user = data.data;
 
       this.email = data.data.email;
       this.firstname = data.data.firstname;
-      this.lastname = data.data.lastname
+      this.lastname = data.data.lastname;
     });
   }
 

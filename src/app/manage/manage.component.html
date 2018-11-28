@@ -6,7 +6,7 @@
     </h5>
     <button class="btn btn-outline-danger offset-6 col-2">Logout</button>
   </div> -->
-  <app-opportunities *ngIf="opportunities_active"></app-opportunities>
+  <app-opportunities *ngIf="opportunities_active && user" [user]="user"></app-opportunities>
   <app-applied *ngIf="applied_active"></app-applied>
   <app-interviews *ngIf="interviews_active"></app-interviews>
   <app-offers *ngIf="offers_active"></app-offers>
