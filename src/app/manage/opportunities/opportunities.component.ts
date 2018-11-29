@@ -4,18 +4,19 @@ import * as jwt_decode from "jwt-decode";
 import { Router, RouterEvent, NavigationEnd, ActivatedRoute } from '@angular/router';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { HttpClient, HttpClientModule, HttpHeaders } from '@angular/common/http';
+import { ManageService } from './../../manage.service';
 
 // icons
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 
 const httpOptions = {
   headers: new HttpHeaders({
-    'Content-Type': 'application/json',
-    // 'Access-Control-Allow-Credentials': 'true'
-  }),
-  // withCredentials: true,
-  // credentials: 'include'
+    'Content-Type': 'application/json'
+  })
 };
+
+const JOB_TYPE = 1;
+const JOB_TYPE_NAME = 'opportunity';
 
 @Component({
   selector: 'app-opportunities',
@@ -53,16 +54,16 @@ export class OpportunitiesComponent implements OnInit {
   // store token
   token: string;
 
-  // array to hold ids for files that need to be attached to an opportunity
+  // array to hold ids for files that need to be attached to a job
   filesArray: string[];
 
-  // array to hold opportunities
-  opportunitiesArray: object[];
+  // array to hold existing opportunities, pulled from api
+  jobsArray: object[];
 
   // display toggles
-  displayAddForm = false;;
+  displayAddForm = false;
 
-  constructor(private router: Router, private cookieService: CookieService, private fb: FormBuilder, private http: HttpClient) {
+  constructor(private router: Router, private cookieService: CookieService, private fb: FormBuilder, private http: HttpClient, public manage: ManageService) {
     router.events.subscribe((val) => {
         // document.body.style.background = 'rgb(54, 73, 78, 1)';
         // document.body.style.background = 'url(\'../../../assets/buttons/btn1.jpg\') no-repeat center center fixed';
@@ -86,7 +87,7 @@ export class OpportunitiesComponent implements OnInit {
     });
 
     // get all user opportunities to display
-    this.getOpportunities();
+    this.getJobs();
   }
 
   /*
@@ -102,32 +103,18 @@ export class OpportunitiesComponent implements OnInit {
     if(validated.status) {
       // check if any files are attached
       // if so then create the string to pass to db
-      var temp = null;
-      if(this.filesArray !== undefined) {
-        temp = '{';
-        // iterate if there are multiple files
-        for(var i = 0; i < this.filesArray.length; i++) {
-          temp += '"' + this.filesArray[i] + '",'
-        }
-        // don't include the trailing comma
-        temp = temp.substring(0, temp.length - 1) + '}';
-      }
-
-      console.log(temp);
+      var temp = this.manage.formatFileNamePayload(this.filesArray);
+      console.log("FILES TO ATTACH:", temp);
 
       // call api to post a job
-      this.http.post<AddJobResponse>(
-        '/api/job',
-        {
-          'company_name': this.addOpportunityForm.get('companyName').value,
-          'job_title': this.addOpportunityForm.get('jobTitle').value,
-          'link': this.addOpportunityForm.get('link').value,
-          'notes': this.addOpportunityForm.get('notes').value,
-          'type': 'opportunity',
-          'attachments': temp,
-          'user_id': this.user.user_id
-        },
-        httpOptions
+      this.manage.addJob(
+        this.addOpportunityForm.get('companyName').value,
+        this.addOpportunityForm.get('jobTitle').value,
+        this.addOpportunityForm.get('link').value,
+        this.addOpportunityForm.get('notes').value,
+        JOB_TYPE_NAME,
+        temp,
+        this.user.user_id
       ).subscribe(data => {
         console.log(data);
         // close add form
@@ -144,50 +131,26 @@ export class OpportunitiesComponent implements OnInit {
     in order to associate the files to a specific job opportunity
   */
   onFileChange(event) {
-    this.filesArray = [];
-    var httpOptions = {
-      headers: new HttpHeaders({
-        'Content-Type': 'multipart/form-data',
-        // 'Access-Control-Allow-Credentials': 'true'
-      }),
-    };
-
-    // let reader = new FileReader();
-    console.log(event.target.files);
-    var filesArray = event.target.files;
-    for(var i = 0; i < filesArray.length; i++) {
-      let formData: FormData = new FormData();
-      var file = filesArray[i];
-      console.log("FILE:", file);
-      formData.append('files', file);
-
-      this.http.post<UploadResponse>(
-        'api/upload',
-        formData
-      )
-        .subscribe(data => {
-          console.log("UPLOAD DATA:", data);
-          // save the file to be attached to an opportunity
-          this.filesArray.push(data.file);
-        });
-    }
+    // save file with type 1 (opportunity)
+    this.filesArray = this.manage.saveFile(event, 1);
   }
 
   /*
     helper function to get the array of opportunities
   */
-  getOpportunities() {
-    this.http.get<GetOpportunitiesResponse>(
-      '/api/job/opportunity/id/' + this.user.user_id,
-      httpOptions
-    ).subscribe(data => {
-      console.log(data.data);
-      this.opportunitiesArray = data.data.get_opportunities_by_user_id;
-      return;
-    // TODO: display message if there was an error retrieving opportunities
-    }, error => {
-      console.log(error);
-    });
+  getJobs() {
+    // call function in manage service to grab jobs based on job type and user id
+    this.manage.getJobs(JOB_TYPE, JOB_TYPE_NAME, this.user.user_id).subscribe(
+      data => {
+        console.log(data.data);
+        this.jobsArray = data.data.get_jobs_by_user_id_and_job_type_id;
+        return;
+      },
+      // TODO: display message if there was an error retrieving opportunities
+      error => {
+        console.log(error);
+      }
+    );
   }
 
 
@@ -206,7 +169,9 @@ export class OpportunitiesComponent implements OnInit {
     }
   }
 
-  // validate the add form
+  /*
+    validate the add form
+  */
   validateAddForm(l:FormGroup) {
     // variables to return
     let messageList: Array<string> = [];
@@ -231,41 +196,5 @@ export class OpportunitiesComponent implements OnInit {
   // reset the values of the add opportunity form
   resetAddForm() {
     this.addOpportunityForm.reset();
-  }
-}
-
-// interface to get an expected response from the api
-// when we call the upload endpoint
-export interface UploadResponse {
-  message: string,
-  file: string
-}
-
-// interface to get an expected response from the api
-// when we call the add job endpoint
-export interface AddJobResponse {
-  message: string
-}
-
-// interface to get an expected response from the api
-// when we call the api to get all opportunities
-export interface GetOpportunitiesResponse {
-  message: string,
-  data: {
-    get_opportunities_by_user_id: [
-      {
-        jobs_id: number,
-        job_title: string,
-        company_name: string,
-        link: string,
-        notes: string,
-        attachments: string[],
-        active: boolean,
-        job_type_id: number,
-        user_id: number,
-        create_datetime: string,
-        update_datetime: string
-      }
-    ]
   }
 }

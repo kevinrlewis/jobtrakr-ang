@@ -80,6 +80,15 @@ fa-icon {
   color: #FFFFFF;
 }
 
+.header > span {
+  height: max-content!important;
+  width: inherit;
+  color: #FFFFFF;
+  border-left: 0.15rem;
+  /* padding-left: 0.15rem;
+  padding-right: 0.15rem; */
+}
+
 /*xs*/
 @media (max-width: 576px) {
 }

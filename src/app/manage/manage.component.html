@@ -7,9 +7,9 @@
     <button class="btn btn-outline-danger offset-6 col-2">Logout</button>
   </div> -->
   <app-opportunities *ngIf="opportunities_active && user" [user]="user"></app-opportunities>
-  <app-applied *ngIf="applied_active"></app-applied>
-  <app-interviews *ngIf="interviews_active"></app-interviews>
-  <app-offers *ngIf="offers_active"></app-offers>
+  <app-applied *ngIf="applied_active && user" [user]="user"></app-applied>
+  <app-interviews *ngIf="interviews_active && user" [user]="user"></app-interviews>
+  <app-offers *ngIf="offers_active && user" [user]="user"></app-offers>
   <div class="options row justify-content-end" *ngIf="!isSubComponentActive()">
     <!-- <a class="offset-10 col-1 text-right">buttons</a>
     <a class="col-1 text-left">plan</a> -->
@@ -36,6 +36,14 @@
       <button class="btn col-12" (click)="toggleOffersActive()">
         <span id="offersSpan">Offers</span>
       </button>
+    </div>
+  </div>
+  <div class="grid-view">
+    <div class="row header text-center">
+      <span class="col-3" id="opportunitiesSpan">Opportunities</span>
+      <span class="col-3" id="appliedSpan">Applied</span>
+      <span class="col-3" id="interviewsSpan">Interviews</span>
+      <span class="col-3" id="offersSpan">Offers</span>
     </div>
   </div>
 </div>
