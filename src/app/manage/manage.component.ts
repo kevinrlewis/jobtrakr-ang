@@ -40,6 +40,14 @@ export class ManageComponent implements OnInit {
   interviews_active: boolean;
   offers_active: boolean;
   show_buttons: boolean;
+  show_grid: boolean;
+
+  jobsArray: object[] = [];
+  opportunitiesArray: object[] = [];
+  appliedArray: object[] = [];
+  interviewArray: object[] = [];
+  offerArray: object[] = [];
+
 
   token: string;
 
@@ -75,7 +83,12 @@ export class ManageComponent implements OnInit {
       // otherwise set initial variables and show the buttons
       } else {
         this.setInitVariables();
-        this.show_buttons = true;
+        // this.show_buttons = true;
+        // this.show_grid = false;
+
+        // testing grid
+        this.show_buttons = false;
+        this.show_grid = true;
       }
     });
 
@@ -91,6 +104,28 @@ export class ManageComponent implements OnInit {
       this.email = data.data.email;
       this.firstname = data.data.firstname;
       this.lastname = data.data.lastname;
+    });
+
+    this.http.get<GetJobsResponse>(
+      '/api/job/id/' + this.id,
+      httpOptions
+    ).subscribe(data => {
+      console.log(data);
+      this.jobsArray = data.data.get_jobs_by_user_id;
+      var temp = data.data.get_jobs_by_user_id;
+
+      for(var i = 0; i < temp.length; i++) {
+        if(temp[i].job_type_id === 1) {
+          this.opportunitiesArray.push(this.jobsArray[i]);
+        } else if(temp[i].job_type_id === 2) {
+          this.appliedArray.push(this.jobsArray[i]);
+        } else if(temp[i].job_type_id === 3) {
+          this.interviewArray.push(this.jobsArray[i]);
+        } else if(temp[i].job_type_id === 4) {
+          this.offerArray.push(this.jobsArray[i]);
+        }
+      }
+
     });
   }
 
@@ -134,6 +169,15 @@ export class ManageComponent implements OnInit {
     this.router.navigate(['profile/' + jwt_decode(this.token).sub]);
   }
 
+  selectGrid() {
+    this.show_buttons = false;
+    this.show_grid = true;
+  }
+
+  selectButtons() {
+    this.show_grid = false;
+    this.show_buttons = true;
+  }
 }
 
 interface GetUserResponse {
@@ -143,5 +187,24 @@ interface GetUserResponse {
     email: string,
     firstname: string,
     lastname: string
+  }
+}
+
+interface GetJobsResponse {
+  message: string,
+  data: {
+    get_jobs_by_user_id: [ {
+      jobs_id: number,
+      job_title: string,
+      company_name: string,
+      link: string,
+      notes: string,
+      attachments: string,
+      user_id: number,
+      create_datetime: string,
+      update_datetime: string,
+      job_type_id: number,
+      job_type_name: string
+    } ]
   }
 }

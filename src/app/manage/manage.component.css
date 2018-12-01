@@ -80,13 +80,65 @@ fa-icon {
   color: #FFFFFF;
 }
 
+#opportunitiesSpanHeader {
+  border-image-source: url('./../../assets/buttons/btn1.jpg');
+}
+
+#appliedSpanHeader {
+  border-image-source: url('./../../assets/buttons/btn2.jpg');
+}
+
+#interviewsSpanHeader {
+  border-image-source: url('./../../assets/buttons/btn3.jpg');
+}
+
+#offersSpanHeader {
+  border-image-source: url('./../../assets/buttons/btn4.jpg');
+}
+
+.header {
+
+
+}
+
 .header > span {
   height: max-content!important;
   width: inherit;
-  color: #FFFFFF;
-  border-left: 0.15rem;
+  color: #000000;
+  border-bottom: 1px solid #000000;
+  border-image-slice: 5;
+  border-image-width: 5;
+  border-image-outset: 5;
+  border-image-repeat: round;
   /* padding-left: 0.15rem;
   padding-right: 0.15rem; */
+}
+
+.grid-items {
+  margin-top: 0.5rem;
+}
+
+.grid-items > .col-3 {
+  padding-right: 20px;
+  padding-left: 20px;
+  padding-bottom: 3rem;
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.grid-items > .col-3 > .row {
+  margin-top: 0.5rem;
+  margin-bottom: 1rem;
+  /*height: 50%;*/
+  background-color: #FFFFFF;
+}
+
+.grid-items > .col-3 > .row > * {
+  padding-left: 0.25rem;
+  padding-right: 0.25rem;
+}
+
+.border-left {
+  border-left: solid 0.2rem #FFFFFF!important;
 }
 
 /*xs*/

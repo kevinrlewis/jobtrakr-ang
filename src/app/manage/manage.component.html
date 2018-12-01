@@ -13,10 +13,10 @@
   <div class="options row justify-content-end" *ngIf="!isSubComponentActive()">
     <!-- <a class="offset-10 col-1 text-right">buttons</a>
     <a class="col-1 text-left">plan</a> -->
-    <a class="col-auto text-right"><fa-icon [icon]="faBars"></fa-icon></a>
-    <a class="col-auto text-left"><fa-icon [icon]="faTh"></fa-icon></a>
+    <a class="col-auto text-right" (click)="selectButtons()"><fa-icon [icon]="faBars"></fa-icon></a>
+    <a class="col-auto text-left" (click)="selectGrid()"><fa-icon [icon]="faTh"></fa-icon></a>
   </div>
-  <div class="buttons-section" *ngIf="!isSubComponentActive() || show_buttons">
+  <div class="buttons-section" *ngIf="!isSubComponentActive() && show_buttons">
     <div class="row section-button">
       <button class="btn col-12" (click)="toggleOpportunitiesActive()">
         <span id="opportunitiesSpan">Opportunities</span>
@@ -38,12 +38,42 @@
       </button>
     </div>
   </div>
-  <div class="grid-view">
-    <div class="row header text-center">
-      <span class="col-3" id="opportunitiesSpan">Opportunities</span>
-      <span class="col-3" id="appliedSpan">Applied</span>
-      <span class="col-3" id="interviewsSpan">Interviews</span>
-      <span class="col-3" id="offersSpan">Offers</span>
+</div>
+<div class="container-fluid grid-view" *ngIf="!isSubComponentActive() && show_grid">
+  <div class="row header text-center">
+    <span class="col-3" id="opportunitiesSpanHeader">Opportunities</span>
+    <span class="col-3" id="appliedSpanHeader">Applied</span>
+    <span class="col-3" id="interviewsSpanHeader">Interviews</span>
+    <span class="col-3" id="offersSpanHeader">Offers</span>
+  </div>
+  <div class="row grid-items">
+    <div class="col-3">
+      <div class="row shadow-lg" *ngFor="let opp of opportunitiesArray">
+        <h5 class="col-12">{{opp.company_name}}</h5>
+        <p class="col-12">{{opp.job_title}}</p>
+        <small class="col-12 text-right">{{opp.create_datetime | date:'MM/dd/yy'}}</small>
+      </div>
+    </div>
+    <div class="col-3 border-left">
+      <div class="row shadow-lg" *ngFor="let app of appliedArray">
+        <h5 class="col-12">{{app.company_name}}</h5>
+        <p class="col-12">{{app.job_title}}</p>
+        <small class="col-12 text-right">{{app.create_datetime | date:'MM/dd/yy'}}</small>
+      </div>
+    </div>
+    <div class="col-3 border-left">
+      <div class="row shadow-lg" *ngFor="let inter of interviewArray">
+        <h5 class="col-12">{{inter.company_name}}</h5>
+        <p class="col-12">{{inter.job_title}}</p>
+        <small class="col-12 text-right">{{inter.create_datetime | date:'MM/dd/yy'}}</small>
+      </div>
+    </div>
+    <div class="col-3 border-left">
+      <div class="row shadow-lg" *ngFor="let off of offerArray">
+        <h5 class="col-12">{{off.company_name}}</h5>
+        <p class="col-12">{{off.job_title}}</p>
+        <small class="col-12 text-right">{{off.create_datetime | date:'MM/dd/yy'}}</small>
+      </div>
     </div>
   </div>
 </div>
