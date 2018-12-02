@@ -115,7 +115,7 @@ fa-icon {
 }
 
 .grid-items {
-  margin-top: 0.5rem;
+  margin-top: 0.75rem;
 }
 
 .grid-items > .col-3 {
@@ -123,6 +123,8 @@ fa-icon {
   padding-left: 20px;
   padding-bottom: 3rem;
   background-color: rgba(0, 0, 0, 0.05);
+  border-left: 2px solid #FFFFFF;
+  border-right: 2px solid #FFFFFF;
 }
 
 .grid-items > .col-3 > .row {
@@ -137,9 +139,9 @@ fa-icon {
   padding-right: 0.25rem;
 }
 
-.border-left {
+/*.border-left {
   border-left: solid 0.2rem #FFFFFF!important;
-}
+}*/
 
 /*xs*/
 @media (max-width: 576px) {
@@ -160,3 +162,12 @@ fa-icon {
 
 /*xlg*/
 @media (min-width: 1200px) { }
+
+.drop-over-active {
+  border: dashed 2px red;
+  /*background-color: lightgreen;*/
+}
+
+.drag-active {
+  z-index: 3;
+}

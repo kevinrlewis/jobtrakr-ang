@@ -4,6 +4,7 @@ import * as jwt_decode from "jwt-decode";
 import { Router, RouterEvent, NavigationEnd, ActivatedRoute } from '@angular/router';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { HttpClient, HttpClientModule, HttpHeaders } from '@angular/common/http';
+// import { NgDragDropModule } from 'ng-drag-drop';
 
 // icons
 import { faBars } from '@fortawesome/free-solid-svg-icons';
@@ -48,6 +49,7 @@ export class ManageComponent implements OnInit {
   interviewArray: object[] = [];
   offerArray: object[] = [];
 
+  droppedData: string;
 
   token: string;
 
@@ -134,6 +136,14 @@ export class ManageComponent implements OnInit {
     this.applied_active = false;
     this.interviews_active = false;
     this.offers_active = false;
+  }
+
+  onJobDrop(event): void {
+    console.log(event);
+    // this.droppedData = dropData;
+    // setTimeout(() => {
+    //   this.droppedData = '';
+    // }, 2000);
   }
 
   toggleOpportunitiesActive() {

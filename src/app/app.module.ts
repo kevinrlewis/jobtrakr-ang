@@ -4,6 +4,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
+import { NgDragDropModule } from 'ng-drag-drop';
 // import { HttpModule } from '@angular/http';
 
 import { AppComponent } from './app.component';
@@ -71,6 +72,7 @@ const appRoutes: Routes = [
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
+    NgDragDropModule.forRoot()
     // HttpModule
   ],
   providers: [AuthService, CookieService, JwtHelperService],
