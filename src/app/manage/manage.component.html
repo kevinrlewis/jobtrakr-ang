@@ -49,28 +49,28 @@
   <!-- <p>{{droppedData}}</p> -->
   <div class="row grid-items">
     <div class="col-3" droppable [dropScope]="['applied', 'interview', 'offer']" [dragOverClass]="'drop-over-active'" (onDrop)="onJobDrop($event)">
-      <div class="row shadow-lg" *ngFor="let opp of opportunitiesArray" draggable [dragScope]="'opportunity'" [dragData]="opp">
+      <div class="row shadow-lg" *ngFor="let opp of opportunitiesArray | async" draggable [dragScope]="'opportunity'" [dragData]="opp">
         <h5 class="col-12">{{opp.company_name}}</h5>
         <p class="col-12">{{opp.job_title}}</p>
         <small class="col-12 text-right">{{opp.create_datetime | date:'MM/dd/yy'}}</small>
       </div>
     </div>
     <div class="col-3" droppable [dropScope]="['opportunity', 'interview', 'offer']" [dragOverClass]="'drop-over-active'" (onDrop)="onJobDrop($event)">
-      <div class="row shadow-lg" *ngFor="let app of appliedArray" draggable [dragScope]="'applied'" [dragData]="app">
+      <div class="row shadow-lg" *ngFor="let app of appliedArray | async" draggable [dragScope]="'applied'" [dragData]="app">
         <h5 class="col-12">{{app.company_name}}</h5>
         <p class="col-12">{{app.job_title}}</p>
         <small class="col-12 text-right">{{app.create_datetime | date:'MM/dd/yy'}}</small>
       </div>
     </div>
     <div class="col-3" droppable [dropScope]="['applied', 'opportunity', 'offer']" [dragOverClass]="'drop-over-active'" (onDrop)="onJobDrop($event)">
-      <div class="row shadow-lg" *ngFor="let inter of interviewArray" draggable [dragScope]="'interview'" [dragData]="inter">
+      <div class="row shadow-lg" *ngFor="let inter of interviewArray | async" draggable [dragClass]="'drag-over-active'" [dragScope]="'interview'" [dragData]="inter">
         <h5 class="col-12">{{inter.company_name}}</h5>
         <p class="col-12">{{inter.job_title}}</p>
         <small class="col-12 text-right">{{inter.create_datetime | date:'MM/dd/yy'}}</small>
       </div>
     </div>
     <div class="col-3" droppable [dropScope]="['applied', 'interview', 'opportunity']" [dragOverClass]="'drop-over-active'" (onDrop)="onJobDrop($event)">
-      <div class="row shadow-lg" *ngFor="let off of offerArray" draggable [dragScope]="'offer'" [dragData]="off">
+      <div class="row shadow-lg" *ngFor="let off of offerArray | async" draggable [dragScope]="'offer'" [dragData]="off">
         <h5 class="col-12">{{off.company_name}}</h5>
         <p class="col-12">{{off.job_title}}</p>
         <small class="col-12 text-right">{{off.create_datetime | date:'MM/dd/yy'}}</small>

@@ -164,10 +164,35 @@ fa-icon {
 @media (min-width: 1200px) { }
 
 .drop-over-active {
-  border: dashed 2px red;
+  /* border: dashed 2px red; */
   /*background-color: lightgreen;*/
+  background-color: #ccffcc!important;
 }
 
 .drag-active {
   z-index: 3;
+}
+
+.drag-over-active {
+  background-color: #ffcccc!important;
+}
+
+/* Draggable*/
+
+.drag-border {
+  border: #666666 dashed 2px!important;
+}
+
+/* Droppable */
+
+.drag-hint-border {
+  border: none;
+}
+
+.drag-over-border {
+  border: none;
+}
+
+.drag-transit {
+  border: none;
 }

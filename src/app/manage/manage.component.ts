@@ -4,6 +4,7 @@ import * as jwt_decode from "jwt-decode";
 import { Router, RouterEvent, NavigationEnd, ActivatedRoute } from '@angular/router';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { HttpClient, HttpClientModule, HttpHeaders } from '@angular/common/http';
+import { Observable, from } from 'rxjs';
 // import { NgDragDropModule } from 'ng-drag-drop';
 
 // icons
@@ -18,6 +19,8 @@ const httpOptions = {
   // withCredentials: true,
   // credentials: 'include'
 };
+
+const POSSIBLE_JOB_TYPES = ['opportunity', 'applied', 'interview', 'offer'];
 
 @Component({
   selector: 'app-manage',
@@ -43,11 +46,11 @@ export class ManageComponent implements OnInit {
   show_buttons: boolean;
   show_grid: boolean;
 
-  jobsArray: object[] = [];
-  opportunitiesArray: object[] = [];
-  appliedArray: object[] = [];
-  interviewArray: object[] = [];
-  offerArray: object[] = [];
+  jobsArray: Observable<Array<Job>>;
+  opportunitiesArray: Observable<Array<object>>;
+  appliedArray: Observable<Array<object>>;
+  interviewArray: Observable<Array<object>>;
+  offerArray: Observable<Array<object>>;
 
   droppedData: string;
 
@@ -55,6 +58,8 @@ export class ManageComponent implements OnInit {
 
   constructor(private http: HttpClient, private cookieService: CookieService, private router: Router, private activatedRoute: ActivatedRoute) {
     this.id = this.email = this.firstname = this.lastname = "";
+
+    this.jobsArray = this.opportunitiesArray = this.appliedArray = this.interviewArray = this.offerArray = from([]);
 
     router.events.subscribe((val) => {
         document.body.style.background = 'rgb(255, 255, 255, 1)';
@@ -113,22 +118,29 @@ export class ManageComponent implements OnInit {
       httpOptions
     ).subscribe(data => {
       console.log(data);
-      this.jobsArray = data.data.get_jobs_by_user_id;
+      // this.jobsArray = data.data.get_jobs_by_user_id;
+      this.jobsArray = from(data.data.get_jobs_by_user_id);
       var temp = data.data.get_jobs_by_user_id;
 
-      for(var i = 0; i < temp.length; i++) {
-        if(temp[i].job_type_id === 1) {
-          this.opportunitiesArray.push(this.jobsArray[i]);
-        } else if(temp[i].job_type_id === 2) {
-          this.appliedArray.push(this.jobsArray[i]);
-        } else if(temp[i].job_type_id === 3) {
-          this.interviewArray.push(this.jobsArray[i]);
-        } else if(temp[i].job_type_id === 4) {
-          this.offerArray.push(this.jobsArray[i]);
+      try {
+        for(var i = 0; i < temp.length; i++) {
+          if(temp[i].job_type_id === 1) {
+            this.opportunitiesArray.push(temp[i]);
+          } else if(temp[i].job_type_id === 2) {
+            this.appliedArray.push(this.temp[i]);
+          } else if(temp[i].job_type_id === 3) {
+            this.interviewArray.push(this.temp[i]);
+          } else if(temp[i].job_type_id === 4) {
+            this.offerArray.push(this.temp[i]);
+          }
         }
+      // display an error message
+      } catch(e) {
+        console.log(e);
       }
 
     });
+    console.log(this.opportunitiesArray);
   }
 
   setInitVariables() {
@@ -139,12 +151,29 @@ export class ManageComponent implements OnInit {
   }
 
   onJobDrop(event:any): void {
-    console.log("from:", event.dragData.job_type_name);
-    console.log("to:", event.nativeEvent.path[0].firstElementChild.attributes[4].value);
-    
     console.log(event.nativeEvent);
-    var old_job_type = event.dragData.job_type_name;
-    var new_job_type = event.nativeEvent.path[0].firstElementChild.attributes[4].value;
+    try {
+      console.log("from:", event.dragData.job_type_name);
+      console.log("to:", event.nativeEvent.path[0].firstElementChild.attributes[4].value);
+
+      var old_job_type = "";
+      var new_job_type = "";
+
+      // get old_job_type from data that was passed during event
+      old_job_type = event.dragData.job_type_name
+      // get new_job_type from html elements
+      // TODO: rethink this?
+      new_job_type = event.nativeEvent.path[0].firstElementChild.attributes[4].value;
+    }
+    /*
+      caught error finding drop destination using existing elements
+      if there are no existing elements then we need to find drop
+      destination another way
+    */
+    catch(e) {
+      //console.log(e);
+      new_job_type = this.determine_drop_destination(event.nativeEvent.srcElement.attributes[4].value);
+    }
 
     if(old_job_type === "opportunity") {
       // move from opportunity to applied
@@ -169,6 +198,25 @@ export class ManageComponent implements OnInit {
 
   moveJob(job: object, oldArray: object[], newArray: object[]) {
 
+  }
+
+  // function to determine the missing job type in a comma separated string
+  determine_drop_destination(k:string) {
+    // split string into an array
+    var temp = k.split(',');
+
+    // store length of array
+    var length_arr = POSSIBLE_JOB_TYPES.length;
+
+    // iterate possible job types
+    for(var i = 0; i < length_arr; i++) {
+      // if the string does not contain one of the POSSIBLE_JOB_TYPES
+      // then return that type
+      if(!temp.includes(POSSIBLE_JOB_TYPES[i])) {
+        console.log("to:", POSSIBLE_JOB_TYPES[i]);
+        return POSSIBLE_JOB_TYPES[i];
+      }
+    }
   }
 
   toggleOpportunitiesActive() {
@@ -241,5 +289,21 @@ interface GetJobsResponse {
       job_type_id: number,
       job_type_name: string
     } ]
+  }
+}
+
+interface Job {
+  data: {
+    jobs_id: number,
+    job_title: string,
+    company_name: string,
+    link: string,
+    notes: string,
+    attachments: string,
+    user_id: number,
+    create_datetime: string,
+    update_datetime: string,
+    job_type_id: number,
+    job_type_name: string
   }
 }
