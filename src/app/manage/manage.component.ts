@@ -138,12 +138,37 @@ export class ManageComponent implements OnInit {
     this.offers_active = false;
   }
 
-  onJobDrop(event): void {
-    console.log(event);
+  onJobDrop(event:any): void {
+    console.log("from:", event.dragData.job_type_name);
+    console.log("to:", event.nativeEvent.path[0].firstElementChild.attributes[4].value);
+    
+    console.log(event.nativeEvent);
+    var old_job_type = event.dragData.job_type_name;
+    var new_job_type = event.nativeEvent.path[0].firstElementChild.attributes[4].value;
+
+    if(old_job_type === "opportunity") {
+      // move from opportunity to applied
+      if(new_job_type === "applied") {
+        this.moveJob(event.dragData, this.opportunitiesArray, this.appliedArray);
+      }
+      // move from opportunity to interview
+      else if(new_job_type == "interview") {
+        this.moveJob(event.dragData, this.opportunitiesArray, this.interviewArray);
+      }
+      // move from opportunity to offer
+      else if(new_job_type == "offer") {
+        this.moveJob(event.dragData, this.opportunitiesArray, this.offerArray);
+      }
+    }
+
     // this.droppedData = dropData;
     // setTimeout(() => {
     //   this.droppedData = '';
     // }, 2000);
+  }
+
+  moveJob(job: object, oldArray: object[], newArray: object[]) {
+
   }
 
   toggleOpportunitiesActive() {
