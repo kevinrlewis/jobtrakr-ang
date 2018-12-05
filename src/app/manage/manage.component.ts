@@ -54,6 +54,8 @@ export class ManageComponent implements OnInit {
   interviewArray: object[] = [];
   offerArray: object[] = [];
 
+  jobMap = { 1: this.opportunitiesArray, 2: this.appliedArray, 3: this.interviewArray, 4: this.offerArray };
+
   opportunitiesObservable: Observable<Array<object>>;
   appliedObservable: Observable<Array<object>>;
   interviewObservable: Observable<Array<object>>;
@@ -214,7 +216,15 @@ export class ManageComponent implements OnInit {
   }
 
   moveJob(job: object, oldArray: object[], newArray: object[]) {
-    
+
+  }
+
+  moveJob2(job: object, oldJobType: number, newJobType: number) {
+    this.jobMap[newJobType].push(job);
+    var index = this.jobMap[oldJobType].indexOf(job);
+    if(index > -1) {
+      this.jobMap[oldJobType].splice(index, 1);
+    }
   }
 
   // function to determine the missing job type in a comma separated string
@@ -323,4 +333,8 @@ interface Job {
     job_type_id: number,
     job_type_name: string
   }
+}
+
+interface ArrayMap {
+  [key: number]: Array<object>
 }
