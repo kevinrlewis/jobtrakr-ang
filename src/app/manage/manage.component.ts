@@ -5,8 +5,8 @@ import { Router, RouterEvent, NavigationEnd, ActivatedRoute } from '@angular/rou
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { HttpClient, HttpClientModule, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
-import { from } from 'rxjs';
-import { filter } from 'rxjs/operators'
+import { from, of } from 'rxjs';
+import { filter, map } from 'rxjs/operators'
 // import { NgDragDropModule } from 'ng-drag-drop';
 
 // icons
@@ -48,11 +48,17 @@ export class ManageComponent implements OnInit {
   show_buttons: boolean;
   show_grid: boolean;
 
-  jobsArray: Observable<Array>;
-  opportunitiesArray: Observable<Array>;
-  appliedArray: Observable<Array>;
-  interviewArray: Observable<Array>;
-  offerArray: Observable<Array>;
+  jobsArray: object[] = [];
+  opportunitiesArray: object[] = [];
+  appliedArray: object[] = [];
+  interviewArray: object[] = [];
+  offerArray: object[] = [];
+
+  opportunitiesObservable: Observable<Array<object>>;
+  appliedObservable: Observable<Array<object>>;
+  interviewObservable: Observable<Array<object>>;
+  offerObservable: Observable<Array<object>>;
+  jobsObservable: Observable<Array<object>>;
 
   droppedData: string;
 
@@ -61,14 +67,19 @@ export class ManageComponent implements OnInit {
   constructor(private http: HttpClient, private cookieService: CookieService, private router: Router, private activatedRoute: ActivatedRoute) {
     this.id = this.email = this.firstname = this.lastname = "";
 
-    // this.jobsArray = this.opportunitiesArray = this.appliedArray = this.interviewArray = this.offerArray = from([{}]);
-
     router.events.subscribe((val) => {
         document.body.style.background = 'rgb(255, 255, 255, 1)';
         // document.body.style.background = 'url(\'../../assets/mountains.jpg\') no-repeat center center fixed';
         // document.body.style.backgroundSize = 'cover';
         // document.body.style.height = '100%';
     });
+
+    // initialize the observables
+    this.opportunitiesObservable = of(this.opportunitiesArray);
+    this.appliedObservable = of(this.appliedArray);
+    this.interviewObservable = of(this.interviewArray);
+    this.offerObservable = of(this.offerArray);
+    this.jobsObservable = of(this.jobsArray);
   }
 
   ngOnInit() {
@@ -92,6 +103,7 @@ export class ManageComponent implements OnInit {
       // otherwise set initial variables and show the buttons
       } else {
         this.setInitVariables();
+        // don't show grid first
         // this.show_buttons = true;
         // this.show_grid = false;
 
@@ -101,8 +113,10 @@ export class ManageComponent implements OnInit {
       }
     });
 
+    // get id from token
     this.id = jwt_decode(this.token).sub.toString();
 
+    // get user information
     this.http.get<GetUserResponse>(
       '/api/user/id/' + this.id,
       httpOptions
@@ -115,51 +129,42 @@ export class ManageComponent implements OnInit {
       this.lastname = data.data.lastname;
     });
 
+    // get all jobs
     this.http.get<GetJobsResponse>(
       '/api/job/id/' + this.id,
       httpOptions
     ).subscribe(data => {
-      console.log(data);
-      // this.jobsArray = data.data.get_jobs_by_user_id;
-      this.jobsArray = from(data.data.get_jobs_by_user_id);
+      // store all jobs in array
+      this.jobsArray = data.data.get_jobs_by_user_id;
+
+      // temp observable
       var temp = from(data.data.get_jobs_by_user_id);
 
-      // temp_opp = temp.forEach(function onNext(job) {
-      //   console.log(job);
-      //   job.pipe(filter(e => e.job_type_id === 1));
-      // });
-
-      var temp_opp = temp.pipe(filter(e => e.job_type_id === 1));
-
-      temp_opp.subscribe(job => {
-        console.log(job);
+      // filter and add all opportunities to the specific array
+      temp.pipe(filter(e => e.job_type_id === 1)).subscribe(job => {
+        this.opportunitiesArray.push(job);
       });
-      // try {
-      //   for(var i = 0; i < temp.length; i++) {
-      //     if(temp[i].job_type_id === 1) {
-      //       this.opportunitiesArray.push(temp[i]);
-      //     } else if(temp[i].job_type_id === 2) {
-      //       this.appliedArray.push(temp[i]);
-      //     } else if(temp[i].job_type_id === 3) {
-      //       this.interviewArray.push(temp[i]);
-      //     } else if(temp[i].job_type_id === 4) {
-      //       this.offerArray.push(temp[i]);
-      //     }
-      //   }
-      // // display an error message
-      // } catch(e) {
-      //   console.log(e);
-      // }
 
+      // filter and add all applied to the specific array
+      temp.pipe(filter(e => e.job_type_id === 2)).subscribe(job => {
+        this.appliedArray.push(job);
+      });
+
+      // filter and add all interviews to the specific array
+      temp.pipe(filter(e => e.job_type_id === 3)).subscribe(job => {
+        this.interviewArray.push(job);
+      });
+
+      // filter and add all offers to the specific array
+      temp.pipe(filter(e => e.job_type_id === 4)).subscribe(job => {
+        this.offerArray.push(job);
+      });
     });
-    console.log(this.opportunitiesArray);
+
   }
 
   setInitVariables() {
-    this.opportunities_active = false;
-    this.applied_active = false;
-    this.interviews_active = false;
-    this.offers_active = false;
+    this.opportunities_active = this.applied_active = this.interviews_active = this.offers_active = false;
   }
 
   onJobDrop(event:any): void {
@@ -209,7 +214,7 @@ export class ManageComponent implements OnInit {
   }
 
   moveJob(job: object, oldArray: object[], newArray: object[]) {
-
+    
   }
 
   // function to determine the missing job type in a comma separated string
