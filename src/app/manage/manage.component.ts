@@ -4,7 +4,9 @@ import * as jwt_decode from "jwt-decode";
 import { Router, RouterEvent, NavigationEnd, ActivatedRoute } from '@angular/router';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { HttpClient, HttpClientModule, HttpHeaders } from '@angular/common/http';
-import { Observable, from } from 'rxjs';
+import { Observable } from 'rxjs/Observable';
+import { from } from 'rxjs';
+import { filter } from 'rxjs/operators'
 // import { NgDragDropModule } from 'ng-drag-drop';
 
 // icons
@@ -46,11 +48,11 @@ export class ManageComponent implements OnInit {
   show_buttons: boolean;
   show_grid: boolean;
 
-  jobsArray: Observable<Array<Job>>;
-  opportunitiesArray: Observable<Array<object>>;
-  appliedArray: Observable<Array<object>>;
-  interviewArray: Observable<Array<object>>;
-  offerArray: Observable<Array<object>>;
+  jobsArray: Observable<Array>;
+  opportunitiesArray: Observable<Array>;
+  appliedArray: Observable<Array>;
+  interviewArray: Observable<Array>;
+  offerArray: Observable<Array>;
 
   droppedData: string;
 
@@ -59,7 +61,7 @@ export class ManageComponent implements OnInit {
   constructor(private http: HttpClient, private cookieService: CookieService, private router: Router, private activatedRoute: ActivatedRoute) {
     this.id = this.email = this.firstname = this.lastname = "";
 
-    this.jobsArray = this.opportunitiesArray = this.appliedArray = this.interviewArray = this.offerArray = from([]);
+    // this.jobsArray = this.opportunitiesArray = this.appliedArray = this.interviewArray = this.offerArray = from([{}]);
 
     router.events.subscribe((val) => {
         document.body.style.background = 'rgb(255, 255, 255, 1)';
@@ -120,24 +122,34 @@ export class ManageComponent implements OnInit {
       console.log(data);
       // this.jobsArray = data.data.get_jobs_by_user_id;
       this.jobsArray = from(data.data.get_jobs_by_user_id);
-      var temp = data.data.get_jobs_by_user_id;
+      var temp = from(data.data.get_jobs_by_user_id);
 
-      try {
-        for(var i = 0; i < temp.length; i++) {
-          if(temp[i].job_type_id === 1) {
-            this.opportunitiesArray.push(temp[i]);
-          } else if(temp[i].job_type_id === 2) {
-            this.appliedArray.push(this.temp[i]);
-          } else if(temp[i].job_type_id === 3) {
-            this.interviewArray.push(this.temp[i]);
-          } else if(temp[i].job_type_id === 4) {
-            this.offerArray.push(this.temp[i]);
-          }
-        }
-      // display an error message
-      } catch(e) {
-        console.log(e);
-      }
+      // temp_opp = temp.forEach(function onNext(job) {
+      //   console.log(job);
+      //   job.pipe(filter(e => e.job_type_id === 1));
+      // });
+
+      var temp_opp = temp.pipe(filter(e => e.job_type_id === 1));
+
+      temp_opp.subscribe(job => {
+        console.log(job);
+      });
+      // try {
+      //   for(var i = 0; i < temp.length; i++) {
+      //     if(temp[i].job_type_id === 1) {
+      //       this.opportunitiesArray.push(temp[i]);
+      //     } else if(temp[i].job_type_id === 2) {
+      //       this.appliedArray.push(temp[i]);
+      //     } else if(temp[i].job_type_id === 3) {
+      //       this.interviewArray.push(temp[i]);
+      //     } else if(temp[i].job_type_id === 4) {
+      //       this.offerArray.push(temp[i]);
+      //     }
+      //   }
+      // // display an error message
+      // } catch(e) {
+      //   console.log(e);
+      // }
 
     });
     console.log(this.opportunitiesArray);
@@ -175,20 +187,20 @@ export class ManageComponent implements OnInit {
       new_job_type = this.determine_drop_destination(event.nativeEvent.srcElement.attributes[4].value);
     }
 
-    if(old_job_type === "opportunity") {
-      // move from opportunity to applied
-      if(new_job_type === "applied") {
-        this.moveJob(event.dragData, this.opportunitiesArray, this.appliedArray);
-      }
-      // move from opportunity to interview
-      else if(new_job_type == "interview") {
-        this.moveJob(event.dragData, this.opportunitiesArray, this.interviewArray);
-      }
-      // move from opportunity to offer
-      else if(new_job_type == "offer") {
-        this.moveJob(event.dragData, this.opportunitiesArray, this.offerArray);
-      }
-    }
+    // if(old_job_type === "opportunity") {
+    //   // move from opportunity to applied
+    //   if(new_job_type === "applied") {
+    //     this.moveJob(event.dragData, this.opportunitiesArray, this.appliedArray);
+    //   }
+    //   // move from opportunity to interview
+    //   else if(new_job_type == "interview") {
+    //     this.moveJob(event.dragData, this.opportunitiesArray, this.interviewArray);
+    //   }
+    //   // move from opportunity to offer
+    //   else if(new_job_type == "offer") {
+    //     this.moveJob(event.dragData, this.opportunitiesArray, this.offerArray);
+    //   }
+    // }
 
     // this.droppedData = dropData;
     // setTimeout(() => {
