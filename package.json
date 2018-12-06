@@ -27,6 +27,7 @@
     "@fortawesome/free-solid-svg-icons": "^5.5.0",
     "@ngrx/core": "^1.2.0",
     "@ngrx/store": "^6.1.2",
+    "@ngrx/store-devtools": "^6.1.2",
     "angular-draggable-droppable": "^4.0.2",
     "angular-jwt": "^0.1.10",
     "bootstrap": "^4.1.3",
