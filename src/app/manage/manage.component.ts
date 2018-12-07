@@ -9,6 +9,8 @@ import { from, of } from 'rxjs';
 import { filter, map } from 'rxjs/operators'
 // import { NgDragDropModule } from 'ng-drag-drop';
 
+import { ManageService } from './../manage.service';
+
 // icons
 import { faBars } from '@fortawesome/free-solid-svg-icons';
 import { faTh } from '@fortawesome/free-solid-svg-icons';
@@ -72,7 +74,13 @@ export class ManageComponent implements OnInit {
 
   token: string;
 
-  constructor(private http: HttpClient, private cookieService: CookieService, private router: Router, private activatedRoute: ActivatedRoute) {
+  constructor(
+    private http: HttpClient,
+    private cookieService: CookieService,
+    private router: Router,
+    private activatedRoute: ActivatedRoute,
+    private manage: ManageService
+  ) {
     this.id = this.email = this.firstname = this.lastname = "";
 
     router.events.subscribe((val) => {
@@ -221,6 +229,8 @@ export class ManageComponent implements OnInit {
 
     // push the updated job to the new array
     this.jobMap[newJobType].push(job);
+
+    // call api
   }
 
   // function to determine the missing job type in a comma separated string

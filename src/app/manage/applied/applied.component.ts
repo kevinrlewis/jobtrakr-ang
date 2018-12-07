@@ -62,7 +62,13 @@ export class AppliedComponent implements OnInit {
   // display toggles
   displayAddForm = false;
 
-  constructor(private router: Router, private cookieService: CookieService, private fb: FormBuilder, private http: HttpClient, public manage: ManageService) { }
+  constructor(
+    private router: Router,
+    private cookieService: CookieService,
+    private fb: FormBuilder,
+    private http: HttpClient,
+    public manage: ManageService
+  ) { }
 
   ngOnInit() {
     this.token = this.cookieService.get('SESSIONID');

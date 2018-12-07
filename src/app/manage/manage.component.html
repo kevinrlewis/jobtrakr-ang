@@ -41,10 +41,10 @@
 </div>
 <div class="container-fluid grid-view" *ngIf="!isSubComponentActive() && show_grid">
   <div class="row header text-center">
-    <span class="col-3" id="opportunitiesSpanHeader">Opportunities</span>
-    <span class="col-3" id="appliedSpanHeader">Applied</span>
-    <span class="col-3" id="interviewsSpanHeader">Interviews</span>
-    <span class="col-3" id="offersSpanHeader">Offers</span>
+    <span class="col-3" id="opportunitiesSpanHeader"><a (click)="toggleOpportunitiesActive()">Opportunities</a></span>
+    <span class="col-3" id="appliedSpanHeader"><a (click)="toggleAppliedActive()">Applied</a></span>
+    <span class="col-3" id="interviewsSpanHeader"><a (click)="toggleInterviewsActive()">Interviews</a></span>
+    <span class="col-3" id="offersSpanHeader"><a (click)="toggleOffersActive()">Offers</a></span>
   </div>
   <!-- <p>{{droppedData}}</p> -->
   <div class="row grid-items">
