@@ -81,19 +81,23 @@ fa-icon {
 }
 
 #opportunitiesSpanHeader {
-  border-image-source: url('./../../assets/buttons/btn1.jpg');
+  /* border-image-source: url('./../../assets/buttons/btn1.jpg'); */
+  border-bottom: 2px solid #FCDC3B;
 }
 
 #appliedSpanHeader {
-  border-image-source: url('./../../assets/buttons/btn2.jpg');
+  /* border-image-source: url('./../../assets/buttons/btn2.jpg'); */
+  border-bottom: 2px solid #3299CC;
 }
 
 #interviewsSpanHeader {
-  border-image-source: url('./../../assets/buttons/btn3.jpg');
+  /* border-image-source: url('./../../assets/buttons/btn3.jpg'); */
+  border-bottom: 2px solid #00EEEE;
 }
 
 #offersSpanHeader {
-  border-image-source: url('./../../assets/buttons/btn4.jpg');
+  /* border-image-source: url('./../../assets/buttons/btn4.jpg'); */
+  border-bottom: 2px solid #7FFF00;
 }
 
 .header {
@@ -105,11 +109,11 @@ fa-icon {
   height: max-content!important;
   width: inherit;
   color: #000000;
-  border-bottom: 1px solid #000000;
-  border-image-slice: 5;
+  /* border-bottom: 1px solid #000000; */
+  /* border-image-slice: 5;
   border-image-width: 5;
   border-image-outset: 5;
-  border-image-repeat: round;
+  border-image-repeat: round; */
   /* padding-left: 0.15rem;
   padding-right: 0.15rem; */
 }
@@ -167,6 +171,22 @@ fa-icon {
   /* border: dashed 2px red; */
   /*background-color: lightgreen;*/
   background-color: #ccffcc!important;
+}
+
+.drop-over-active-opportunities {
+  background-color: rgba(252, 220, 59, 0.25)!important;
+}
+
+.drop-over-active-applied {
+  background-color: rgba(50, 153, 204, 0.25)!important;
+}
+
+.drop-over-active-interviews {
+  background-color: rgba(0, 238, 238, 0.25)!important;
+}
+
+.drop-over-active-offers {
+  background-color: rgba(127, 255, 0, 0.25)!important;
 }
 
 .drag-active {

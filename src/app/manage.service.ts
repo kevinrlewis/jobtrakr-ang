@@ -104,7 +104,7 @@ export class ManageService {
   /*
     Given a job id and job type id, update a job in the database
   */
-  updateJobType(user_id: number, job_id: number, job_type_id: number) {
+  updateJobType(user_id: number, jobs_id: number, job_type_id: number) {
     var httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json'
@@ -112,7 +112,7 @@ export class ManageService {
     };
 
     return this.http.post<UpdateJobTypeResponse>(
-      '/api/' + user_id + 'update/' + job_id + '/' + job_type_id,
+      '/api/' + user_id + '/job/' + jobs_id + '/update/' + job_type_id,
       httpOptions
     )
   }

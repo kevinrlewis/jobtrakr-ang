@@ -117,12 +117,12 @@ export class ManageComponent implements OnInit {
       } else {
         this.setInitVariables();
         // don't show grid first
-        // this.show_buttons = true;
-        // this.show_grid = false;
+        this.show_buttons = true;
+        this.show_grid = false;
 
         // testing grid
-        this.show_buttons = false;
-        this.show_grid = true;
+        // this.show_buttons = false;
+        // this.show_grid = true;
       }
     });
 
@@ -147,6 +147,7 @@ export class ManageComponent implements OnInit {
       '/api/job/id/' + this.id,
       httpOptions
     ).subscribe(data => {
+      console.log(data);
       // store all jobs in array
       this.jobsArray = data.data.get_jobs_by_user_id;
 
@@ -207,7 +208,7 @@ export class ManageComponent implements OnInit {
     string and will move that job object between arrays within the jobMap
   */
   moveJob(job: Job, oldJobType: string, newJobType: string) {
-    console.log("old job type:", oldJobType, "new job type:", newJobType);
+    console.log("old job type:", oldJobType, "| new job type:", newJobType);
     try {
       // determine index of the job we are removing from the old array
       var index = this.jobMap[oldJobType].indexOf(job);
@@ -231,6 +232,10 @@ export class ManageComponent implements OnInit {
     this.jobMap[newJobType].push(job);
 
     // call api
+    this.manage.updateJobType(job.user_id, job.jobs_id, job.job_type_id)
+      .subscribe(data => {
+        console.log(data);
+      });
   }
 
   // function to determine the missing job type in a comma separated string

@@ -51,7 +51,7 @@
     <div id="opportunityDropArea" class="col-3"
       droppable
       [dropScope]="['applied', 'interview', 'offer']"
-      [dragOverClass]="'drop-over-active'"
+      [dragOverClass]="'drop-over-active-opportunities'"
       (onDrop)="onJobDrop($event)">
       <div class="row shadow-lg" *ngFor="let opp of opportunitiesObservable | async"
         draggable
@@ -67,7 +67,7 @@
     <div id="appliedDropArea" class="col-3"
       droppable
       [dropScope]="['opportunity', 'interview', 'offer']"
-      [dragOverClass]="'drop-over-active'"
+      [dragOverClass]="'drop-over-active-applied'"
       (onDrop)="onJobDrop($event)">
       <!-- <div class="row shadow-lg" *ngFor="let app of appliedArray" draggable [dragScope]="'applied'" [dragData]="app"> -->
       <div class="row shadow-lg" *ngFor="let app of appliedObservable | async"
@@ -83,7 +83,7 @@
     <div id="interviewDropArea" class="col-3"
       droppable
       [dropScope]="['applied', 'opportunity', 'offer']"
-      [dragOverClass]="'drop-over-active'"
+      [dragOverClass]="'drop-over-active-interviews'"
       (onDrop)="onJobDrop($event)">
       <!-- <div class="row shadow-lg" *ngFor="let inter of interviewArray" draggable [dragClass]="'drag-over-active'" [dragScope]="'interview'" [dragData]="inter"> -->
       <div class="row shadow-lg" *ngFor="let inter of interviewObservable | async"
@@ -99,7 +99,7 @@
     <div id="offerDropArea" class="col-3"
       droppable
       [dropScope]="['applied', 'interview', 'opportunity']"
-      [dragOverClass]="'drop-over-active'"
+      [dragOverClass]="'drop-over-active-offers'"
       (onDrop)="onJobDrop($event)">
       <!-- <div class="row shadow-lg" *ngFor="let off of offerArray" draggable [dragScope]="'offer'" [dragData]="off"> -->
       <div class="row shadow-lg" *ngFor="let off of offerObservable | async"
