@@ -7,7 +7,7 @@ import { HttpClient, HttpClientModule, HttpHeaders } from '@angular/common/http'
 import { ManageService } from './../../manage.service';
 import { Observable } from 'rxjs/Observable';
 import { from, of } from 'rxjs';
-import { filter, map } from 'rxjs/operators'
+import { filter, map } from 'rxjs/operators';
 
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 
@@ -68,6 +68,9 @@ export class AppliedComponent implements OnInit {
   // display toggles
   displayAddForm = false;
 
+  validationMessage = [];
+  displayMessage:boolean;
+
   constructor(
     private router: Router,
     private cookieService: CookieService,
@@ -116,10 +119,15 @@ export class AppliedComponent implements OnInit {
       ).subscribe(data => {
         console.log(data);
         // close add form
+        this.displayAddForm = false;
       }, error => {
         console.log(error);
         // TODO: display error
       });
+    } else {
+      // display message
+      this.displayMessage = true;
+      this.validationMessage = validated.message;
     }
   }
 
@@ -135,14 +143,14 @@ export class AppliedComponent implements OnInit {
     // )
     this.manage.getJobs(JOB_TYPE, JOB_TYPE_NAME, this.user.user_id).subscribe(
       data => {
-        console.log(data.data.get_jobs_by_user_id_and_job_type_id);
+        // console.log(data.data.get_jobs_by_user_id_and_job_type_id);
         // this.jobsArray = data.data.get_jobs_by_user_id_and_job_type_id;
-        // data.data.get_jobs_by_user_id_and_job_type_id.forEach(job => {
-        //   if(job.job_type_id === JOB_TYPE) {
-        //     this.appliedArray.push(job);
-        //   }
-        //   this.jobsArray.push(job);
-        // });
+        data.data.get_jobs_by_user_id_and_job_type_id.forEach(job => {
+          if(job.job_type_id === JOB_TYPE) {
+            this.appliedArray.push(job);
+          }
+          // this.jobsArray.push(job);
+        });
         return;
       },
       // TODO: display message if there was an error retrieving opportunities
@@ -185,6 +193,12 @@ export class AppliedComponent implements OnInit {
     //   messageList.push('Password invalid.');
     // }
 
+    if(!this.isValidUrl(l.get('link').value)) {
+      console.log('link invalid');
+      status = false;
+      messageList.push('Link invalid.');
+    }
+
     // return object
     return { status: status, message: messageList };
   }
@@ -192,6 +206,21 @@ export class AppliedComponent implements OnInit {
   resetAddForm() {
     // reset form
     this.addAppliedForm.reset();
+  }
+
+  isValidUrl(link) {
+    var pattern = new RegExp('^(https?:\\/\\/)?'+ // protocol
+    '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|'+ // domain name
+    '((\\d{1,3}\\.){3}\\d{1,3}))'+ // OR ip (v4) address
+    '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*'+ // port and path
+    '(\\?[;&a-z\\d%_.~+=-]*)?'+ // query string
+    '(\\#[-a-z\\d_]*)?$','i'); // fragment locater
+
+    if(!pattern.test(link)) {
+      return false;
+    } else {
+      return true;
+    }
   }
 
 }
@@ -202,7 +231,7 @@ interface Job {
   company_name: string,
   link: string,
   notes: string,
-  attachments: number[],
+  attachments: string[],
   user_id: number,
   create_datetime: string,
   update_datetime: string,

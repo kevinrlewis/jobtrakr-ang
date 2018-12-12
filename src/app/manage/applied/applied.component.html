@@ -13,6 +13,13 @@
   <button class="col-12 btn btn-outline-success add-applied" (click)="toggleAddForm()">Add</button>
 </div>
 <div class="row" *ngIf="displayAddForm">
+  <div class="justify-content-center col-12 validation-message" *ngIf="displayMessage">
+    <div class="alert alert-danger">
+      <li class="" *ngFor="let message of validationMessage">
+        {{message}}
+      </li>
+    </div>
+  </div>
   <div class="container op-area">
     <div class="row add-applied">
       <form [formGroup]="addAppliedForm" (ngSubmit)="onAddSubmit()" class="col-12">
@@ -48,7 +55,7 @@
     </div>
   </div>
 </div>
-<div class="row" *ngFor="let job of jobsArray">
+<div class="row" *ngFor="let job of appliedObservable | async">
   <div class="container job-container">
     <div class="row job" (click)="job.jobs_id = !job.jobs_id">
       <h4 class="col-8">{{job.job_title}}<small> {{job.company_name}}</small></h4>

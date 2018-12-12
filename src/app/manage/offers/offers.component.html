@@ -48,7 +48,7 @@
     </div>
   </div>
 </div>
-<div class="row" *ngFor="let job of jobsArray">
+<div class="row" *ngFor="let job of offersObservable | async">
   <div class="container job-container">
     <div class="row job" (click)="job.jobs_id = !job.jobs_id">
       <h4 class="col-8">{{job.job_title}}<small> {{job.company_name}}</small></h4>

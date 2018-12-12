@@ -5,6 +5,9 @@ import { Router, RouterEvent, NavigationEnd, ActivatedRoute } from '@angular/rou
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { HttpClient, HttpClientModule, HttpHeaders } from '@angular/common/http';
 import { ManageService } from './../../manage.service';
+import { Observable } from 'rxjs/Observable';
+import { from, of } from 'rxjs';
+import { filter, map } from 'rxjs/operators';
 
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 
@@ -59,10 +62,21 @@ export class InterviewsComponent implements OnInit {
   // array to hold jobs interviewing, pulled from api
   jobsArray: object[];
 
+  interviewsArray: Job[] = [];
+  interviewsObservable: Observable<Array<Job>>;
+
   // display toggles
   displayAddForm = false;
 
-  constructor(private router: Router, private cookieService: CookieService, private fb: FormBuilder, private http: HttpClient, public manage: ManageService) { }
+  constructor(
+    private router: Router,
+    private cookieService: CookieService,
+    private fb: FormBuilder,
+    private http: HttpClient,
+    public manage: ManageService
+  ) {
+    this.interviewsObservable = of(this.interviewsArray);
+  }
 
   ngOnInit() {
     this.token = this.cookieService.get('SESSIONID');
@@ -121,8 +135,13 @@ export class InterviewsComponent implements OnInit {
     // )
     this.manage.getJobs(JOB_TYPE, JOB_TYPE_NAME, this.user.user_id).subscribe(
       data => {
-        console.log(data.data);
-        this.jobsArray = data.data.get_jobs_by_user_id_and_job_type_id;
+        // console.log(data.data);
+        data.data.get_jobs_by_user_id_and_job_type_id.forEach(job => {
+          if(job.job_type_id === JOB_TYPE) {
+            this.interviewsArray.push(job);
+          }
+          // this.jobsArray.push(job);
+        });
         return;
       },
       // TODO: display message if there was an error retrieving opportunities
@@ -174,4 +193,17 @@ export class InterviewsComponent implements OnInit {
     this.addInterviewForm.reset();
   }
 
+}
+
+interface Job {
+  jobs_id: number,
+  job_title: string,
+  company_name: string,
+  link: string,
+  notes: string,
+  attachments: string[],
+  user_id: number,
+  create_datetime: string,
+  update_datetime: string,
+  job_type_id: number
 }

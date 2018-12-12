@@ -44,3 +44,13 @@
 .more > .row > p {
   margin-bottom: 0;
 }
+
+.validation-message {
+  padding: 0;
+}
+
+.validation-message > .alert {
+  border-radius: 0;
+  margin-bottom: 0.25rem;
+  padding: 0.25rem 1.25rem;
+}

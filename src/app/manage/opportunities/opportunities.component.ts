@@ -5,6 +5,9 @@ import { Router, RouterEvent, NavigationEnd, ActivatedRoute } from '@angular/rou
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { HttpClient, HttpClientModule, HttpHeaders } from '@angular/common/http';
 import { ManageService } from './../../manage.service';
+import { Observable } from 'rxjs/Observable';
+import { from, of } from 'rxjs';
+import { filter, map } from 'rxjs/operators';
 
 // icons
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
@@ -60,16 +63,27 @@ export class OpportunitiesComponent implements OnInit {
   // array to hold existing opportunities, pulled from api
   jobsArray: object[];
 
+  opportunitiesArray: Job[] = [];
+  opportunitiesObservable: Observable<Array<Job>>;
+
   // display toggles
   displayAddForm = false;
 
-  constructor(private router: Router, private cookieService: CookieService, private fb: FormBuilder, private http: HttpClient, public manage: ManageService) {
+  constructor(
+    private router: Router,
+    private cookieService: CookieService,
+    private fb: FormBuilder,
+    private http: HttpClient,
+    public manage: ManageService
+  ) {
     router.events.subscribe((val) => {
         // document.body.style.background = 'rgb(54, 73, 78, 1)';
         // document.body.style.background = 'url(\'../../../assets/buttons/btn1.jpg\') no-repeat center center fixed';
         // document.body.style.backgroundSize = 'cover';
         // document.body.style.height = '100%';
     });
+
+    this.opportunitiesObservable = of(this.opportunitiesArray);
   }
 
   // initialization function, when the component is refreshed/initialized
@@ -143,7 +157,12 @@ export class OpportunitiesComponent implements OnInit {
     this.manage.getJobs(JOB_TYPE, JOB_TYPE_NAME, this.user.user_id).subscribe(
       data => {
         console.log(data.data);
-        this.jobsArray = data.data.get_jobs_by_user_id_and_job_type_id;
+        data.data.get_jobs_by_user_id_and_job_type_id.forEach(job => {
+          if(job.job_type_id === JOB_TYPE) {
+            this.opportunitiesArray.push(job);
+          }
+          // this.jobsArray.push(job);
+        });
         return;
       },
       // TODO: display message if there was an error retrieving opportunities
@@ -197,4 +216,17 @@ export class OpportunitiesComponent implements OnInit {
   resetAddForm() {
     this.addOpportunityForm.reset();
   }
+}
+
+interface Job {
+  jobs_id: number,
+  job_title: string,
+  company_name: string,
+  link: string,
+  notes: string,
+  attachments: string[],
+  user_id: number,
+  create_datetime: string,
+  update_datetime: string,
+  job_type_id: number
 }
