@@ -13,7 +13,8 @@
 }
 
 .job-container {
-  padding: 0;
+  /* padding: 0; */
+  background-color: rgba(0, 0, 0, 0.05);
 }
 
 .job {
@@ -22,17 +23,17 @@
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
-  background-color: rgba(0, 0, 0, 0.15);
-  margin-top: 0.15rem;
-  margin-bottom: 0.15rem;
+  background-color: #FFFFFF;
+  margin-top: 0.25rem;
+  margin-bottom: 0.25rem;
   margin-right: 0;
   margin-left: 0;
   padding-top: 0.4rem;
   padding-bottom: 0.4rem;
+  box-shadow: 0 1rem 3rem rgba(0,0,0,.175)!important;
 }
 
 .more {
-  background-color: rgba(0, 0, 0, 0.05);
   padding-top: 0.25rem;
   padding-bottom: 0.25rem;
 }
