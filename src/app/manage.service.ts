@@ -88,7 +88,24 @@ export class ManageService {
     // });
   }
 
-  getJobs(job_type, job_type_name, user_id) {
+  // getJobs(job_type, job_type_name, user_id) {
+  //   var httpOptions = {
+  //     headers: new HttpHeaders({
+  //       'Content-Type': 'application/json'
+  //     })
+  //   };
+  //
+  //   return this.http.get<GetJobsResponse>(
+  //     '/api/job/' + job_type_name + '/id/' + user_id,
+  //     httpOptions
+  //   );
+  // }
+
+  /*
+    Get all jobs attached to a user
+  */
+  getJobs(user_id) {
+    console.log('getJobs: ', user_id);
     var httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json'
@@ -96,7 +113,7 @@ export class ManageService {
     };
 
     return this.http.get<GetJobsResponse>(
-      '/api/job/' + job_type_name + '/id/' + user_id,
+      '/api/job/id/' + user_id,
       httpOptions
     );
   }

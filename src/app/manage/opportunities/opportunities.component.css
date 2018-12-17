@@ -13,8 +13,8 @@
 }
 
 .job-container {
-  /* padding: 0; */
-  background-color: rgba(0, 0, 0, 0.05);
+  padding: 0;
+  /* background-color: rgba(0, 0, 0, 0.05); */
 }
 
 .job {

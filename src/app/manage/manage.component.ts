@@ -147,7 +147,7 @@ export class ManageComponent implements OnInit {
       '/api/job/id/' + this.id,
       httpOptions
     ).subscribe(data => {
-      console.log(data);
+      console.log('/api/job/id response', data);
       // store all jobs in array
       this.jobsArray = data.data.get_jobs_by_user_id;
 

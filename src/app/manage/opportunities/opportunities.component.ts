@@ -154,10 +154,11 @@ export class OpportunitiesComponent implements OnInit {
   */
   getJobs() {
     // call function in manage service to grab jobs based on job type and user id
-    this.manage.getJobs(JOB_TYPE, JOB_TYPE_NAME, this.user.user_id).subscribe(
+    console.log(this.user.user_id);
+    this.manage.getJobs(this.user.user_id).subscribe(
       data => {
         console.log(data.data);
-        data.data.get_jobs_by_user_id_and_job_type_id.forEach(job => {
+        data.data.get_jobs_by_user_id.forEach(job => {
           if(job.job_type_id === JOB_TYPE) {
             this.opportunitiesArray.push(job);
           }
