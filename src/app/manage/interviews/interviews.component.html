@@ -13,6 +13,13 @@
   <button class="col-12 btn btn-outline-success add-interview" (click)="toggleAddForm()">Add</button>
 </div>
 <div class="row" *ngIf="displayAddForm">
+  <div class="justify-content-center col-12 validation-message" *ngIf="displayMessage">
+    <div class="alert alert-danger">
+      <li class="" *ngFor="let message of validationMessage">
+        {{message}}
+      </li>
+    </div>
+  </div>
   <div class="container op-area">
     <div class="row add-interview">
       <form [formGroup]="addInterviewForm" (ngSubmit)="onAddSubmit()" class="col-12">

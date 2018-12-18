@@ -68,6 +68,9 @@ export class OffersComponent implements OnInit {
   // display toggles
   displayAddForm = false;
 
+  validationMessage = [];
+  displayMessage:boolean;
+
   constructor(
     private router: Router,
     private cookieService: CookieService,
@@ -120,6 +123,9 @@ export class OffersComponent implements OnInit {
         console.log(error);
         // TODO: display error
       });
+    } else {
+      this.displayMessage = true;
+      this.validationMessage = validated.message;
     }
   }
 
@@ -133,10 +139,10 @@ export class OffersComponent implements OnInit {
     //   '/api/job/' + JOB_TYPE_NAME + '/id/' + this.user.user_id,
     //   httpOptions
     // )
-    this.manage.getJobs(JOB_TYPE, JOB_TYPE_NAME, this.user.user_id).subscribe(
+    this.manage.getJobs(this.user.user_id).subscribe(
       data => {
         console.log(data.data);
-        data.data.get_jobs_by_user_id_and_job_type_id.forEach(job => {
+        data.data.get_jobs_by_user_id.forEach(job => {
           if(job.job_type_id === JOB_TYPE) {
             this.offersArray.push(job);
           }
@@ -172,17 +178,24 @@ export class OffersComponent implements OnInit {
     let messageList: Array<string> = [];
     let status: boolean = true;
 
-    // // check if the email is invalid
-    // if (l.get('email').invalid) {
-    //   status = false;
-    //   messageList.push('Email invalid.');
-    // }
-    //
-    // // check if password is invalid
-    // if (l.get('password').invalid) {
-    //   status = false;
-    //   messageList.push('Password invalid.');
-    // }
+    // check if the job title is invalid
+    if (l.get('jobTitle').invalid) {
+      status = false;
+      messageList.push('Job title invalid.');
+    }
+
+    // check if the company name is invalid
+    if (l.get('companyName').invalid) {
+      status = false;
+      messageList.push('Company name invalid.');
+    }
+
+    // check if link is a valid link
+    if(!this.manage.isValidUrl(l.get('link').value) || l.get('link').invalid) {
+      status = false;
+      messageList.push('Link invalid.');
+    }
+
 
     // return object
     return { status: status, message: messageList };

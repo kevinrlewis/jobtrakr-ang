@@ -105,7 +105,6 @@ export class AppliedComponent implements OnInit {
       // check if any files are attached
       // if so then create the string to pass to db
       var temp = this.manage.formatFileNamePayload(this.filesArray);
-      console.log("FILES TO ATTACH:", temp);
 
       // call api to post a job
       this.manage.addJob(
@@ -141,11 +140,11 @@ export class AppliedComponent implements OnInit {
     //   '/api/job/applied/id/' + this.user.user_id,
     //   httpOptions
     // )
-    this.manage.getJobs(JOB_TYPE, JOB_TYPE_NAME, this.user.user_id).subscribe(
+    this.manage.getJobs(this.user.user_id).subscribe(
       data => {
         // console.log(data.data.get_jobs_by_user_id_and_job_type_id);
         // this.jobsArray = data.data.get_jobs_by_user_id_and_job_type_id;
-        data.data.get_jobs_by_user_id_and_job_type_id.forEach(job => {
+        data.data.get_jobs_by_user_id.forEach(job => {
           if(job.job_type_id === JOB_TYPE) {
             this.appliedArray.push(job);
           }
@@ -180,21 +179,21 @@ export class AppliedComponent implements OnInit {
     // variables to return
     let messageList: Array<string> = [];
     let status: boolean = true;
+    console.log(l);
+    // check if the job title is invalid
+    if (l.get('jobTitle').invalid) {
+      status = false;
+      messageList.push('Job title invalid.');
+    }
 
-    // // check if the email is invalid
-    // if (l.get('email').invalid) {
-    //   status = false;
-    //   messageList.push('Email invalid.');
-    // }
-    //
-    // // check if password is invalid
-    // if (l.get('password').invalid) {
-    //   status = false;
-    //   messageList.push('Password invalid.');
-    // }
+    // check if the company name is invalid
+    if (l.get('companyName').invalid) {
+      status = false;
+      messageList.push('Company name invalid.');
+    }
 
-    if(!this.isValidUrl(l.get('link').value)) {
-      console.log('link invalid');
+    // check if link is a valid link
+    if(!this.manage.isValidUrl(l.get('link').value) || l.get('link').invalid) {
       status = false;
       messageList.push('Link invalid.');
     }
@@ -207,22 +206,6 @@ export class AppliedComponent implements OnInit {
     // reset form
     this.addAppliedForm.reset();
   }
-
-  isValidUrl(link) {
-    var pattern = new RegExp('^(https?:\\/\\/)?'+ // protocol
-    '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|'+ // domain name
-    '((\\d{1,3}\\.){3}\\d{1,3}))'+ // OR ip (v4) address
-    '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*'+ // port and path
-    '(\\?[;&a-z\\d%_.~+=-]*)?'+ // query string
-    '(\\#[-a-z\\d_]*)?$','i'); // fragment locater
-
-    if(!pattern.test(link)) {
-      return false;
-    } else {
-      return true;
-    }
-  }
-
 }
 
 interface Job {

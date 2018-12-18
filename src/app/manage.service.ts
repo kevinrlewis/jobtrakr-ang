@@ -105,7 +105,6 @@ export class ManageService {
     Get all jobs attached to a user
   */
   getJobs(user_id) {
-    console.log('getJobs: ', user_id);
     var httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json'
@@ -147,6 +146,22 @@ export class ManageService {
     }
     return temp;
   }
+
+  isValidUrl(link) {
+    var pattern = new RegExp('^(https?:\\/\\/)?'+ // protocol
+    '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|'+ // domain name
+    '((\\d{1,3}\\.){3}\\d{1,3}))'+ // OR ip (v4) address
+    '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*'+ // port and path
+    '(\\?[;&a-z\\d%_.~+=-]*)?'+ // query string
+    '(\\#[-a-z\\d_]*)?$','i'); // fragment locater
+
+    if(!pattern.test(link)) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
 }
 
 // interface to get an expected response from the api
@@ -167,7 +182,7 @@ export interface AddJobResponse {
 export interface GetJobsResponse {
   message: string,
   data: {
-    get_jobs_by_user_id_and_job_type_id: [
+    get_jobs_by_user_id: [
       {
         jobs_id: number,
         job_title: string,
