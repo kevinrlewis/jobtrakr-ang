@@ -60,14 +60,15 @@
     <div class="row job" (click)="job.jobs_id = !job.jobs_id">
       <h4 class="col-8">{{job.job_title}}<small> {{job.company_name}}</small></h4>
       <small class="col-4 text-right">{{job.create_datetime | date:'MMMM d, y h:mm a'}}</small>
-    </div>
-    <div class="more" *ngIf="!job.jobs_id">
-      <div class="row">
-        <h6 class="col-12"><small>Link: </small>{{job.link}}</h6>
+      <div class="more col-12" *ngIf="!job.jobs_id">
+        <div class="row">
+          <h6 class="col-12"><small>Link: </small>{{job.link}}</h6>
+        </div>
+        <div class="row">
+          <p class="col-12"><small>Notes: </small>{{job.notes}}</p>
+        </div>
       </div>
-      <div class="row">
-        <p class="col-12"><small>Notes: </small>{{job.notes}}</p>
-      </div>
     </div>
+    <hr>
   </div>
 </div>

@@ -22,7 +22,10 @@ a {
 }
 
 .add-opportunity {
-  margin-bottom: 0.25rem;
+  margin-bottom: 0.25rem;.job:hover {
+  background-color: rgba(0, 238, 238, 0.25)!important;
+}
+
 }
 
 .job-container {
@@ -36,14 +39,13 @@ a {
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
-  background-color: #FFFFFF;
   margin-top: 0.25rem;
   margin-bottom: 0.25rem;
   margin-right: 0;
   margin-left: 0;
   padding-top: 0.4rem;
   padding-bottom: 0.4rem;
-  box-shadow: 0 1rem 3rem rgba(0,0,0,.175)!important;
+  /* box-shadow: 0 1rem 3rem rgba(0,0,0,.175)!important; */
 }
 
 .more {
@@ -70,4 +72,16 @@ a {
   padding: 0.25rem 1.25rem;
   border: none;
   margin: 0;
+}
+
+hr {
+  margin: 0;
+}
+
+.job h4 {
+  margin: 0!important;
+}
+
+.job:hover {
+  background-color: rgba(50, 153, 204, 0.25);
 }
