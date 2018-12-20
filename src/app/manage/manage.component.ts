@@ -151,13 +151,19 @@ export class ManageComponent implements OnInit {
       // store all jobs in array
       this.jobsArray = data.data.get_jobs_by_user_id;
 
-      // temp observable
-      var temp = from(data.data.get_jobs_by_user_id);
+      /*
+        check if there are no jobs, if so then we do not want to create
+        an observable out of null
+      */
+      if(data.data.get_jobs_by_user_id !== null) {
+        // temp observable
+        var temp = from(data.data.get_jobs_by_user_id);
 
-      // filter and add all jobs to their specific array
-      temp.subscribe(job => {
-        this.jobMap[job.job_type_name].push(job);
-      });
+        // filter and add all jobs to their specific array
+        temp.subscribe(job => {
+          this.jobMap[job.job_type_name].push(job);
+        });
+      }
     });
 
   }

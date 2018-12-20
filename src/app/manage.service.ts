@@ -1,5 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpClientModule, HttpHeaders } from '@angular/common/http';
+import * as AWS from 'aws-sdk/global';
+import * as S3 from 'aws-sdk/clients/s3';
+import
 
 @Injectable({
   providedIn: 'root'
@@ -11,8 +14,10 @@ export class ManageService {
   constructor(private http: HttpClient) { }
 
 
-  // function to call the api and save a file
-  // and also add the file to the database
+  /*
+    function to call the api and save a file
+    and also add the file to the database
+  */
   saveFile(event, type:number) {
     // reset filesArray
     this.filesArray = [];
@@ -139,7 +144,7 @@ export class ManageService {
       temp = '{';
       // iterate if there are multiple files
       for(var i = 0; i < file_arr.length; i++) {
-        temp += '"' + file_arr[i] + '",'
+        temp += file_arr[i] + ','
       }
       // don't include the trailing comma
       temp = temp.substring(0, temp.length - 1) + '}';
@@ -159,6 +164,14 @@ export class ManageService {
       return false;
     } else {
       return true;
+    }
+  }
+
+  getAttachment(key) {
+    const bucket = new S3.loadFromFile('./../../../aws_cred.json');
+    const params = {
+      Bucket: 'jobtrak',
+      Key: key
     }
   }
 

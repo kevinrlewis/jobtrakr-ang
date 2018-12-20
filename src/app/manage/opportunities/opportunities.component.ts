@@ -152,7 +152,7 @@ export class OpportunitiesComponent implements OnInit {
   */
   onFileChange(event) {
     // save file with type 1 (opportunity)
-    this.filesArray = this.manage.saveFile(event, 1);
+    this.filesArray = this.manage.saveFile(event, JOB_TYPE);
   }
 
   /*
@@ -162,12 +162,14 @@ export class OpportunitiesComponent implements OnInit {
     // call function in manage service to grab jobs based on job type and user id
     this.manage.getJobs(this.user.user_id).subscribe(
       data => {
-        data.data.get_jobs_by_user_id.forEach(job => {
-          if(job.job_type_id === JOB_TYPE) {
-            this.opportunitiesArray.push(job);
-          }
-          // this.jobsArray.push(job);
-        });
+        if(data.data.get_jobs_by_user_id !== null) {
+          data.data.get_jobs_by_user_id.forEach(job => {
+            if(job.job_type_id === JOB_TYPE) {
+              this.opportunitiesArray.push(job);
+            }
+            // this.jobsArray.push(job);
+          });  
+        }
         return;
       },
       // TODO: display message if there was an error retrieving opportunities

@@ -142,14 +142,14 @@ export class AppliedComponent implements OnInit {
     // )
     this.manage.getJobs(this.user.user_id).subscribe(
       data => {
-        // console.log(data.data.get_jobs_by_user_id_and_job_type_id);
-        // this.jobsArray = data.data.get_jobs_by_user_id_and_job_type_id;
-        data.data.get_jobs_by_user_id.forEach(job => {
-          if(job.job_type_id === JOB_TYPE) {
-            this.appliedArray.push(job);
-          }
-          // this.jobsArray.push(job);
-        });
+        if(data.data.get_jobs_by_user_id !== null) {
+          data.data.get_jobs_by_user_id.forEach(job => {
+            if(job.job_type_id === JOB_TYPE) {
+              this.appliedArray.push(job);
+            }
+            // this.jobsArray.push(job);
+          });
+        }
         return;
       },
       // TODO: display message if there was an error retrieving opportunities
