@@ -1,8 +1,11 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpClientModule, HttpHeaders } from '@angular/common/http';
-import * as AWS from 'aws-sdk/global';
-import * as S3 from 'aws-sdk/clients/s3';
-import
+import { Observable } from 'rxjs/Observable';
+import { from, of } from 'rxjs';
+import { filter, map } from 'rxjs/operators';
+
+import * as AWS from 'aws-sdk';
+const cred = require('./../../../aws_cred.json');
 
 @Injectable({
   providedIn: 'root'
@@ -63,6 +66,9 @@ export class ManageService {
     return this.filesArray;
   }
 
+  /*
+
+  */
   addJob(company_name:string, job_title:string, link:string, notes:string, type:string, attachments:string, user_id:number) {
     var httpOptions = {
       headers: new HttpHeaders({
@@ -84,27 +90,7 @@ export class ManageService {
       },
       httpOptions
     );
-    // .subscribe(data => {
-    //   console.log(data);
-    //   // close add form
-    // }, error => {
-    //   console.log(error);
-    //   // display error
-    // });
   }
-
-  // getJobs(job_type, job_type_name, user_id) {
-  //   var httpOptions = {
-  //     headers: new HttpHeaders({
-  //       'Content-Type': 'application/json'
-  //     })
-  //   };
-  //
-  //   return this.http.get<GetJobsResponse>(
-  //     '/api/job/' + job_type_name + '/id/' + user_id,
-  //     httpOptions
-  //   );
-  // }
 
   /*
     Get all jobs attached to a user
@@ -167,12 +153,22 @@ export class ManageService {
     }
   }
 
-  getAttachment(key) {
-    const bucket = new S3.loadFromFile('./../../../aws_cred.json');
-    const params = {
+  /*
+    get a signed url from aws for a specific key in S3
+  */
+  getAttachment(key):any {
+    // initialize s3 with credentials
+    var s3 = new AWS.S3(cred);
+
+    var params = {
       Bucket: 'jobtrak',
+      Expires: 60*60,
       Key: key
-    }
+    };
+
+    // call the s3 method to get the signed url
+    var url = s3.getSignedUrl('getObject', params);
+    return url;
   }
 
 }

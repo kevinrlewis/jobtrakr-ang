@@ -10,7 +10,11 @@ import { from, of } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 
 // icons
-import { faTimes } from '@fortawesome/free-solid-svg-icons';
+import {
+  faTimes,
+  faExternalLinkSquareAlt,
+  faExternalLinkAlt
+} from '@fortawesome/free-solid-svg-icons';
 
 const httpOptions = {
   headers: new HttpHeaders({
@@ -45,6 +49,8 @@ export class OpportunitiesComponent implements OnInit {
 
   // font awesome icons
   faTimes = faTimes;
+  faExternalLinkAlt = faExternalLinkAlt;
+  faExternalLinkSquareAlt = faExternalLinkSquareAlt;
 
   // form variables
   addOpportunityForm: FormGroup;
@@ -168,7 +174,7 @@ export class OpportunitiesComponent implements OnInit {
               this.opportunitiesArray.push(job);
             }
             // this.jobsArray.push(job);
-          });  
+          });
         }
         return;
       },
@@ -180,13 +186,17 @@ export class OpportunitiesComponent implements OnInit {
   }
 
 
-  // when the user clicks the x button, navigate back to the manage component
+  /*
+    when the user clicks the x button, navigate back to the manage component
+  */
   close() {
     this.router.navigate(['manage/' + jwt_decode(this.token).sub]);
     this.resetAddForm();
   }
 
-  // helper function to toggle the add opportunity form to display and not display
+  /*
+    helper function to toggle the add opportunity form to display and not display
+  */
   toggleAddForm() {
     this.displayAddForm = !this.displayAddForm;
     // if the form is already being display, close should reset the values
@@ -225,12 +235,30 @@ export class OpportunitiesComponent implements OnInit {
     return { status: status, message: messageList };
   }
 
-  // reset the values of the add opportunity form
+  /*
+    reset the values of the add opportunity form
+  */
   resetAddForm() {
     this.addOpportunityForm.reset();
   }
+
+  /*
+    get a file from s3 to download
+  */
+  getFile(file_path) {
+    // get path of the url
+    var l = document.createElement("a");
+    l.href = file_path;
+
+    // get the pre signed url by passing the url without the initial slash
+    var url = this.manage.getAttachment(l.pathname.substring(1));
+
+    // open file in new tab (should download it)
+    window.open(url);
+  }
 }
 
+// job interfaces
 interface Job {
   jobs_id: number,
   job_title: string,

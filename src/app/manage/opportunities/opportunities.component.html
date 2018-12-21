@@ -62,14 +62,18 @@
       <small class="col-4 text-right">{{job.create_datetime | date:'MMMM d, y h:mm a'}}</small>
       <div class="more col-12" *ngIf="!job.jobs_id">
         <div class="row">
-          <h6 class="col-12"><small>Link: </small>{{job.link}}</h6>
+          <h6 class="col-12">Link: {{job.link}}</h6>
         </div>
         <div class="row">
-          <p class="col-12"><small>Notes: </small>{{job.notes}}</p>
+          <p class="col-12">Notes: {{job.notes}}</p>
         </div>
-        <div class="row"><small>Attachments:</small>
-          <div *ngFor="let attachment of job.attachments">
-            <a href="{{attachment.file_path}}">{{attachment.original_name}}</a>
+        <div class="row">
+          <div class="col-12">Attachments:
+            <div *ngFor="let attachment of job.attachments">
+              <a class="col-auto attachment" (click)="getFile(attachment.file_path)">{{attachment.original_name}}
+                <fa-icon [icon]="faExternalLinkSquareAlt" size="xs"></fa-icon>
+              </a>
+            </div>
           </div>
         </div>
       </div>
