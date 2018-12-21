@@ -1,16 +1,17 @@
 <div class="row">
   <h5 class="col-11">
-    Opportunities
+    {{jobTypeMap[jobType].title}}
   </h5>
   <a class="col-1 text-right" (click)="close()">
     <fa-icon [icon]="faTimes"></fa-icon>
   </a>
 </div>
 <div class="row description">
-  <p class="col-12">Add job opportunities that you are interested in.</p>
+  <p class="col-12">{{jobTypeMap[jobType].description}}</p>
 </div>
-<div class="row">
-  <button class="col-12 btn btn-outline-success add-opportunity" (click)="toggleAddForm()">Add</button>
+<div class="row action-buttons">
+  <button class="col-11 mr-auto btn btn-outline-success add-opportunity" (click)="toggleAddForm()">Add</button>
+  <button class="col-auto btn btn-outline-info" (click)="toggleSettings()"><fa-icon [icon]="faCog"></fa-icon></button>
 </div>
 <div class="row" *ngIf="displayAddForm">
   <div class="justify-content-center col-12 validation-message" *ngIf="displayMessage">
@@ -21,14 +22,14 @@
     </div>
   </div>
   <div class="container op-area">
-    <div class="row add-opportunities">
-      <form [formGroup]="addOpportunityForm" (ngSubmit)="onAddSubmit()" class="col-12">
+    <div class="row add-jobs">
+      <form [formGroup]="addForm" (ngSubmit)="onAddSubmit()" class="col-12">
         <div class="row">
           <div class="form-group col-6">
-            <input type="text" class="form-control" placeholder="Job Title" formControlName="jobTitle"/>
+            <input type="text" class="form-control" placeholder="Company Name" formControlName="companyName"/>
           </div>
           <div class="form-group col-6">
-            <input type="text" class="form-control" placeholder="Company Name" formControlName="companyName"/>
+            <input type="text" class="form-control" placeholder="Job Title" formControlName="jobTitle"/>
           </div>
           <div class="form-group col-12">
             <input type="text" class="form-control" placeholder="Job Link" formControlName="link"/>
@@ -37,12 +38,12 @@
             <input type="text-area" class="form-control" placeholder="Notes" formControlName="notes"/>
           </div>
           <div class="form-group col-12">
-            <label class="form-label" for="opportunitiesAttachments"></label>
+            <label class="form-label" for="jobAttachments"></label>
             <input type="file"
-              formControlName="opportunitiesFiles"
+              formControlName="files"
               class="form-control-file"
               (change)="onFileChange($event)"
-              id="opportunitiesAttachments"
+              id="jobAttachments"
               multiple/>
           </div>
           <div class="col-12">
@@ -55,14 +56,16 @@
     </div>
   </div>
 </div>
-<div class="row" *ngFor="let job of opportunitiesObservable | async">
+<div class="row" *ngFor="let job of jobsObservable | async">
   <div class="container job-container">
     <div class="row job" (click)="job.jobs_id = !job.jobs_id">
-      <h4 class="col-8">{{job.company_name}}<small> {{job.job_title}}</small></h4>
+      <h4 class="col-8">{{job.company_name}}
+        <small> {{job.job_title}}</small>
+      </h4>
       <small class="col-4 text-right">{{job.create_datetime | date:'MMMM d, y h:mm a'}}</small>
       <div class="more col-12" *ngIf="!job.jobs_id">
         <div class="row">
-          <h6 class="col-12">Link: {{job.link}}</h6>
+          <a href="{{job.link}}" target="_blank" class="col-auto">Job posting</a>
         </div>
         <div class="row">
           <p class="col-12">Notes: {{job.notes}}</p>
@@ -75,6 +78,16 @@
               </a>
             </div>
           </div>
+        </div>
+        <div class="row justify-content-end">
+          <a class="remove col-auto">
+            <fa-icon [icon]="faTimes" size="s"></fa-icon>
+            Delete
+          </a>
+          <a class="edit col-auto">
+            <fa-icon [icon]="faEdit" size="s"></fa-icon>
+            Edit
+          </a>
         </div>
       </div>
     </div>

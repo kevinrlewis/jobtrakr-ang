@@ -21,13 +21,6 @@ a {
   margin-bottom: 0.25rem;
 }
 
-.add-opportunity {
-  margin-bottom: 0.25rem;.job:hover {
-  background-color: rgba(0, 238, 238, 0.25)!important;
-}
-
-}
-
 .job-container {
   padding: 0;
   /* background-color: rgba(0, 0, 0, 0.05); */

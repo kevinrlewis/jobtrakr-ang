@@ -1,0 +1,16 @@
+.attachment:hover {
+  color: red!important;
+  text-decoration: underline!important;
+}
+
+.edit:hover {
+  color: var(--info)!important;
+}
+
+.remove:hover {
+  color: var(--danger)!important;
+}
+
+.action-buttons {
+  margin-bottom: 0.25rem;
+}

@@ -38,6 +38,8 @@ export class ManageComponent implements OnInit {
 
   // @Input() email: string;
   user: object;
+  job_type_view: number;
+
   id: string;
   email: string;
   firstname: string;
@@ -103,18 +105,23 @@ export class ManageComponent implements OnInit {
     this.activatedRoute.fragment.subscribe(frag => {
       // if opportunities then display opportunities component
       if(frag === 'opportunities') {
-        this.opportunities_active = true;
+        // this.opportunities_active = true;
+        this.job_type_view = 1;
       // if applied then display applied component
       } else if (frag === 'applied') {
-        this.applied_active = true;
+        // this.applied_active = true;
+        this.job_type_view = 2;
       // if interviews then display interviews component
       } else if (frag === 'interviews') {
-        this.interviews_active = true;
+        // this.interviews_active = true;
+        this.job_type_view = 3;
       // if offers then display offers component
       } else if (frag === 'offers') {
-        this.offers_active = true;
+        // this.offers_active = true;
+        this.job_type_view = 4;
       // otherwise set initial variables and show the buttons
       } else {
+        this.job_type_view = 0;
         this.setInitVariables();
         // don't show grid first
         this.show_buttons = true;
@@ -142,33 +149,14 @@ export class ManageComponent implements OnInit {
       this.lastname = data.data.lastname;
     });
 
-    // get all jobs
-    this.http.get<GetJobsResponse>(
-      '/api/job/id/' + this.id,
-      httpOptions
-    ).subscribe(data => {
-      console.log('/api/job/id response', data);
-      // store all jobs in array
-      this.jobsArray = data.data.get_jobs_by_user_id;
-
-      /*
-        check if there are no jobs, if so then we do not want to create
-        an observable out of null
-      */
-      if(data.data.get_jobs_by_user_id !== null) {
-        // temp observable
-        var temp = from(data.data.get_jobs_by_user_id);
-
-        // filter and add all jobs to their specific array
-        temp.subscribe(job => {
-          this.jobMap[job.job_type_name].push(job);
-        });
-      }
-    });
+    // call the helper function to refresh the jobs within the grid
+    this.refreshJobs();
 
   }
 
-  // set initial variables
+  /*
+    set initial variables
+  */
   setInitVariables() {
     this.opportunities_active = this.applied_active = this.interviews_active = this.offers_active = false;
   }
@@ -244,7 +232,9 @@ export class ManageComponent implements OnInit {
       });
   }
 
-  // function to determine the missing job type in a comma separated string
+  /*
+    function to determine the missing job type in a comma separated string
+  */
   determine_drop_destination(k:string) {
     // split string into an array
     var temp = k.split(',');
@@ -262,59 +252,132 @@ export class ManageComponent implements OnInit {
     }
   }
 
-  // when the opportunities button is clicked
-  // display the opportunities component
+  /*
+    when the opportunities button is clicked
+    display the opportunities component
+  */
   toggleOpportunitiesActive() {
-    this.opportunities_active = !this.opportunities_active;
+    // this.opportunities_active = !this.opportunities_active;
     this.show_buttons = false;
     this.router.navigate([this.router.url], { fragment: 'opportunities' });
   }
 
-  // when the applied button is clicked
-  // display the applied component
+  /*
+    when the applied button is clicked
+    display the applied component
+  */
   toggleAppliedActive() {
-    this.applied_active = !this.applied_active;
+    // this.applied_active = !this.applied_active;
     this.show_buttons = false;
     this.router.navigate([this.router.url], { fragment: 'applied' });
   }
 
-  // when the interview button is clicked
-  // display the interview component
+  /*
+    when the interview button is clicked
+    display the interview component
+  */
   toggleInterviewsActive() {
-    this.interviews_active = !this.interviews_active;
+    // this.interviews_active = !this.interviews_active;
     this.show_buttons = false;
     this.router.navigate([this.router.url], { fragment: 'interviews' });
   }
 
-  // when the offer button is clicked
-  // display the offer component
+  /*
+    when the offer button is clicked
+    display the offer component
+  */
   toggleOffersActive() {
-    this.offers_active = !this.offers_active;
+    // this.offers_active = !this.offers_active;
     this.show_buttons = false;
     this.router.navigate([this.router.url], { fragment: 'offers' });
   }
 
-  // check if on of the job type sub components is active
+  /*
+    check if on of the job type sub components is active
+  */
   isSubComponentActive() {
     // console.log('isSubComponentActive: ', (this.opportunities_active || this.applied_active || this.interviews_active || this.offers_active));
-    return (this.opportunities_active || this.applied_active || this.interviews_active || this.offers_active);
+    // return (this.opportunities_active || this.applied_active || this.interviews_active || this.offers_active);
+    return this.job_type_view !== 0;
   }
 
-  // when the settings button tab is clicked
+  /*
+    when the settings button tab is clicked
+  */
   settingsClicked() {
     this.router.navigate(['profile/' + jwt_decode(this.token).sub]);
   }
 
-  // if the grid button is clicked, display the grid view
+  /*
+    if the grid button is clicked, display the grid view
+  */
   selectGrid() {
     this.show_buttons = false;
     this.show_grid = true;
+    this.refreshJobs();
   }
 
-  // if the buttons button is clicked, display the buttons div
+  /*
+    if the buttons button is clicked, display the buttons div
+  */
   selectButtons() {
     this.show_grid = false;
     this.show_buttons = true;
+  }
+
+  /*
+    refreshes the grid and the jobs within the grid
+    really refreshes the jobs available to grab within the manage
+    component
+  */
+  refreshJobs() {
+    // call the api within the manage service to get jobs
+    this.manage.getJobs(this.id).subscribe(data => {
+      // call helper function to reset the job arrays
+      this.resetJobsArrays();
+
+      console.log('/api/job/id response', data);
+      // store all jobs in array
+      this.jobsArray = data.data.get_jobs_by_user_id;
+
+      /*
+        check if there are no jobs, if so then we do not want to create
+        an observable out of null
+      */
+      if(data.data.get_jobs_by_user_id !== null) {
+        // temp observable
+        var temp = from(data.data.get_jobs_by_user_id);
+
+        // filter and add all jobs to their specific array
+        temp.subscribe(job => {
+          this.jobMap[job.job_type_name].push(job);
+        });
+
+      }
+      // call helper function to reload the observables
+      this.reloadObservables();
+    });
+  }
+
+  /*
+    reset arrays within the job map to refresh the grid
+  */
+  resetJobsArrays() {
+    // iterate over the possible job types to iterate the job map
+    POSSIBLE_JOB_TYPES.forEach(job_type_name => {
+      this.jobMap[job_type_name] = [];
+    });
+  }
+
+  /*
+    something weird happens when the arrays within the job map are reset
+    so we need to re assign the observables to those arrays
+  */
+  reloadObservables() {
+    this.opportunitiesObservable = of(this.jobMap['opportunity']);
+    this.appliedObservable = of(this.jobMap['applied']);
+    this.interviewObservable = of(this.jobMap['interview']);
+    this.offerObservable = of(this.jobMap['offer']);
   }
 }
 
@@ -329,23 +392,12 @@ interface GetUserResponse {
   }
 }
 
-// interface for the response from getting jobs
-interface GetJobsResponse {
+// interface to get an expected response from the api
+// when we call the api to get all jobs interviewing
+export interface GetJobsResponse {
   message: string,
   data: {
-    get_jobs_by_user_id: [ {
-      jobs_id: number,
-      job_title: string,
-      company_name: string,
-      link: string,
-      notes: string,
-      attachments: string,
-      user_id: number,
-      create_datetime: string,
-      update_datetime: string,
-      job_type_id: number,
-      job_type_name: string
-    } ]
+    get_jobs_by_user_id: Job[]
   }
 }
 

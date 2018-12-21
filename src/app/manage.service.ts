@@ -124,6 +124,9 @@ export class ManageService {
     )
   }
 
+  /*
+    construct database array for the file names
+  */
   formatFileNamePayload(file_arr:string[]) {
     var temp = null;
     if(file_arr !== undefined) {
@@ -138,6 +141,9 @@ export class ManageService {
     return temp;
   }
 
+  /*
+    check if string is formatted correctly as a url
+  */
   isValidUrl(link) {
     var pattern = new RegExp('^(https?:\\/\\/)?'+ // protocol
     '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|'+ // domain name
@@ -157,6 +163,8 @@ export class ManageService {
     get a signed url from aws for a specific key in S3
   */
   getAttachment(key):any {
+    console.log('getAttachment:', key);
+
     // initialize s3 with credentials
     var s3 = new AWS.S3(cred);
 
@@ -183,7 +191,21 @@ export interface UploadResponse {
 // interface to get an expected response from the api
 // when we call the add job endpoint
 export interface AddJobResponse {
-  message: string
+  message: string,
+  data: {
+    insert_job: {
+      jobs_id: number,
+      job_title: string,
+      company_name: string,
+      link: string,
+      notes: string,
+      attachments: string[],
+      user_id: number,
+      create_datetime: string,
+      update_datetime: string,
+      job_type_id: number
+    }
+  }
 }
 
 // interface to get an expected response from the api
@@ -191,24 +213,25 @@ export interface AddJobResponse {
 export interface GetJobsResponse {
   message: string,
   data: {
-    get_jobs_by_user_id: [
-      {
-        jobs_id: number,
-        job_title: string,
-        company_name: string,
-        link: string,
-        notes: string,
-        attachments: string[],
-        active: boolean,
-        job_type_id: number,
-        user_id: number,
-        create_datetime: string,
-        update_datetime: string
-      }
-    ]
+    get_jobs_by_user_id: Job[]
   }
 }
 
 export interface UpdateJobTypeResponse {
 
+}
+
+// interface for a job object
+interface Job {
+  jobs_id: number,
+  job_title: string,
+  company_name: string,
+  link: string,
+  notes: string,
+  attachments: any,
+  user_id: number,
+  create_datetime: string,
+  update_datetime: string,
+  job_type_id: number,
+  job_type_name: string
 }

@@ -9,7 +9,14 @@ import { Observable } from 'rxjs/Observable';
 import { from, of } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 
-import { faTimes } from '@fortawesome/free-solid-svg-icons';
+// icons
+import {
+  faTimes,
+  faExternalLinkSquareAlt,
+  faExternalLinkAlt,
+  faEdit,
+  faCog
+} from '@fortawesome/free-solid-svg-icons';
 
 const httpOptions = {
   headers: new HttpHeaders({
@@ -17,17 +24,41 @@ const httpOptions = {
   })
 };
 
-const JOB_TYPE = 2;
-const JOB_TYPE_NAME = 'applied';
+/*
+  modify titles and descriptions here or add dynamic fields
+  dependent on the job type
+*/
+const jobTypeMap = {
+  1: {
+    job_type_name: 'opportunity',
+    title: 'Opportunities',
+    description: 'Store jobs that you wish to apply to or plan to apply to here.'
+  },
+  2: {
+    job_type_name: 'applied',
+    title: 'Applied',
+    description: 'Once you have applied to a job, move the applied job here or add it.'
+  },
+  3: {
+    job_type_name: 'interview',
+    title: 'Interviews',
+    description: 'As you start interviewing for jobs, add or move them here to track your progression.'
+  },
+  4: {
+    job_type_name: 'offer',
+    title: 'Offers',
+    description: 'Once you have received some form of offer, add or move the job here.'
+  }
+};
 
 @Component({
-  selector: 'app-applied',
-  templateUrl: './applied.component.html',
-  styleUrls: ['./applied.component.css']
+  selector: 'app-jobtype',
+  templateUrl: './jobtype.component.html',
+  styleUrls: ['./jobtype.component.css']
 })
-export class AppliedComponent implements OnInit {
+export class JobtypeComponent implements OnInit {
 
-  // get user data from parent component
+  // user information retrieved from the parent component
   @Input() user: {
     user_id: number,
     email: string,
@@ -42,16 +73,28 @@ export class AppliedComponent implements OnInit {
     update_datetime: string
   };
 
+  // job type retrieved from the parent component
+  @Input() jobType: number;
+
+  // initialize the jobTypeMap constant as part of this component
+  jobTypeMap = jobTypeMap;
+  jobNameToIdMap = { 'opportunity': 1, 'applied': 2, 'interview': 3, 'offer': 4 };
+  jobIdToNameMap = { 1: 'opportunity', 2: 'applied', 3: 'interview', 4: 'offer' };
+
   // font awesome icons
   faTimes = faTimes;
+  faExternalLinkAlt = faExternalLinkAlt;
+  faExternalLinkSquareAlt = faExternalLinkSquareAlt;
+  faEdit = faEdit;
+  faCog = faCog;
 
-  // form
-  addAppliedForm: FormGroup;
+  // form variables
+  addForm: FormGroup;
   companyName: string;
   jobTitle: string;
   link: string;
   notes: string;
-  appliedFiles: string;
+  files: string;
 
   // store token
   token: string;
@@ -59,15 +102,15 @@ export class AppliedComponent implements OnInit {
   // array to hold ids for files that need to be attached to a job
   filesArray: string[];
 
-  // array to hold existing applied jobs, pulled from api
-  jobsArray: Job[];
-
-  appliedArray: Job[] = [];
-  appliedObservable: Observable<Array<Job>>;
+  // arrars/observables to display jobs
+  jobsArray: Job[] = [];
+  jobsObservable: Observable<Array<Job>>;
 
   // display toggles
   displayAddForm = false;
+  displaySettings = false;
 
+  // error messages during the add job process
   validationMessage = [];
   displayMessage:boolean;
 
@@ -78,28 +121,35 @@ export class AppliedComponent implements OnInit {
     private http: HttpClient,
     public manage: ManageService
   ) {
-    this.appliedObservable = of(this.appliedArray);
+    // initialize the observable to watch the jobsArray
+    this.jobsObservable = of(this.jobsArray);
   }
 
   ngOnInit() {
+    // get token
     this.token = this.cookieService.get('SESSIONID');
 
-    // initialize add applied form
-    this.addAppliedForm = this.fb.group({
+    // initialize add form
+    this.addForm = this.fb.group({
       'companyName': [this.companyName, [Validators.required]],
       'jobTitle': [this.jobTitle, [Validators.required]],
       'link': [this.link, [Validators.required]],
       'notes': [this.notes, []],
-      'appliedFiles': [this.appliedFiles, []],
+      'files': [this.files, []],
     });
 
-    // get all applied jobs to display
+    // get all user jobs to display
     this.getJobs();
   }
 
+  /*
+    when the add form is submitted
+    attempt to call the api to add the data
+  */
   onAddSubmit() {
     // validate form
-    var validated = this.validateAddForm(this.addAppliedForm);
+    var validated = this.validateAddForm(this.addForm);
+
 
     if(validated.status) {
       // check if any files are attached
@@ -108,62 +158,78 @@ export class AppliedComponent implements OnInit {
 
       // call api to post a job
       this.manage.addJob(
-        this.addAppliedForm.get('companyName').value,
-        this.addAppliedForm.get('jobTitle').value,
-        this.addAppliedForm.get('link').value,
-        this.addAppliedForm.get('notes').value,
-        JOB_TYPE_NAME,
+        this.addForm.get('companyName').value,
+        this.addForm.get('jobTitle').value,
+        this.addForm.get('link').value,
+        this.addForm.get('notes').value,
+        this.jobIdToNameMap[this.jobType],
         temp,
         this.user.user_id
       ).subscribe(data => {
-        console.log(data);
+        // add job to observable
+        if(data.data.insert_job.job_type_id === this.jobType) {
+          this.jobsArray.push(data.data.insert_job);
+        }
+
         // close add form
         this.displayAddForm = false;
       }, error => {
         console.log(error);
-        // TODO: display error
+        // display error
       });
     } else {
-      // display message
       this.displayMessage = true;
       this.validationMessage = validated.message;
     }
   }
 
+  /*
+    listen to changes to the file input tag
+    upload files that are attached and store their location
+    in order to associate the files to a specific job
+  */
   onFileChange(event) {
-    // save file with type 2 (applied)
-    this.filesArray = this.manage.saveFile(event, 2);
+    // save the file with the specific job type
+    this.filesArray = this.manage.saveFile(event, this.jobType);
   }
 
+  /*
+    helper function to get the array of jobs
+  */
   getJobs() {
-    // this.http.get<GetAppliedResponse>(
-    //   '/api/job/applied/id/' + this.user.user_id,
-    //   httpOptions
-    // )
+    // call function in manage service to grab jobs based on job type and user id
     this.manage.getJobs(this.user.user_id).subscribe(
       data => {
         if(data.data.get_jobs_by_user_id !== null) {
           data.data.get_jobs_by_user_id.forEach(job => {
-            if(job.job_type_id === JOB_TYPE) {
-              this.appliedArray.push(job);
+            if(job.job_type_id === this.jobType) {
+              // if the job is part of this job type then store it to be
+              // displayed
+              this.jobsArray.push(job);
             }
-            // this.jobsArray.push(job);
           });
         }
         return;
       },
-      // TODO: display message if there was an error retrieving opportunities
+      // TODO: display message if there was an error retrieving jobs
       error => {
         console.log(error);
       }
     );
   }
 
+
+  /*
+    when the user clicks the x button, navigate back to the manage component
+  */
   close() {
     this.router.navigate(['manage/' + jwt_decode(this.token).sub]);
+    this.resetAddForm();
   }
 
-  // helper function to toggle the add opportunity form to display and not display
+  /*
+    helper function to toggle the add form to display and not display
+  */
   toggleAddForm() {
     this.displayAddForm = !this.displayAddForm;
     // if the form is already being display, close should reset the values
@@ -173,13 +239,20 @@ export class AppliedComponent implements OnInit {
   }
 
   /*
+    helper function to toggle the settings display
+  */
+  toggleSettings() {
+    this.displaySettings = !this.displaySettings;
+  }
+
+  /*
     validate the add form
   */
   validateAddForm(l:FormGroup) {
     // variables to return
     let messageList: Array<string> = [];
     let status: boolean = true;
-    console.log(l);
+
     // check if the job title is invalid
     if (l.get('jobTitle').invalid) {
       status = false;
@@ -202,12 +275,31 @@ export class AppliedComponent implements OnInit {
     return { status: status, message: messageList };
   }
 
+  /*
+    reset the values of the add form
+  */
   resetAddForm() {
-    // reset form
-    this.addAppliedForm.reset();
+    this.addForm.reset();
   }
+
+  /*
+    get a file from s3 to download
+  */
+  getFile(file_path) {
+    // get path of the url
+    var l = document.createElement("a");
+    l.href = file_path;
+
+    // get the pre signed url by passing the url without the initial slash
+    var url = this.manage.getAttachment(l.pathname.substring(1));
+
+    // open file in new tab (should download it)
+    window.open(url);
+  }
+
 }
 
+// job interfaces
 interface Job {
   jobs_id: number,
   job_title: string,
