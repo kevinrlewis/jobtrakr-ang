@@ -31,7 +31,7 @@
             multiple/>
           <div class="row attachment border-bottom border-top" *ngFor="let attachment of attachmentsObservable | async">
             <a class="col-8 mr-auto">{{attachment.original_name}}</a>
-            <button class="col-auto btn btn-danger">Remove</button>
+            <button class="col-auto btn btn-danger" (click)="removeAttachment(attachment)">Remove</button>
           </div>
         </div>
         <div class="col-12">

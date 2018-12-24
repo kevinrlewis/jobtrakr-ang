@@ -58,8 +58,14 @@ export class EditComponent implements OnInit {
     }
   }
 
+  /**/
   editFormSubmit() {
-    
+
+  }
+
+  /**/
+  removeAttachment(attachment) {
+    console.log('removing attachment', attachment);
   }
 
 }
