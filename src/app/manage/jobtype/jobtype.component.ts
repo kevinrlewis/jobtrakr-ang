@@ -9,6 +9,8 @@ import { Observable } from 'rxjs/Observable';
 import { from, of } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 
+import { Job } from './../../../models/job.model';
+
 // icons
 import {
   faTimes,
@@ -108,11 +110,15 @@ export class JobtypeComponent implements OnInit {
 
   // display toggles
   displayAddForm = false;
-  displaySettings = false;
+  @Input() displaySettings = false;
+  @Input() displayEdit = false;
 
   // error messages during the add job process
   validationMessage = [];
   displayMessage:boolean;
+
+  // current job to edit
+  jobToEdit: Job = null;
 
   constructor(
     private router: Router,
@@ -140,6 +146,14 @@ export class JobtypeComponent implements OnInit {
 
     // get all user jobs to display
     this.getJobs();
+  }
+
+  /*
+    retrieve the emit from the child component to close the settings box
+  */
+  settingsClose(val: boolean) {
+    console.log('parent closing settings...');
+    this.displaySettings = val;
   }
 
   /*
@@ -217,7 +231,6 @@ export class JobtypeComponent implements OnInit {
       }
     );
   }
-
 
   /*
     when the user clicks the x button, navigate back to the manage component
@@ -297,18 +310,16 @@ export class JobtypeComponent implements OnInit {
     window.open(url);
   }
 
-}
+  /**/
+  onClickEdit(job: Job) {
+    console.log('editting...', job);
+    this.displayEdit = true;
+    this.jobToEdit = job;
+  }
 
-// job interfaces
-interface Job {
-  jobs_id: number,
-  job_title: string,
-  company_name: string,
-  link: string,
-  notes: string,
-  attachments: string[],
-  user_id: number,
-  create_datetime: string,
-  update_datetime: string,
-  job_type_id: number
+  /**/
+  onClickDelete(job: Job) {
+    console.log('deleting...', job);
+  }
+
 }

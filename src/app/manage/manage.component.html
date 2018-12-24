@@ -6,14 +6,8 @@
     </h5>
     <button class="btn btn-outline-danger offset-6 col-2">Logout</button>
   </div> -->
-  <!-- <app-opportunities *ngIf="opportunities_active && user" [user]="user"></app-opportunities>
-  <app-applied *ngIf="applied_active && user" [user]="user"></app-applied>
-  <app-interviews *ngIf="interviews_active && user" [user]="user"></app-interviews>
-  <app-offers *ngIf="offers_active && user" [user]="user"></app-offers> -->
   <app-jobtype *ngIf="user && job_type_view != 0" [user]="user" [jobType]="job_type_view"></app-jobtype>
   <div class="options row justify-content-end" *ngIf="!isSubComponentActive()">
-    <!-- <a class="offset-10 col-1 text-right">buttons</a>
-    <a class="col-1 text-left">plan</a> -->
     <a class="col-auto text-right" (click)="selectButtons()"><fa-icon [icon]="faBars"></fa-icon></a>
     <a class="col-auto text-left" (click)="selectGrid()"><fa-icon [icon]="faTh"></fa-icon></a>
   </div>

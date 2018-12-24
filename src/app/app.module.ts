@@ -21,6 +21,8 @@ import { JwtHelperService } from '@auth0/angular-jwt';
 import { ManageComponent } from './manage/manage.component';
 import { HeaderbarComponent } from './headerbar/headerbar.component';
 import { JobtypeComponent } from './manage/jobtype/jobtype.component';
+import { SettingsComponent } from './manage/jobtype/settings/settings.component';
+import { EditComponent } from './manage/jobtype/edit/edit.component';
 
 const appRoutes: Routes = [
   { path: '', component: HomeComponent, data: { title: 'JobTrakMe' } },
@@ -54,7 +56,9 @@ const appRoutes: Routes = [
     HomeComponent,
     ManageComponent,
     HeaderbarComponent,
-    JobtypeComponent
+    JobtypeComponent,
+    SettingsComponent,
+    EditComponent
   ],
   imports: [
     BrowserModule,

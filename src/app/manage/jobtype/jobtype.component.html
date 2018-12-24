@@ -1,3 +1,12 @@
+<app-settings *ngIf="displaySettings"
+  [(displaySettings)]="displaySettings"
+  [displaySettings]="displaySettings"
+  [jobsObservable]="jobsObservable">
+</app-settings>
+<app-edit *ngIf="displayEdit"
+  [(displayEdit)]="displayEdit"
+  [displayEdit]="displayEdit"
+  [job]="jobToEdit"></app-edit>
 <div class="row">
   <h5 class="col-11">
     {{jobTypeMap[jobType].title}}
@@ -58,12 +67,12 @@
 </div>
 <div class="row" *ngFor="let job of jobsObservable | async">
   <div class="container job-container">
-    <div class="row job" (click)="job.jobs_id = !job.jobs_id">
+    <div class="row job" (click)="job.more = !job.more">
       <h4 class="col-8">{{job.company_name}}
         <small> {{job.job_title}}</small>
       </h4>
       <small class="col-4 text-right">{{job.create_datetime | date:'MMMM d, y h:mm a'}}</small>
-      <div class="more col-12" *ngIf="!job.jobs_id">
+      <div class="more col-12" *ngIf="job.more">
         <div class="row">
           <a href="{{job.link}}" target="_blank" class="col-auto">Job posting</a>
         </div>
@@ -80,11 +89,11 @@
           </div>
         </div>
         <div class="row justify-content-end">
-          <a class="remove col-auto">
+          <a class="remove col-auto" (click)="onClickDelete(job)">
             <fa-icon [icon]="faTimes" size="s"></fa-icon>
             Delete
           </a>
-          <a class="edit col-auto">
+          <a class="edit col-auto" (click)="onClickEdit(job)">
             <fa-icon [icon]="faEdit" size="s"></fa-icon>
             Edit
           </a>

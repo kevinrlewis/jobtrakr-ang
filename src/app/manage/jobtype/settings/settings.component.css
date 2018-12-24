@@ -1,0 +1,28 @@
+.jobtype-settings {
+  /* border: 1px solid #000000; */
+  position: fixed;
+  z-index: 2;
+  background: #FFFFFF;
+  height: auto;
+  width: 50%;
+  right: 25%;
+  top: 25%;
+}
+
+.jobtype-settings * {
+  padding: 0.15rem;
+}
+
+.header > * {
+  text-decoration: underline;
+}
+
+.background {
+  height: 100%;
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.65);
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  left: 0;
+}

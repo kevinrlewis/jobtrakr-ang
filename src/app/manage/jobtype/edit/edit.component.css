@@ -1,0 +1,43 @@
+.edit {
+  /* border: 1px solid #000000; */
+  position: fixed;
+  z-index: 2;
+  background: #FFFFFF;
+  height: auto;
+  width: 75%;
+  right: 12.5%;
+  top: 15%;
+}
+
+label {
+  margin-bottom: 0;
+  font-size: 12px;
+  text-decoration: underline;
+}
+
+.form-group > .row {
+  margin-left: 0;
+  margin-right: 0;
+}
+
+.attachment {
+  margin-bottom: 0.2rem;
+}
+
+.attachment > .btn {
+  font-size: 12px;
+}
+
+.edit * {
+  padding: 0.15rem;
+}
+
+.background {
+  height: 100%;
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.65);
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  left: 0;
+}
