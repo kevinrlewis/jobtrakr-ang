@@ -179,6 +179,30 @@ export class ManageService {
     return url;
   }
 
+
+  /*
+  */
+  deleteFile(user_id, jobs_id, file_name) {
+    var httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json'
+      })
+    };
+
+    return this.http.post<DeleteFileResponse>(
+      '/api/' + user_id + '/delete/file',
+      {
+        'file_name': file_name,
+        'jobs_id': jobs_id
+      },
+      httpOptions
+    )
+  }
+
+  /**/
+  updateJob() {
+
+  }
 }
 
 // interface to get an expected response from the api
@@ -218,7 +242,11 @@ export interface GetJobsResponse {
 }
 
 export interface UpdateJobTypeResponse {
+  message: string
+}
 
+export interface DeleteFileResponse {
+  message: string
 }
 
 // interface for a job object

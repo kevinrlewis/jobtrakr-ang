@@ -8,7 +8,10 @@ import { Observable } from 'rxjs/Observable';
 import { from, of } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 
+
+import { ManageService } from './../../../manage.service';
 import { Job } from './../../../../models/job.model';
+import { User } from './../../../../models/user.model';
 
 @Component({
   selector: 'app-edit',
@@ -19,6 +22,7 @@ export class EditComponent implements OnInit {
 
   @Input() job: Job;
   @Input() displayEdit: boolean;
+  @Input() user: User;
 
   @Output() displayEditChange = new EventEmitter<boolean>();
 
@@ -31,7 +35,10 @@ export class EditComponent implements OnInit {
 
   attachmentsObservable: Observable<Array<any>>;
 
-  constructor(private fb: FormBuilder) { }
+  // array to hold ids for files that need to be attached to a job
+  filesArray: string[];
+
+  constructor(private fb: FormBuilder, private manage: ManageService) { }
 
   ngOnInit() {
     // initialize edit form
@@ -63,9 +70,39 @@ export class EditComponent implements OnInit {
 
   }
 
-  /**/
+  /*
+    function to remove an attachment from the database and s3 by calling the
+    api
+    the function calls the api through a function in the manage.service.ts file
+  */
   removeAttachment(attachment) {
-    console.log('removing attachment', attachment);
+    console.log('removing attachment:', attachment);
+    this.manage.deleteFile(this.user.user_id, this.job.jobs_id, attachment.file_name).subscribe(data => {
+      console.log('removeAttachment:', data);
+      // if the file was successfully removed from job/db and deleted from s3
+      if(data.message === "Success") {
+        // remove attachment from array
+        var i = 0;
+        // determine index of attachment
+        this.job.attachments.forEach((at, index) => function() {
+          if(at === attachment) {
+            i = index;
+          }
+        });
+        // splice attachment from array
+        this.job.attachments.splice(i, 1);
+      }
+    });
   }
 
+
+  /*
+    listen to changes to the file input tag
+    upload files that are attached and store their location
+    in order to associate the files to a specific job
+  */
+  onFileChange(event) {
+    // save the file with the specific job type
+    this.filesArray = this.manage.saveFile(event, this.job.job_type_id);
+  }
 }

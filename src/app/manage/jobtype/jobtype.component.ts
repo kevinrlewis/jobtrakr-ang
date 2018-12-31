@@ -10,6 +10,7 @@ import { from, of } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 
 import { Job } from './../../../models/job.model';
+import { User } from './../../../models/user.model';
 
 // icons
 import {
@@ -61,19 +62,7 @@ const jobTypeMap = {
 export class JobtypeComponent implements OnInit {
 
   // user information retrieved from the parent component
-  @Input() user: {
-    user_id: number,
-    email: string,
-    firstname: string,
-    lastname: string,
-    bio: string,
-    profile_image: string,
-    share_applied: boolean,
-    share_interviews: boolean,
-    share_offers: boolean,
-    share_opportunities: boolean,
-    update_datetime: string
-  };
+  @Input() user: User;
 
   // job type retrieved from the parent component
   @Input() jobType: number;
@@ -125,7 +114,7 @@ export class JobtypeComponent implements OnInit {
     private cookieService: CookieService,
     private fb: FormBuilder,
     private http: HttpClient,
-    public manage: ManageService
+    private manage: ManageService
   ) {
     // initialize the observable to watch the jobsArray
     this.jobsObservable = of(this.jobsArray);

@@ -6,7 +6,8 @@
 <app-edit *ngIf="displayEdit"
   [(displayEdit)]="displayEdit"
   [displayEdit]="displayEdit"
-  [job]="jobToEdit"></app-edit>
+  [job]="jobToEdit"
+  [user]="user"></app-edit>
 <div class="row">
   <h5 class="col-11">
     {{jobTypeMap[jobType].title}}
