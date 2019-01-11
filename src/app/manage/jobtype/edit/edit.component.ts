@@ -65,9 +65,52 @@ export class EditComponent implements OnInit {
     }
   }
 
-  /**/
+  /*
+    function called when the update button is clicked to submit changes
+    to a job
+  */
   editFormSubmit() {
+    let formVar = this.editForm.value;
+    var valid = true;
 
+    // validate fields
+    // iterate properties
+    for(var property in formVar) {
+      // if value isn't null
+      if(formVar.hasOwnProperty(property) && formVar[property] != null) {
+        // if value is a link then validate the link
+        if(property == 'link') {
+          if(!this.manage.isValidUrl(formVar[property])) {
+            valid = false;
+          }
+        }
+        // validate the form requirements
+        if(this.editForm.get(property).invalid) {
+          valid = false;
+        }
+      }
+    }
+
+
+    // handle invalid entries
+    if(!valid) {
+      console.log('something is invalid..');
+    } else {
+      // check if any files are attached
+      // if so then create the string to pass to db
+      var temp = this.manage.formatFileNamePayload(this.filesArray);
+
+      this.manage.updateJob(
+        this.user.user_id,
+        this.job.jobs_id,
+        formVar
+      ).subscribe(data => {
+        console.log(data)
+      }, error => {
+        console.log(error);
+        // display error
+      });
+    }
   }
 
   /*

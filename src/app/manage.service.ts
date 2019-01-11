@@ -200,8 +200,22 @@ export class ManageService {
   }
 
   /**/
-  updateJob() {
+  updateJob(user_id, jobs_id, form_values) {
+    var httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json'
+      })
+    };
 
+    // call api
+    return this.http.post<AddJobResponse>(
+      '/api/' + user_id + '/job/update',
+      {
+        'jobs_id': jobs_id,
+        'form_values': form_values
+      },
+      httpOptions
+    );
   }
 }
 
