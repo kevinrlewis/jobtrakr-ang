@@ -18,7 +18,8 @@ import {
   faExternalLinkSquareAlt,
   faExternalLinkAlt,
   faEdit,
-  faCog
+  faCog,
+  faFileDownload
 } from '@fortawesome/free-solid-svg-icons';
 
 const httpOptions = {
@@ -78,6 +79,7 @@ export class JobtypeComponent implements OnInit {
   faExternalLinkSquareAlt = faExternalLinkSquareAlt;
   faEdit = faEdit;
   faCog = faCog;
+  faFileDownload = faFileDownload;
 
   // form variables
   addForm: FormGroup;
@@ -104,10 +106,11 @@ export class JobtypeComponent implements OnInit {
 
   // error messages during the add job process
   validationMessage = [];
-  displayMessage:boolean;
+  displayMessage: boolean;
 
   // current job to edit
   jobToEdit: Job = null;
+  @Input() updatedJob: Job = null;
 
   constructor(
     private router: Router,
@@ -309,6 +312,24 @@ export class JobtypeComponent implements OnInit {
   /**/
   onClickDelete(job: Job) {
     console.log('deleting...', job);
+    // call function in manage service to grab jobs based on job type and user id
+    this.manage.deleteJob(job.user_id, job.jobs_id).subscribe(
+      data => {
+        console.log(data);
+        var arrLength = this.jobsArray.length;
+
+        // remove job from array
+        for(var i = 0; i < arrLength; i++) {
+          if(this.jobsArray[i].jobs_id === job.jobs_id) {
+            this.jobsArray.splice(i, 1);
+          }
+        }
+      },
+      // TODO: display message if there was an error retrieving jobs
+      error => {
+        console.log(error);
+      }
+    );
   }
 
 }

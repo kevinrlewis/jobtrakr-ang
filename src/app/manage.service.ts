@@ -163,7 +163,7 @@ export class ManageService {
     get a signed url from aws for a specific key in S3
   */
   getAttachment(key):any {
-    console.log('getAttachment:', key);
+    // console.log('getAttachment:', key);
 
     // initialize s3 with credentials
     var s3 = new AWS.S3(cred);
@@ -181,6 +181,7 @@ export class ManageService {
 
 
   /*
+    function to delete a file by calling the api
   */
   deleteFile(user_id, jobs_id, file_name) {
     var httpOptions = {
@@ -199,7 +200,9 @@ export class ManageService {
     )
   }
 
-  /**/
+  /*
+    function to update a job by calling the api
+  */
   updateJob(user_id, jobs_id, form_values) {
     var httpOptions = {
       headers: new HttpHeaders({
@@ -208,11 +211,31 @@ export class ManageService {
     };
 
     // call api
-    return this.http.post<AddJobResponse>(
+    return this.http.post<UpdateJobResponse>(
       '/api/' + user_id + '/job/update',
       {
         'jobs_id': jobs_id,
         'form_values': form_values
+      },
+      httpOptions
+    );
+  }
+
+  /*
+    function to delete a job by calling the api
+  */
+  deleteJob(user_id, jobs_id) {
+    var httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json'
+      })
+    };
+
+    // call api
+    return this.http.post<UpdateJobResponse>(
+      '/api/' + user_id + '/job/delete',
+      {
+        'jobs_id': jobs_id
       },
       httpOptions
     );
@@ -276,4 +299,24 @@ interface Job {
   update_datetime: string,
   job_type_id: number,
   job_type_name: string
+}
+
+// interface to get an expected response from the api
+// when we call the update job endpoint
+export interface UpdateJobResponse {
+  message: string,
+  data: {
+    update_job: {
+      jobs_id: number,
+      job_title: string,
+      company_name: string,
+      link: string,
+      notes: string,
+      attachments: string[],
+      user_id: number,
+      create_datetime: string,
+      update_datetime: string,
+      job_type_id: number
+    }
+  }
 }

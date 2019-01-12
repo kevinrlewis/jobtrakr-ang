@@ -6,6 +6,8 @@
 <app-edit *ngIf="displayEdit"
   [(displayEdit)]="displayEdit"
   [displayEdit]="displayEdit"
+  [(jobsArray)]="jobsArray"
+  [jobsArray]="jobsArray"
   [job]="jobToEdit"
   [user]="user"></app-edit>
 <div class="row">
@@ -84,7 +86,7 @@
           <div class="col-12">Attachments:
             <div *ngFor="let attachment of job.attachments">
               <a class="col-auto attachment" (click)="getFile(attachment.file_path)">{{attachment.original_name}}
-                <fa-icon [icon]="faExternalLinkSquareAlt" size="xs"></fa-icon>
+                <fa-icon [icon]="faFileDownload" size="xs"></fa-icon>
               </a>
             </div>
           </div>

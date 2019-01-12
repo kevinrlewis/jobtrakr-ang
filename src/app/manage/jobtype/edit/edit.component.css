@@ -41,3 +41,8 @@ label {
   top: 0;
   left: 0;
 }
+
+.attachment:hover {
+  color: red!important;
+  text-decoration: underline!important;
+}

@@ -8,6 +8,10 @@ import { Observable } from 'rxjs/Observable';
 import { from, of } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 
+import {
+  faFileDownload
+} from '@fortawesome/free-solid-svg-icons';
+
 
 import { ManageService } from './../../../manage.service';
 import { Job } from './../../../../models/job.model';
@@ -23,8 +27,13 @@ export class EditComponent implements OnInit {
   @Input() job: Job;
   @Input() displayEdit: boolean;
   @Input() user: User;
+  @Input() jobsArray: Job[];
 
   @Output() displayEditChange = new EventEmitter<boolean>();
+  @Output() jobsArrayUpdate = new EventEmitter<Job[]>();
+
+  // font awesome icons
+  faFileDownload = faFileDownload;
 
   editForm: FormGroup;
   companyName: string;
@@ -34,6 +43,9 @@ export class EditComponent implements OnInit {
   files: string;
 
   attachmentsObservable: Observable<Array<any>>;
+
+  displayMessage: boolean;
+  validationMessage = [];
 
   // array to hold ids for files that need to be attached to a job
   filesArray: string[];
@@ -53,7 +65,9 @@ export class EditComponent implements OnInit {
     this.attachmentsObservable = of(this.job.attachments);
   }
 
-  // handle closing the edit box
+  /*
+    handle closing the edit box
+  */
   close(event) {
     // determine if the click was within the edit box
     if(event.target.closest('.edit')) {
@@ -66,12 +80,21 @@ export class EditComponent implements OnInit {
   }
 
   /*
-    function called when the update button is clicked to submit changes
-    to a job
+    funtion to be called when a non user action closes the edit form
   */
-  editFormSubmit() {
-    let formVar = this.editForm.value;
-    var valid = true;
+  forceClose() {
+    this.displayEditChange.emit(false);
+  }
+
+  /*
+    validate the add form
+  */
+  validateForm(l:FormGroup) {
+    let formVar = l.value;
+
+    // variables to return
+    let messageList: Array<string> = [];
+    let status: boolean = true;
 
     // validate fields
     // iterate properties
@@ -81,34 +104,73 @@ export class EditComponent implements OnInit {
         // if value is a link then validate the link
         if(property == 'link') {
           if(!this.manage.isValidUrl(formVar[property])) {
-            valid = false;
+            status = false;
+            messageList.push('Link invalid.');
           }
         }
         // validate the form requirements
         if(this.editForm.get(property).invalid) {
-          valid = false;
+          status = false;
+          messageList.push(this.editForm.get(property) + ' invalid.');
         }
       }
     }
 
+    // return object
+    return { status: status, message: messageList };
+  }
+
+  /*
+    function called when the update button is clicked to submit changes
+    to a job
+  */
+  editFormSubmit() {
+    var validated = this.validateForm(this.editForm);
 
     // handle invalid entries
-    if(!valid) {
-      console.log('something is invalid..');
+    if(!validated.status) {
+      this.displayMessage = true;
+      this.validationMessage = validated.message;
     } else {
       // check if any files are attached
       // if so then create the string to pass to db
       var temp = this.manage.formatFileNamePayload(this.filesArray);
 
+      this.editForm.value.files = temp;
+
       this.manage.updateJob(
         this.user.user_id,
         this.job.jobs_id,
-        formVar
+        this.editForm.value
       ).subscribe(data => {
-        console.log(data)
+        console.log(data);
+        // set the job to the updated job
+        this.job = data.data.update_job;
+
+        // store array length
+        var arrLength = this.jobsArray.length;
+
+        // iterate jobs array to find the job to update
+        for(var i = 0; i < arrLength; i++) {
+          // when found
+          if(this.jobsArray[i].jobs_id === this.job.jobs_id) {
+            // set the job with jobs_id to the updated job
+            this.jobsArray[i] = this.job;
+          }
+        }
+
+        // emit the updated jobsArray to the parent component
+        this.jobsArrayUpdate.emit(this.jobsArray);
+
+        // close the edit component
+        this.forceClose();
       }, error => {
         console.log(error);
         // display error
+        if(error.status !== 200) {
+          this.validationMessage.push('Error updating job, please retry.');
+          this.displayMessage = true;
+        }
       });
     }
   }
@@ -126,18 +188,35 @@ export class EditComponent implements OnInit {
       if(data.message === "Success") {
         // remove attachment from array
         var i = 0;
-        // determine index of attachment
-        this.job.attachments.forEach((at, index) => function() {
-          if(at === attachment) {
-            i = index;
-          }
-        });
-        // splice attachment from array
-        this.job.attachments.splice(i, 1);
+        if(this.job.attachments !== null) {
+          // determine index of attachment
+          this.job.attachments.forEach((at, index) => function() {
+            if(at === attachment) {
+              i = index;
+            }
+          });
+          // splice attachment from array
+          this.job.attachments.splice(i, 1);
+        }
       }
     });
   }
 
+
+  /*
+    get a file from s3 to download
+  */
+  getFile(file_path) {
+    // get path of the url
+    var l = document.createElement("a");
+    l.href = file_path;
+
+    // get the pre signed url by passing the url without the initial slash
+    var url = this.manage.getAttachment(l.pathname.substring(1));
+
+    // open file in new tab (should download it)
+    window.open(url);
+  }
 
   /*
     listen to changes to the file input tag
