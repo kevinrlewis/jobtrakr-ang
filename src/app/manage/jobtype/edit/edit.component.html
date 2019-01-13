@@ -1,7 +1,10 @@
 <div class="background" (click)="close($event)">
   <div class="container-fluid edit">
-    <div class="row">
+    <div class="row title">
       <h3 class="col-12 text-center">Edit</h3>
+    </div>
+    <div class="row">
+      <hr class="col-12">
     </div>
     <div class="row">
       <div class="justify-content-center col-12 validation-message" *ngIf="displayMessage">
@@ -12,43 +15,42 @@
         </div>
       </div>
     </div>
-    <form [formGroup]="editForm" (ngSubmit)="editFormSubmit()" class="col-12">
-      <div class="row">
-        <div class="form-group col-6">
-          <label class="form-label" for="companyName">Company Name</label>
-          <input id="companyName" type="text" class="form-control" placeholder="{{job.company_name}}" formControlName="companyName"/>
+    <form [formGroup]="editForm" (ngSubmit)="editFormSubmit()" class="form row">
+      <div class="form-group col-6">
+        <label class="form-label" for="companyName">Company Name</label>
+        <input id="companyName" type="text" class="form-control" placeholder="{{job.company_name}}" formControlName="companyName"/>
+      </div>
+      <div class="form-group col-6">
+        <label class="form-label" for="jobTitle">Job Title</label>
+        <input id="jobTitle" type="text" class="form-control" placeholder="{{job.job_title}}" formControlName="jobTitle"/>
+      </div>
+      <div class="form-group col-12">
+        <label class="form-label" for="link">Link</label>
+        <input id="link" type="text" class="form-control" placeholder="{{job.link}}" formControlName="link"/>
+      </div>
+      <div class="form-group col-12">
+        <label class="form-label" for="notes">Notes</label>
+        <input id="notes" type="text-area" class="form-control" placeholder="{{job.notes}}" formControlName="notes"/>
+      </div>
+      <div class="form-group col-12 container">
+        <label class="form-label" for="jobAttachments">Add attachments</label>
+        <input type="file"
+          formControlName="files"
+          class="form-control-file"
+          (change)="onFileChange($event)"
+          id="jobAttachments"
+          multiple/>
+        <div class="row attachment border-bottom border-top" *ngFor="let attachment of attachmentsObservable | async">
+          <a class="col-8 mr-auto attachment" (click)="getFile(attachment.file_path)">{{attachment.original_name}}
+            <fa-icon [icon]="faFileDownload" size="xs"></fa-icon>
+          </a>
+          <button class="col-auto btn btn-danger" (click)="removeAttachment(attachment)">Remove</button>
         </div>
-        <div class="form-group col-6">
-          <label class="form-label" for="jobTitle">Job Title</label>
-          <input id="jobTitle" type="text" class="form-control" placeholder="{{job.job_title}}" formControlName="jobTitle"/>
-        </div>
-        <div class="form-group col-12">
-          <label class="form-label" for="link">Link</label>
-          <input id="link" type="text" class="form-control" placeholder="{{job.link}}" formControlName="link"/>
-        </div>
-        <div class="form-group col-12">
-          <label class="form-label" for="notes">Notes</label>
-          <input id="notes" type="text-area" class="form-control" placeholder="{{job.notes}}" formControlName="notes"/>
-        </div>
-        <div class="form-group col-12 container">
-          <label class="form-label" for="jobAttachments">Add attachments</label>
-          <input type="file"
-            formControlName="files"
-            class="form-control-file"
-            (change)="onFileChange($event)"
-            id="jobAttachments"
-            multiple/>
-          <div class="row attachment border-bottom border-top" *ngFor="let attachment of attachmentsObservable | async">
-            <a class="col-8 mr-auto attachment" (click)="getFile(attachment.file_path)">{{attachment.original_name}}
-              <fa-icon [icon]="faFileDownload" size="xs"></fa-icon>
-            </a>
-            <button class="col-auto btn btn-danger" (click)="removeAttachment(attachment)">Remove</button>
-          </div>
-        </div>
-        <div class="col-12">
-          <div class="row justify-content-center">
-            <button type="submit" class="btn btn-outline-info col-2">Update</button>
-          </div>
+      </div>
+      <hr class="col-12">
+      <div class="col-12">
+        <div class="row justify-content-center">
+          <button type="submit" class="btn btn-outline-info col-2">Update</button>
         </div>
       </div>
     </form>

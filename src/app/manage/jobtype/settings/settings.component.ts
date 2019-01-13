@@ -8,6 +8,11 @@ import { Observable } from 'rxjs/Observable';
 import { from, of } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 
+// icons
+import {
+  faCheck
+} from '@fortawesome/free-solid-svg-icons';
+
 import { Job } from './../../../../models/job.model';
 
 @Component({
@@ -21,6 +26,9 @@ export class SettingsComponent implements OnInit {
   @Input() displaySettings: boolean;
 
   @Output() displaySettingsChange = new EventEmitter<boolean>();
+
+  // font awesome icons
+  faCheck = faCheck;
 
   updateForm: FormGroup;
 

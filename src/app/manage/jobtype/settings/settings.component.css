@@ -4,13 +4,24 @@
   z-index: 2;
   background: #FFFFFF;
   height: auto;
-  width: 50%;
-  right: 25%;
+  width: 60%;
+  right: 20%;
   top: 25%;
 }
 
-.jobtype-settings * {
+/* .jobtype-settings * {
   padding: 0.15rem;
+} */
+
+.pretty {
+  margin-right: 0;
+  margin-left: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.submission-section {
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
 }
 
 .header > * {
@@ -25,4 +36,9 @@
   z-index: 1;
   top: 0;
   left: 0;
+}
+
+.title {
+  background-color: #000000;
+  color: #FFFFFF;
 }
