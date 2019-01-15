@@ -11,7 +11,9 @@
 }
 
 .nav-row {
-  border-bottom: 1px solid #000000;
+  /* border-bottom: 1px solid #000000; */
+  border-bottom: 0.15rem solid;
+  border-image: repeating-linear-gradient(to right, orange, yellow, green, cyan, blue, violet) 60;
   margin-bottom: 0.5rem;
 }
 
