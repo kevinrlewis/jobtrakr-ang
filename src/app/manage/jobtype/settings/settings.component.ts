@@ -55,7 +55,7 @@ export class SettingsComponent implements OnInit {
   }
 
   updateFormSubmit() {
-
+    console.log(this.updateForm);
   }
 
 }

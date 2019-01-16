@@ -233,9 +233,29 @@ export class ManageService {
 
     // call api
     return this.http.post<UpdateJobResponse>(
-      '/api/' + user_id + '/job/delete',
+      '/api/' + user_id + '/delete/job',
       {
         'jobs_id': jobs_id
+      },
+      httpOptions
+    );
+  }
+
+  /*
+    function to delete multiple jobs by calling the api
+  */
+  deleteJobs(user_id, jobs_ids) {
+    var httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json'
+      })
+    };
+
+    // call api
+    return this.http.post<UpdateJobResponse>(
+      '/api/' + user_id + '/delete/jobs',
+      {
+        'jobs_ids': jobs_ids
       },
       httpOptions
     );
