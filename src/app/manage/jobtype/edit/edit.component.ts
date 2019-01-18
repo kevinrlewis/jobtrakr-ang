@@ -8,6 +8,7 @@ import { Observable } from 'rxjs/Observable';
 import { from, of } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 
+// icons
 import {
   faFileDownload
 } from '@fortawesome/free-solid-svg-icons';

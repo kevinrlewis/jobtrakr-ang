@@ -95,8 +95,8 @@ export class JobtypeComponent implements OnInit {
   // array to hold ids for files that need to be attached to a job
   filesArray: string[];
 
-  // arrars/observables to display jobs
-  jobsArray: Job[] = [];
+  // arrays/observables to display jobs
+  @Input() jobsArray: Job[] = [];
   jobsObservable: Observable<Array<Job>>;
 
   // display toggles

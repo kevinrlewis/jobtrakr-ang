@@ -2,7 +2,7 @@ import { Component, OnInit, Input, HostListener, EventEmitter, Output } from '@a
 import { CookieService } from 'ngx-cookie-service';
 import * as jwt_decode from "jwt-decode";
 import { Router, RouterEvent, NavigationEnd, ActivatedRoute } from '@angular/router';
-import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormControl, FormArray } from '@angular/forms';
 import { HttpClient, HttpClientModule, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 import { from, of } from 'rxjs';
@@ -13,7 +13,9 @@ import {
   faCheck
 } from '@fortawesome/free-solid-svg-icons';
 
+import { ManageService } from './../../../manage.service';
 import { Job } from './../../../../models/job.model';
+import { User } from './../../../../models/user.model';
 
 @Component({
   selector: 'app-settings',
@@ -22,27 +24,42 @@ import { Job } from './../../../../models/job.model';
 })
 export class SettingsComponent implements OnInit {
 
-  @Input() jobsObservable: Observable<Array<Job>>;
+  // what we want to receive from the parent component
+  @Input() jobsArray: Job[];
   @Input() displaySettings: boolean;
+  @Input() user: User;
 
+  // what we want to relay the parent component
   @Output() displaySettingsChange = new EventEmitter<boolean>();
+  @Output() jobsArrayUpdate = new EventEmitter<Job[]>();
 
   // font awesome icons
   faCheck = faCheck;
 
+  // form group
   updateForm: FormGroup;
 
-  constructor(private fb: FormBuilder) {
+  // boolean to control displaying an error message
+  displayMessage: boolean;
+  message: string;
+
+  constructor(private fb: FormBuilder, private manage: ManageService) {
 
   }
 
   ngOnInit() {
+    // initialize jobIds for the form
+    const jobIds = this.jobsArray.map(j => new FormControl(false));
+
     // initialize update form
     this.updateForm = this.fb.group({
+      jobs: new FormArray(jobIds)
     });
   }
 
-  // handle closing the settings box
+  /*
+    handle closing the settings box
+  */
   close(event) {
     // determine if the click was within the settings box
     if(event.target.closest('.jobtype-settings')) {
@@ -54,8 +71,41 @@ export class SettingsComponent implements OnInit {
     }
   }
 
+  /*
+    close the settings component
+  */
+  forceClose() {
+    this.displaySettingsChange.emit(false);
+  }
+
+  /*
+    function called when the updateForm has been submitted
+  */
   updateFormSubmit() {
-    console.log(this.updateForm);
+    const selectedJobs = this.updateForm.value.jobs
+      .map((v, i) => v ? this.jobsArray[i].jobs_id : null)
+      .filter(v => v !== null);
+
+    // delete jobs by calling the api
+    this.manage.deleteJobs(
+      this.user.user_id, selectedJobs
+    ).subscribe(data => {
+      console.log(data);
+      this.jobsArray = this.jobsArray
+        .map((v, i) => selectedJobs.includes(v.jobs_id) ? null : v)
+        .filter(v => v !== null);
+
+      // emit updated jobsArray
+      this.jobsArrayUpdate.emit(this.jobsArray);
+
+      // close settings
+      this.forceClose();
+    }, error => {
+      console.log(error);
+      // display error
+      this.message = 'Error bulk updating jobs, please retry.';
+      this.displayMessage = true;
+    });
   }
 
 }

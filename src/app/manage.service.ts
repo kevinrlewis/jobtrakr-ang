@@ -243,6 +243,8 @@ export class ManageService {
 
   /*
     function to delete multiple jobs by calling the api
+    user_id: int
+    jobs_ids: array of integers (jobs_ids)
   */
   deleteJobs(user_id, jobs_ids) {
     var httpOptions = {
