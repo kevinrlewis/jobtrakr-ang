@@ -5,7 +5,7 @@ import { from, of } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 
 import * as AWS from 'aws-sdk';
-const cred = require('./../../../aws_cred.json');
+const cred = require('./../../aws_cred.json');
 
 @Injectable({
   providedIn: 'root'
@@ -78,7 +78,7 @@ export class ManageService {
 
     // call api to post a job
     return this.http.post<AddJobResponse>(
-      '/api/job',
+      'http://localhost:3000/api/job',
       {
         'company_name': company_name,
         'job_title': job_title,
@@ -103,7 +103,7 @@ export class ManageService {
     };
 
     return this.http.get<GetJobsResponse>(
-      '/api/job/id/' + user_id,
+      'http://localhost:3000/api/job/id/' + user_id,
       httpOptions
     );
   }
