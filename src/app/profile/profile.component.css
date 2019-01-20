@@ -1,3 +1,17 @@
 .settings {
   font-family: monospace;
 }
+
+.pretty {
+  margin-right: 0;
+  margin-left: 1rem;
+  margin-bottom: 1rem;
+}
+
+form {
+  margin-top: 1rem;
+}
+
+.submit {
+  margin-top: 1rem;
+}

@@ -71,6 +71,10 @@ export class SettingsComponent implements OnInit {
     }
   }
 
+  get formData() {
+    return (<FormArray>this.updateForm.controls['jobs']);
+  }
+
   /*
     close the settings component
   */
@@ -88,15 +92,23 @@ export class SettingsComponent implements OnInit {
 
     // delete jobs by calling the api
     this.manage.deleteJobs(
-      this.user.user_id, selectedJobs
+      this.user.user_id,
+      selectedJobs
     ).subscribe(data => {
       console.log(data);
-      this.jobsArray = this.jobsArray
-        .map((v, i) => selectedJobs.includes(v.jobs_id) ? null : v)
-        .filter(v => v !== null);
 
-      // emit updated jobsArray
-      this.jobsArrayUpdate.emit(this.jobsArray);
+      // iterate jobsArray for jobs to remove
+      this.jobsArray.forEach((d, i) => {
+        // if job should be removed then remove it
+        if(selectedJobs.includes(d.jobs_id)) {
+          this.jobsArray.splice(i, 1);
+        }
+      },
+      // after iteration
+      function done() {
+        // emit to parent the updated jobsArray
+        this.jobsArrayUpdate.emit(this.jobsArray);
+      });
 
       // close settings
       this.forceClose();

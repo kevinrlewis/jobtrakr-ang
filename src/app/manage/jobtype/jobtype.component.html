@@ -1,18 +1,14 @@
-<app-settings *ngIf="displaySettings"
-  [(displaySettings)]="displaySettings"
-  [displaySettings]="displaySettings"
-  [(jobsArray)]="jobsArray"
-  [jobsArray]="jobsArray"
-  [user]="user">
-</app-settings>
 <app-edit *ngIf="displayEdit"
   [(displayEdit)]="displayEdit"
-  [displayEdit]="displayEdit"
   [(jobsArray)]="jobsArray"
-  [jobsArray]="jobsArray"
   [job]="jobToEdit"
   [user]="user">
 </app-edit>
+<app-settings *ngIf="displaySettings"
+  [(displaySettings)]="displaySettings"
+  [(jobsArray)]="jobsArray"
+  [user]="user">
+</app-settings>
 <div class="row">
   <h5 class="col-11">
     {{jobTypeMap[jobType].title}}

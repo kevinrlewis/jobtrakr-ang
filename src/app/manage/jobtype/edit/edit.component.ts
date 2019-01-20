@@ -148,20 +148,19 @@ export class EditComponent implements OnInit {
         // set the job to the updated job
         this.job = data.data.update_job;
 
-        // store array length
-        var arrLength = this.jobsArray.length;
-
         // iterate jobs array to find the job to update
-        for(var i = 0; i < arrLength; i++) {
+        this.jobsArray.forEach((d, i) => {
           // when found
-          if(this.jobsArray[i].jobs_id === this.job.jobs_id) {
+          if(this.job.jobs_id === d.jobs_id) {
             // set the job with jobs_id to the updated job
             this.jobsArray[i] = this.job;
           }
-        }
-
-        // emit the updated jobsArray to the parent component
-        this.jobsArrayUpdate.emit(this.jobsArray);
+        },
+        // after iteration
+        function done() {
+          // emit the updated jobsArray to the parent component
+          this.jobsArrayUpdate.emit(this.jobsArray);
+        });
 
         // close the edit component
         this.forceClose();
