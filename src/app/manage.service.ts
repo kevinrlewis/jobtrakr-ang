@@ -3,9 +3,11 @@ import { HttpClient, HttpClientModule, HttpHeaders } from '@angular/common/http'
 import { Observable } from 'rxjs/Observable';
 import { from, of } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
+import { environment } from '../environments/environment';
 
 import * as AWS from 'aws-sdk';
-const cred = require('./../../aws_cred.json');
+var cred = require('./../../../aws_cred.json');
+const API_URL = environment.apiUrl;
 
 @Injectable({
   providedIn: 'root'
@@ -51,7 +53,7 @@ export class ManageService {
 
       // post to the api endpoint
       this.http.post<UploadResponse>(
-        'api/upload',
+        environment.apiUrl + 'api/upload',
         formData
       )
         .subscribe(data => {
@@ -78,7 +80,7 @@ export class ManageService {
 
     // call api to post a job
     return this.http.post<AddJobResponse>(
-      'http://localhost:3000/api/job',
+      API_URL + '/api/job',
       {
         'company_name': company_name,
         'job_title': job_title,
@@ -103,7 +105,7 @@ export class ManageService {
     };
 
     return this.http.get<GetJobsResponse>(
-      'http://localhost:3000/api/job/id/' + user_id,
+      API_URL + '/api/job/id/' + user_id,
       httpOptions
     );
   }
@@ -119,7 +121,7 @@ export class ManageService {
     };
 
     return this.http.post<UpdateJobTypeResponse>(
-      '/api/' + user_id + '/job/' + jobs_id + '/update/' + job_type_id,
+      API_URL + '/api/' + user_id + '/job/' + jobs_id + '/update/' + job_type_id,
       httpOptions
     )
   }
@@ -169,7 +171,7 @@ export class ManageService {
     var s3 = new AWS.S3(cred);
 
     var params = {
-      Bucket: 'jobtrak',
+      Bucket: environment.s3FileBucket,
       Expires: 60*60,
       Key: key
     };
@@ -191,7 +193,7 @@ export class ManageService {
     };
 
     return this.http.post<DeleteFileResponse>(
-      '/api/' + user_id + '/delete/file',
+      API_URL + '/api/' + user_id + '/delete/file',
       {
         'file_name': file_name,
         'jobs_id': jobs_id
@@ -212,7 +214,7 @@ export class ManageService {
 
     // call api
     return this.http.post<UpdateJobResponse>(
-      '/api/' + user_id + '/job/update',
+      API_URL + '/api/' + user_id + '/job/update',
       {
         'jobs_id': jobs_id,
         'form_values': form_values
@@ -233,7 +235,7 @@ export class ManageService {
 
     // call api
     return this.http.post<UpdateJobResponse>(
-      '/api/' + user_id + '/delete/job',
+      API_URL + '/api/' + user_id + '/delete/job',
       {
         'jobs_id': jobs_id
       },
@@ -255,7 +257,7 @@ export class ManageService {
 
     // call api
     return this.http.post<UpdateJobResponse>(
-      '/api/' + user_id + '/delete/jobs',
+      API_URL + '/api/' + user_id + '/delete/jobs',
       {
         'jobs_ids': jobs_ids
       },
