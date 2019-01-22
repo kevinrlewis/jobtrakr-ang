@@ -4,6 +4,7 @@ import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms'
 import { HttpClient } from '@angular/common/http';
 import { AuthService } from './../auth/auth.service';
 import { CookieService } from 'ngx-cookie-service';
+import { NGXLogger } from 'ngx-logger';
 
 @Component({
   selector: 'app-login',
@@ -23,7 +24,14 @@ export class LoginComponent implements OnInit {
   errorLink:string;
 
 
-  constructor(private router: Router, private fb: FormBuilder, private http: HttpClient, public auth: AuthService, private cookieService: CookieService) {
+  constructor(
+    private router: Router,
+    private fb: FormBuilder,
+    private http: HttpClient,
+    public auth: AuthService,
+    private cookieService: CookieService,
+    private logger: NGXLogger
+  ) {
     router.events.subscribe((val) => {
         // document.body.style.background = 'rgb(54, 73, 78, 1)';
         document.body.style.background = 'url(\'../../assets/mountains.jpg\') no-repeat center center fixed';
@@ -41,7 +49,7 @@ export class LoginComponent implements OnInit {
 
   onSubmit() {
     // validate form
-    // console.log(this.loginForm.value);
+    // this.logger.debug(this.loginForm.value);
     var validated = this.validateLoginForm(this.loginForm);
 
     //if valid, attempt to login
@@ -51,15 +59,27 @@ export class LoginComponent implements OnInit {
         this.loginForm.get('email').value,
         this.loginForm.get('password').value
       ).subscribe(data => {
-        console.log("DATA:", data);
+        this.logger.debug("DATA:", data);
         // navigate to profile url based on their id
         this.router.navigateByUrl('/manage/' + data.id.toString());
       }, error => {
-        console.log("ERROR:", error);
-        this.displayErrorMessage = true;
-        this.displayMessage = false;
-        this.errorMessage.push(error.error.message);
-        this.errorLink = 'signup';
+        this.logger.error("ERROR:", error);
+        this.errorMessage = [];
+        if(error.status === 0 || error.status === 500) {
+          this.displayErrorMessage = true;
+          this.displayMessage = false;
+          this.errorMessage.push('Unable to process your request.');
+        } else if(error.status === 404) {
+          this.displayErrorMessage = true;
+          this.displayMessage = false;
+          this.errorMessage.push(error.error.message);
+          this.errorLink = 'signup';
+        } else if(error.status === 401) {
+          this.displayErrorMessage = true;
+          this.displayMessage = false;
+          this.errorMessage.push('Incorrect login information.');
+          // eventually when forgot password is implemented, add link here
+        }
       });
     } else {
       // display message

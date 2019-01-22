@@ -7,6 +7,7 @@ import { HttpClient, HttpClientModule, HttpHeaders } from '@angular/common/http'
 import { Observable } from 'rxjs/Observable';
 import { from, of } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
+import { NGXLogger } from 'ngx-logger';
 
 // icons
 import {
@@ -51,7 +52,11 @@ export class EditComponent implements OnInit {
   // array to hold ids for files that need to be attached to a job
   filesArray: string[];
 
-  constructor(private fb: FormBuilder, private manage: ManageService) { }
+  constructor(
+    private fb: FormBuilder,
+    private manage: ManageService,
+    private logger: NGXLogger
+  ) { }
 
   ngOnInit() {
     // initialize edit form
@@ -144,7 +149,7 @@ export class EditComponent implements OnInit {
         this.job.jobs_id,
         this.editForm.value
       ).subscribe(data => {
-        console.log(data);
+        this.logger.debug(data);
         // set the job to the updated job
         this.job = data.data.update_job;
 
@@ -165,7 +170,7 @@ export class EditComponent implements OnInit {
         // close the edit component
         this.forceClose();
       }, error => {
-        console.log(error);
+        this.logger.error(error);
         // display error
         if(error.status !== 200) {
           this.validationMessage.push('Error updating job, please retry.');
@@ -181,9 +186,9 @@ export class EditComponent implements OnInit {
     the function calls the api through a function in the manage.service.ts file
   */
   removeAttachment(attachment) {
-    console.log('removing attachment:', attachment);
+    this.logger.debug('removing attachment:', attachment);
     this.manage.deleteFile(this.user.user_id, this.job.jobs_id, attachment.file_name).subscribe(data => {
-      console.log('removeAttachment:', data);
+      this.logger.debug('removeAttachment:', data);
       // if the file was successfully removed from job/db and deleted from s3
       if(data.message === "Success") {
         // remove attachment from array

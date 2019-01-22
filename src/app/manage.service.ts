@@ -4,6 +4,7 @@ import { Observable } from 'rxjs/Observable';
 import { from, of } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 import { environment } from '../environments/environment';
+import { NGXLogger } from 'ngx-logger';
 
 import * as AWS from 'aws-sdk';
 var cred = require('./../../../aws_cred.json');
@@ -16,7 +17,10 @@ export class ManageService {
 
   filesArray: string[];
 
-  constructor(private http: HttpClient) { }
+  constructor(
+    private http: HttpClient,
+    private logger: NGXLogger
+  ) { }
 
 
   /*
@@ -45,7 +49,7 @@ export class ManageService {
       // store one file
       var file = tempFilesArray[i];
 
-      console.log("FILE:", file);
+      this.logger.debug("FILE:", file);
 
       // append form data
       formData.append('files', file);
@@ -53,11 +57,11 @@ export class ManageService {
 
       // post to the api endpoint
       this.http.post<UploadResponse>(
-        environment.apiUrl + 'api/upload',
+        environment.apiUrl + '/api/upload',
         formData
       )
         .subscribe(data => {
-          console.log("UPLOAD DATA:", data);
+          this.logger.debug("UPLOAD DATA:", data);
 
           // save the file to be attached to an opportunity
           this.filesArray.push(data.file);
@@ -165,7 +169,7 @@ export class ManageService {
     get a signed url from aws for a specific key in S3
   */
   getAttachment(key):any {
-    // console.log('getAttachment:', key);
+    // this.logger.debug('getAttachment:', key);
 
     // initialize s3 with credentials
     var s3 = new AWS.S3(cred);

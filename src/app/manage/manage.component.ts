@@ -7,6 +7,8 @@ import { HttpClient, HttpClientModule, HttpHeaders } from '@angular/common/http'
 import { Observable } from 'rxjs/Observable';
 import { from, of } from 'rxjs';
 import { filter, map } from 'rxjs/operators'
+import { environment } from '../../environments/environment';
+import { NGXLogger } from 'ngx-logger';
 // import { NgDragDropModule } from 'ng-drag-drop';
 
 import { ManageService } from './../manage.service';
@@ -23,6 +25,8 @@ const httpOptions = {
   // withCredentials: true,
   // credentials: 'include'
 };
+
+const API_URL = environment.apiUrl;
 
 const POSSIBLE_JOB_TYPES = ['opportunity', 'applied', 'interview', 'offer'];
 
@@ -81,7 +85,8 @@ export class ManageComponent implements OnInit {
     private cookieService: CookieService,
     private router: Router,
     private activatedRoute: ActivatedRoute,
-    private manage: ManageService
+    private manage: ManageService,
+    private logger: NGXLogger
   ) {
     this.id = this.email = this.firstname = this.lastname = "";
 
@@ -99,7 +104,7 @@ export class ManageComponent implements OnInit {
 
   ngOnInit() {
     this.token = this.cookieService.get('SESSIONID');
-    // console.log("cookies: ", this.cookieService.getAll());
+    // this.logger.debug("cookies: ", this.cookieService.getAll());
 
     // subscibe to detect fragments when this component is initialized
     this.activatedRoute.fragment.subscribe(frag => {
@@ -138,10 +143,10 @@ export class ManageComponent implements OnInit {
 
     // get user information
     this.http.get<GetUserResponse>(
-      '/api/user/id/' + this.id,
+      API_URL + '/api/user/id/' + this.id,
       httpOptions
     ).subscribe(data => {
-      console.log(data);
+      this.logger.debug(data);
       this.user = data.data;
 
       this.email = data.data.email;
@@ -162,7 +167,7 @@ export class ManageComponent implements OnInit {
   }
 
   onJobDrop(event:any): void {
-    console.log(event.nativeEvent);
+    this.logger.debug(event.nativeEvent);
     var old_job_type = "";
     var new_job_type = "";
 
@@ -202,7 +207,7 @@ export class ManageComponent implements OnInit {
     string and will move that job object between arrays within the jobMap
   */
   moveJob(job: Job, oldJobType: string, newJobType: string) {
-    console.log("old job type:", oldJobType, "| new job type:", newJobType);
+    this.logger.debug("old job type:", oldJobType, "| new job type:", newJobType);
     try {
       // determine index of the job we are removing from the old array
       var index = this.jobMap[oldJobType].indexOf(job);
@@ -215,7 +220,7 @@ export class ManageComponent implements OnInit {
     }
     // catch error and display an error message
     catch(e) {
-      console.log(e);
+      this.logger.error(e);
     }
 
     // reset values to the new job_type
@@ -228,7 +233,7 @@ export class ManageComponent implements OnInit {
     // call api
     this.manage.updateJobType(job.user_id, job.jobs_id, job.job_type_id)
       .subscribe(data => {
-        console.log(data);
+        this.logger.debug(data);
       });
   }
 
@@ -296,7 +301,7 @@ export class ManageComponent implements OnInit {
     check if on of the job type sub components is active
   */
   isSubComponentActive() {
-    // console.log('isSubComponentActive: ', (this.opportunities_active || this.applied_active || this.interviews_active || this.offers_active));
+    // this.logger.debug('isSubComponentActive: ', (this.opportunities_active || this.applied_active || this.interviews_active || this.offers_active));
     // return (this.opportunities_active || this.applied_active || this.interviews_active || this.offers_active);
     return this.job_type_view !== 0;
   }
@@ -336,7 +341,7 @@ export class ManageComponent implements OnInit {
       // call helper function to reset the job arrays
       this.resetJobsArrays();
 
-      console.log('/api/job/id response', data);
+      this.logger.debug('/api/job/id response', data);
       // store all jobs in array
       this.jobsArray = data.data.get_jobs_by_user_id;
 

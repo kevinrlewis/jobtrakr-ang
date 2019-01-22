@@ -4,6 +4,8 @@ import * as jwt_decode from "jwt-decode";
 import { Router, RouterEvent, NavigationEnd } from '@angular/router';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { HttpClient, HttpClientModule, HttpHeaders } from '@angular/common/http';
+import { environment } from '../../environments/environment';
+import { NGXLogger } from 'ngx-logger';
 
 const httpOptions = {
   headers: new HttpHeaders({
@@ -13,6 +15,8 @@ const httpOptions = {
   // withCredentials: true,
   // credentials: 'include'
 };
+
+const API_URL = environment.apiUrl;
 
 // const imgPath = './../../../.profile_images/default_profile.png';
 const imgPath = './../../assets/.profile_images/default_profile.png';
@@ -43,7 +47,13 @@ export class ProfileComponent implements OnInit {
 
   token: string;
 
-  constructor(private http: HttpClient, private fb: FormBuilder, private cookieService: CookieService, private router: Router) {
+  constructor(
+    private http: HttpClient,
+    private fb: FormBuilder,
+    private cookieService: CookieService,
+    private router: Router,
+    private logger: NGXLogger
+  ) {
     this.id = this.email = this.firstname = this.lastname = this.profile_image = this.bio = this.create_datetime = this.update_datetime = "";
 
     router.events.subscribe((val) => {
@@ -56,10 +66,10 @@ export class ProfileComponent implements OnInit {
 
   ngOnInit() {
     this.token = this.cookieService.get('SESSIONID');
-    // console.log("cookies: ", this.cookieService.getAll());
+    // this.logger.debug("cookies: ", this.cookieService.getAll());
     this.id = jwt_decode(this.token).sub.toString();
 
-    console.log('share_opportunities:', this.share_opportunies);
+    this.logger.debug('share_opportunities:', this.share_opportunies);
     // set values retrieved from user
     this.sharingForm = this.fb.group({
       'shareOpportunities': [this.share_opportunies, []],
@@ -77,10 +87,10 @@ export class ProfileComponent implements OnInit {
     });
 
     this.http.get<GetUserResponse>(
-      '/api/user/id/' + this.id,
+      API_URL + '/api/user/id/' + this.id,
       httpOptions
     ).subscribe(data => {
-      console.log(data);
+      this.logger.debug(data);
 
       // initialize values retrieved from db
       this.email = data.data.email;

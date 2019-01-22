@@ -2,6 +2,8 @@ import { Component, OnInit, HostListener } from '@angular/core';
 import { Router, RouterEvent, NavigationEnd } from '@angular/router';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { HttpClient, HttpClientModule, HttpHeaders } from '@angular/common/http';
+import { environment } from '../../environments/environment';
+import { NGXLogger } from 'ngx-logger';
 
 // icons
 import { faLayerGroup, faUserTie, faSmileBeam } from '@fortawesome/free-solid-svg-icons';
@@ -14,6 +16,8 @@ const httpOptions = {
   // withCredentials: true,
   // credentials: 'include'
 };
+
+const API_URL = environment.apiUrl;
 
 @Component({
   selector: 'app-home',
@@ -44,14 +48,19 @@ export class HomeComponent implements OnInit {
   displayMessage:boolean;
   validationMessage:string[];
 
-  constructor(private router: Router, private fb: FormBuilder, private http: HttpClient) {
+  constructor(
+    private router: Router,
+    private fb: FormBuilder,
+    private http: HttpClient,
+    private logger: NGXLogger
+  ) {
 
     router.events.subscribe((val) => {
       // document.body.style.background = '#393E41';
       document.body.style.background = 'url(\'../../assets/mountains.jpg\') no-repeat center center fixed';
       document.body.style.backgroundSize = 'cover';
       document.body.style.height = '100%';
-      // console.log(val instanceof NavigationEnd);
+      // this.logger.debug(val instanceof NavigationEnd);
     });
   }
 
@@ -66,14 +75,14 @@ export class HomeComponent implements OnInit {
   }
 
   onSubmit() {
-    // console.log(this.signupForm.value);
+    // this.logger.debug(this.signupForm.value);
 
     // validate form
     var validated = this.validateSignUpForm(this.signupForm);
-    console.log(validated);
+    this.logger.debug(validated);
     // if valid, attempt to signup
     if (validated.status) {
-      // console.log(this.signupForm.get('email').value);
+      // this.logger.debug(this.signupForm.get('email').value);
       // attempt to sign up
       this.signUp(this.signupForm.get('email').value, this.signupForm.get('password').value, this.signupForm.get('firstName').value, this.signupForm.get('lastName').value);
     } else {
@@ -125,10 +134,10 @@ export class HomeComponent implements OnInit {
   }
 
   private signUp(email:string, password:string, firstname:string, lastname:string) {
-    // console.log(email, password, firstname, lastname);
+    this.logger.debug(API_URL + '/api/signup');
     // call api
     this.http.post<SignUpResponse>(
-      'api/signup',
+      API_URL + '/api/signup',
       {
         'email': email,
         'password': password,
@@ -138,8 +147,8 @@ export class HomeComponent implements OnInit {
       httpOptions
     )
       .subscribe(data => {
-        console.log(data);
-        console.log('/manage/' + data.data.user_id.toString());
+        this.logger.debug(data);
+        this.logger.debug('/manage/' + data.data.user_id.toString());
         this.router.navigateByUrl('/manage/' + data.data.user_id.toString());
       });
   }

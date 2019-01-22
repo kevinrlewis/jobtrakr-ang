@@ -6,6 +6,9 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { NgDragDropModule } from 'ng-drag-drop';
 // import { HttpModule } from '@angular/http';
+import { enableProdMode } from '@angular/core';
+import { environment } from '../environments/environment';
+import { LoggerModule, NgxLoggerLevel } from 'ngx-logger';
 
 import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
@@ -47,6 +50,11 @@ const appRoutes: Routes = [
   { path: '**', component: PageNotFoundComponent }
 ];
 
+if(environment.production) {
+  console.log("PRODUCTION");
+  enableProdMode();
+}
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -71,6 +79,7 @@ const appRoutes: Routes = [
     FormsModule,
     ReactiveFormsModule,
     NgDragDropModule.forRoot(),
+    LoggerModule.forRoot({serverLoggingUrl: '/api/logs', level: NgxLoggerLevel.DEBUG, serverLogLevel: NgxLoggerLevel.ERROR}),
     // HttpModule
   ],
   providers: [AuthService, CookieService, JwtHelperService],

@@ -15,7 +15,7 @@ export class LoginGuard implements CanActivate {
   canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
     const token = this.cookieService.get('SESSIONID');
 
-    // console.log('profile/' + jwt_decode(token).sub);
+    // this.logger.debug('profile/' + jwt_decode(token).sub);
     if(this.auth.isAuthenticated()) {
       this.router.navigate(['manage/' + jwt_decode(token).sub]);
       return false;

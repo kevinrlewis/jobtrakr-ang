@@ -3,6 +3,8 @@ import { HttpClient, HttpClientModule, HttpHeaders } from '@angular/common/http'
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { CookieService } from 'ngx-cookie-service';
 import * as jwt_decode from "jwt-decode";
+import { environment } from '../../environments/environment';
+import { NGXLogger } from 'ngx-logger';
 
 const httpOptions = {
   headers: new HttpHeaders({
@@ -13,12 +15,18 @@ const httpOptions = {
   // credentials: 'include'
 };
 
+const API_URL = environment.apiUrl;
+
 @Injectable()
 export class AuthService {
 
   jwtHelper:JwtHelperService;
 
-  constructor(private http: HttpClient, private cookieService: CookieService) {
+  constructor(
+    private http: HttpClient,
+    private cookieService: CookieService,
+    private logger: NGXLogger
+  ) {
     this.jwtHelper = new JwtHelperService();
   }
 
@@ -30,7 +38,7 @@ export class AuthService {
 
     // check if token is null, empty, or undefined
     if(token === null || token === "" || token === undefined) {
-      console.log('token is null, empty, or undefined');
+      this.logger.error('token is null, empty, or undefined');
       return false;
     }
 
@@ -39,10 +47,11 @@ export class AuthService {
   }
 
   public login(email:string, password:string) {
-    console.log('logging in...');
+    this.logger.debug('logging in...');
+    this.logger.debug(API_URL + '/api/login');
     // look into piping for error handling
     return this.http.post<LoginResponse>(
-      '/api/login',
+      API_URL + '/api/login',
       {
         'email': email,
         'password': password

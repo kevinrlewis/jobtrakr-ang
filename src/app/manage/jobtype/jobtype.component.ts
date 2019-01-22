@@ -8,6 +8,7 @@ import { ManageService } from './../../manage.service';
 import { Observable } from 'rxjs/Observable';
 import { from, of } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
+import { NGXLogger } from 'ngx-logger';
 
 import { Job } from './../../../models/job.model';
 import { User } from './../../../models/user.model';
@@ -117,7 +118,8 @@ export class JobtypeComponent implements OnInit {
     private cookieService: CookieService,
     private fb: FormBuilder,
     private http: HttpClient,
-    private manage: ManageService
+    private manage: ManageService,
+    private logger: NGXLogger
   ) {
     // initialize the observable to watch the jobsArray
     this.jobsObservable = of(this.jobsArray);
@@ -144,7 +146,7 @@ export class JobtypeComponent implements OnInit {
     retrieve the emit from the child component to close the settings box
   */
   settingsClose(val: boolean) {
-    console.log('parent closing settings...');
+    this.logger.debug('parent closing settings...');
     this.displaySettings = val;
   }
 
@@ -180,7 +182,7 @@ export class JobtypeComponent implements OnInit {
         // close add form
         this.displayAddForm = false;
       }, error => {
-        console.log(error);
+        this.logger.error(error);
         // display error
       });
     } else {
@@ -196,7 +198,7 @@ export class JobtypeComponent implements OnInit {
   */
   onFileChange(event) {
     // save the file with the specific job type
-    this.filesArray = this.manage.saveFile(event, this.jobType);
+    this.filesArray = this.manage.saveFile(event, 2);
   }
 
   /*
@@ -219,7 +221,7 @@ export class JobtypeComponent implements OnInit {
       },
       // TODO: display message if there was an error retrieving jobs
       error => {
-        console.log(error);
+        this.logger.error(error);
       }
     );
   }
@@ -304,18 +306,18 @@ export class JobtypeComponent implements OnInit {
 
   /**/
   onClickEdit(job: Job) {
-    console.log('editting...', job);
+    this.logger.debug('editting...', job);
     this.displayEdit = true;
     this.jobToEdit = job;
   }
 
   /**/
   onClickDelete(job: Job) {
-    console.log('deleting...', job);
+    this.logger.debug('deleting...', job);
     // call function in manage service to grab jobs based on job type and user id
     this.manage.deleteJob(job.user_id, job.jobs_id).subscribe(
       data => {
-        console.log(data);
+        this.logger.debug(data);
         var arrLength = this.jobsArray.length;
 
         // remove job from array
@@ -327,7 +329,7 @@ export class JobtypeComponent implements OnInit {
       },
       // TODO: display message if there was an error retrieving jobs
       error => {
-        console.log(error);
+        this.logger.error(error);
       }
     );
   }

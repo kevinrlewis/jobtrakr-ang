@@ -7,6 +7,7 @@ import { HttpClient, HttpClientModule, HttpHeaders } from '@angular/common/http'
 import { Observable } from 'rxjs/Observable';
 import { from, of } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
+import { NGXLogger } from 'ngx-logger';
 
 // icons
 import {
@@ -43,7 +44,11 @@ export class SettingsComponent implements OnInit {
   displayMessage: boolean;
   message: string;
 
-  constructor(private fb: FormBuilder, private manage: ManageService) {
+  constructor(
+    private fb: FormBuilder,
+    private manage: ManageService,
+    private logger: NGXLogger
+  ) {
 
   }
 
@@ -95,7 +100,7 @@ export class SettingsComponent implements OnInit {
       this.user.user_id,
       selectedJobs
     ).subscribe(data => {
-      console.log(data);
+      this.logger.debug(data);
 
       // iterate jobsArray for jobs to remove
       this.jobsArray.forEach((d, i) => {
@@ -113,7 +118,7 @@ export class SettingsComponent implements OnInit {
       // close settings
       this.forceClose();
     }, error => {
-      console.log(error);
+      this.logger.error(error);
       // display error
       this.message = 'Error bulk updating jobs, please retry.';
       this.displayMessage = true;
