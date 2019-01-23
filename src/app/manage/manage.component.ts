@@ -13,6 +13,9 @@ import { NGXLogger } from 'ngx-logger';
 
 import { ManageService } from './../manage.service';
 
+import { Job } from './../../models/job.model';
+import { User } from './../../models/user.model';
+
 // icons
 import { faBars } from '@fortawesome/free-solid-svg-icons';
 import { faTh } from '@fortawesome/free-solid-svg-icons';
@@ -41,13 +44,13 @@ export class ManageComponent implements OnInit {
   faTh = faTh;
 
   // @Input() email: string;
-  user: object;
+  user: User;
   job_type_view: number;
 
   id: string;
   email: string;
-  firstname: string;
-  lastname: string;
+  firstName: string;
+  lastName: string;
 
   // booleans
   opportunities_active: boolean;
@@ -67,6 +70,7 @@ export class ManageComponent implements OnInit {
   // constant maps
   jobMap = { 'opportunity': this.opportunitiesArray, 'applied': this.appliedArray, 'interview': this.interviewArray, 'offer': this.offerArray };
   jobIdMap = { 'opportunity': 1, 'applied': 2, 'interview': 3, 'offer': 4 };
+  jobIdToNameMap = { 1: 'opportunity', 2: 'applied', 3: 'interview', 4: 'offer' };
 
   // observables for the job arrays
   opportunitiesObservable: Observable<Array<Job>>;
@@ -88,7 +92,7 @@ export class ManageComponent implements OnInit {
     private manage: ManageService,
     private logger: NGXLogger
   ) {
-    this.id = this.email = this.firstname = this.lastname = "";
+    this.id = this.email = this.firstName = this.lastName = "";
 
     router.events.subscribe((val) => {
         document.body.style.background = 'rgb(255, 255, 255, 1)';
@@ -104,7 +108,7 @@ export class ManageComponent implements OnInit {
 
   ngOnInit() {
     this.token = this.cookieService.get('SESSIONID');
-    // this.logger.debug("cookies: ", this.cookieService.getAll());
+    // console.log("cookies: ", this.cookieService.getAll());
 
     // subscibe to detect fragments when this component is initialized
     this.activatedRoute.fragment.subscribe(frag => {
@@ -146,12 +150,12 @@ export class ManageComponent implements OnInit {
       API_URL + '/api/user/id/' + this.id,
       httpOptions
     ).subscribe(data => {
-      this.logger.debug(data);
+      console.log(data);
       this.user = data.data;
 
       this.email = data.data.email;
-      this.firstname = data.data.firstname;
-      this.lastname = data.data.lastname;
+      this.firstName = data.data.first_name;
+      this.lastName = data.data.last_name;
     });
 
     // call the helper function to refresh the jobs within the grid
@@ -167,12 +171,12 @@ export class ManageComponent implements OnInit {
   }
 
   onJobDrop(event:any): void {
-    this.logger.debug(event.nativeEvent);
-    var old_job_type = "";
+    console.log(event.nativeEvent);
+    var old_job_type = 0;
     var new_job_type = "";
 
     // get old_job_type from data that was passed during event
-    old_job_type = event.dragData.job_type_name
+    old_job_type = event.dragData.job_type_id;
 
     // get new_job_type from html elements
     // TODO: rethink this?
@@ -206,8 +210,9 @@ export class ManageComponent implements OnInit {
     function that takes a job object, a old job type string and a new job type
     string and will move that job object between arrays within the jobMap
   */
-  moveJob(job: Job, oldJobType: string, newJobType: string) {
-    this.logger.debug("old job type:", oldJobType, "| new job type:", newJobType);
+  moveJob(job: Job, oldJobTypeId: number, newJobType: string) {
+    var oldJobType = this.jobIdToNameMap[oldJobTypeId];
+    console.log("old job type:", oldJobType, "| new job type:", newJobType);
     try {
       // determine index of the job we are removing from the old array
       var index = this.jobMap[oldJobType].indexOf(job);
@@ -220,20 +225,19 @@ export class ManageComponent implements OnInit {
     }
     // catch error and display an error message
     catch(e) {
-      this.logger.error(e);
+      console.log(e);
     }
 
     // reset values to the new job_type
-    job.job_type_name = newJobType;
     job.job_type_id = this.jobIdMap[newJobType];
 
     // push the updated job to the new array
-    this.jobMap[newJobType].push(job);
+    this.jobMap[this.jobIdToNameMap[job.job_type_id]].push(job);
 
     // call api
     this.manage.updateJobType(job.user_id, job.jobs_id, job.job_type_id)
       .subscribe(data => {
-        this.logger.debug(data);
+        console.log(data);
       });
   }
 
@@ -301,7 +305,7 @@ export class ManageComponent implements OnInit {
     check if on of the job type sub components is active
   */
   isSubComponentActive() {
-    // this.logger.debug('isSubComponentActive: ', (this.opportunities_active || this.applied_active || this.interviews_active || this.offers_active));
+    // console.log('isSubComponentActive: ', (this.opportunities_active || this.applied_active || this.interviews_active || this.offers_active));
     // return (this.opportunities_active || this.applied_active || this.interviews_active || this.offers_active);
     return this.job_type_view !== 0;
   }
@@ -341,7 +345,7 @@ export class ManageComponent implements OnInit {
       // call helper function to reset the job arrays
       this.resetJobsArrays();
 
-      this.logger.debug('/api/job/id response', data);
+      console.log('/api/job/id response', data);
       // store all jobs in array
       this.jobsArray = data.data.get_jobs_by_user_id;
 
@@ -355,7 +359,7 @@ export class ManageComponent implements OnInit {
 
         // filter and add all jobs to their specific array
         temp.subscribe(job => {
-          this.jobMap[job.job_type_name].push(job);
+          this.jobMap[this.jobIdToNameMap[job.job_type_id]].push(job);
         });
 
       }
@@ -389,12 +393,7 @@ export class ManageComponent implements OnInit {
 // interface for the response from getting the user
 interface GetUserResponse {
   message: string,
-  data: {
-    user_id: number,
-    email: string,
-    firstname: string,
-    lastname: string
-  }
+  data: User
 }
 
 // interface to get an expected response from the api
@@ -404,19 +403,4 @@ export interface GetJobsResponse {
   data: {
     get_jobs_by_user_id: Job[]
   }
-}
-
-// interface for a job object
-interface Job {
-  jobs_id: number,
-  job_title: string,
-  company_name: string,
-  link: string,
-  notes: string,
-  attachments: string,
-  user_id: number,
-  create_datetime: string,
-  update_datetime: string,
-  job_type_id: number,
-  job_type_name: string
 }

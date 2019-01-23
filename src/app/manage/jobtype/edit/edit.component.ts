@@ -149,7 +149,7 @@ export class EditComponent implements OnInit {
         this.job.jobs_id,
         this.editForm.value
       ).subscribe(data => {
-        this.logger.debug(data);
+        console.log(data);
         // set the job to the updated job
         this.job = data.data.update_job;
 
@@ -170,7 +170,7 @@ export class EditComponent implements OnInit {
         // close the edit component
         this.forceClose();
       }, error => {
-        this.logger.error(error);
+        console.log(error);
         // display error
         if(error.status !== 200) {
           this.validationMessage.push('Error updating job, please retry.');
@@ -186,9 +186,9 @@ export class EditComponent implements OnInit {
     the function calls the api through a function in the manage.service.ts file
   */
   removeAttachment(attachment) {
-    this.logger.debug('removing attachment:', attachment);
+    console.log('removing attachment:', attachment);
     this.manage.deleteFile(this.user.user_id, this.job.jobs_id, attachment.file_name).subscribe(data => {
-      this.logger.debug('removeAttachment:', data);
+      console.log('removeAttachment:', data);
       // if the file was successfully removed from job/db and deleted from s3
       if(data.message === "Success") {
         // remove attachment from array

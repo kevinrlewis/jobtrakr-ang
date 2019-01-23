@@ -49,7 +49,7 @@ export class LoginComponent implements OnInit {
 
   onSubmit() {
     // validate form
-    // this.logger.debug(this.loginForm.value);
+    // console.log(this.loginForm.value);
     var validated = this.validateLoginForm(this.loginForm);
 
     //if valid, attempt to login
@@ -59,17 +59,13 @@ export class LoginComponent implements OnInit {
         this.loginForm.get('email').value,
         this.loginForm.get('password').value
       ).subscribe(data => {
-        this.logger.debug("DATA:", data);
+        console.log("DATA:", data);
         // navigate to profile url based on their id
         this.router.navigateByUrl('/manage/' + data.id.toString());
       }, error => {
-        this.logger.error("ERROR:", error);
+        console.log("ERROR:", error);
         this.errorMessage = [];
-        if(error.status === 0 || error.status === 500) {
-          this.displayErrorMessage = true;
-          this.displayMessage = false;
-          this.errorMessage.push('Unable to process your request.');
-        } else if(error.status === 404) {
+        if(error.status === 404) {
           this.displayErrorMessage = true;
           this.displayMessage = false;
           this.errorMessage.push(error.error.message);
@@ -79,6 +75,10 @@ export class LoginComponent implements OnInit {
           this.displayMessage = false;
           this.errorMessage.push('Incorrect login information.');
           // eventually when forgot password is implemented, add link here
+        } else {
+          this.displayErrorMessage = true;
+          this.displayMessage = false;
+          this.errorMessage.push('Unable to process your request.');
         }
       });
     } else {

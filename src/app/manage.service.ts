@@ -6,6 +6,9 @@ import { filter, map } from 'rxjs/operators';
 import { environment } from '../environments/environment';
 import { NGXLogger } from 'ngx-logger';
 
+import { Job } from './../models/job.model';
+import { User } from './../models/user.model';
+
 import * as AWS from 'aws-sdk';
 var cred = require('./../../../aws_cred.json');
 const API_URL = environment.apiUrl;
@@ -49,11 +52,11 @@ export class ManageService {
       // store one file
       var file = tempFilesArray[i];
 
-      this.logger.debug("FILE:", file);
+      console.log("FILE:", file);
 
       // append form data
       formData.append('files', file);
-      formData.append('type', type.toString())
+      formData.append('type', type.toString());
 
       // post to the api endpoint
       this.http.post<UploadResponse>(
@@ -61,7 +64,7 @@ export class ManageService {
         formData
       )
         .subscribe(data => {
-          this.logger.debug("UPLOAD DATA:", data);
+          console.log("UPLOAD DATA:", data);
 
           // save the file to be attached to an opportunity
           this.filesArray.push(data.file);
@@ -70,6 +73,36 @@ export class ManageService {
 
     // return successful file names
     return this.filesArray;
+  }
+
+  /*
+    function to call api to upload a profile image and attach it to a user
+  */
+  saveProfileImage(event, user_id:number) {
+    // set content type
+    var httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'multipart/form-data'
+      }),
+    };
+
+    // set form data for the post request
+    let formData: FormData = new FormData();
+
+    // store file
+    var file = event.target.files[0];
+
+    console.log("FILE:", file);
+
+    // append form data
+    formData.append('profile_image', file);
+    formData.append('user_id', user_id.toString());
+
+    // post to the api endpoint and return an observable
+    return this.http.post<UploadResponse>(
+      environment.apiUrl + '/api/upload-profile-image',
+      formData
+    );
   }
 
   /*
@@ -169,7 +202,7 @@ export class ManageService {
     get a signed url from aws for a specific key in S3
   */
   getAttachment(key):any {
-    // this.logger.debug('getAttachment:', key);
+    // console.log('getAttachment:', key);
 
     // initialize s3 with credentials
     var s3 = new AWS.S3(cred);
@@ -229,8 +262,10 @@ export class ManageService {
 
   /*
     function to delete a job by calling the api
+    user_id: int
+    jobs_id: int
   */
-  deleteJob(user_id, jobs_id) {
+  deleteJob(user_id:number, jobs_id:number) {
     var httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json'
@@ -252,7 +287,7 @@ export class ManageService {
     user_id: int
     jobs_ids: array of integers (jobs_ids)
   */
-  deleteJobs(user_id, jobs_ids) {
+  deleteJobs(user_id:number, jobs_ids:number) {
     var httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json'
@@ -268,6 +303,24 @@ export class ManageService {
       httpOptions
     );
   }
+
+  /*
+    function to call the api to get user information
+    user_id: int
+  */
+  getUser(user_id:number) {
+    var httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json'
+      })
+    };
+
+    return this.http.get<GetUserResponse>(
+      API_URL + '/api/user/id/' + user_id,
+      httpOptions
+    );
+  }
+
 }
 
 // interface to get an expected response from the api
@@ -314,21 +367,6 @@ export interface DeleteFileResponse {
   message: string
 }
 
-// interface for a job object
-interface Job {
-  jobs_id: number,
-  job_title: string,
-  company_name: string,
-  link: string,
-  notes: string,
-  attachments: any,
-  user_id: number,
-  create_datetime: string,
-  update_datetime: string,
-  job_type_id: number,
-  job_type_name: string
-}
-
 // interface to get an expected response from the api
 // when we call the update job endpoint
 export interface UpdateJobResponse {
@@ -347,4 +385,9 @@ export interface UpdateJobResponse {
       job_type_id: number
     }
   }
+}
+
+interface GetUserResponse {
+  message: string,
+  data: User
 }

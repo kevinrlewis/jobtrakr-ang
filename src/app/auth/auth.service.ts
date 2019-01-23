@@ -38,7 +38,7 @@ export class AuthService {
 
     // check if token is null, empty, or undefined
     if(token === null || token === "" || token === undefined) {
-      this.logger.error('token is null, empty, or undefined');
+      console.log('token is null, empty, or undefined');
       return false;
     }
 
@@ -47,8 +47,8 @@ export class AuthService {
   }
 
   public login(email:string, password:string) {
-    this.logger.debug('logging in...');
-    this.logger.debug(API_URL + '/api/login');
+    console.log('logging in...');
+    console.log(API_URL + '/api/login');
     // look into piping for error handling
     return this.http.post<LoginResponse>(
       API_URL + '/api/login',

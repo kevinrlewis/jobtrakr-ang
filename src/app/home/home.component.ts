@@ -60,7 +60,7 @@ export class HomeComponent implements OnInit {
       document.body.style.background = 'url(\'../../assets/mountains.jpg\') no-repeat center center fixed';
       document.body.style.backgroundSize = 'cover';
       document.body.style.height = '100%';
-      // this.logger.debug(val instanceof NavigationEnd);
+      // console.log(val instanceof NavigationEnd);
     });
   }
 
@@ -75,14 +75,14 @@ export class HomeComponent implements OnInit {
   }
 
   onSubmit() {
-    // this.logger.debug(this.signupForm.value);
+    // console.log(this.signupForm.value);
 
     // validate form
     var validated = this.validateSignUpForm(this.signupForm);
-    this.logger.debug(validated);
+    console.log(validated);
     // if valid, attempt to signup
     if (validated.status) {
-      // this.logger.debug(this.signupForm.get('email').value);
+      // console.log(this.signupForm.get('email').value);
       // attempt to sign up
       this.signUp(this.signupForm.get('email').value, this.signupForm.get('password').value, this.signupForm.get('firstName').value, this.signupForm.get('lastName').value);
     } else {
@@ -134,7 +134,7 @@ export class HomeComponent implements OnInit {
   }
 
   private signUp(email:string, password:string, firstname:string, lastname:string) {
-    this.logger.debug(API_URL + '/api/signup');
+    console.log(API_URL + '/api/signup');
     // call api
     this.http.post<SignUpResponse>(
       API_URL + '/api/signup',
@@ -147,8 +147,8 @@ export class HomeComponent implements OnInit {
       httpOptions
     )
       .subscribe(data => {
-        this.logger.debug(data);
-        this.logger.debug('/manage/' + data.data.user_id.toString());
+        console.log(data);
+        console.log('/manage/' + data.data.user_id.toString());
         this.router.navigateByUrl('/manage/' + data.data.user_id.toString());
       });
   }

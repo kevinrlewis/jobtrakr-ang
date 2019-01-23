@@ -146,7 +146,7 @@ export class JobtypeComponent implements OnInit {
     retrieve the emit from the child component to close the settings box
   */
   settingsClose(val: boolean) {
-    this.logger.debug('parent closing settings...');
+    console.log('parent closing settings...');
     this.displaySettings = val;
   }
 
@@ -182,7 +182,7 @@ export class JobtypeComponent implements OnInit {
         // close add form
         this.displayAddForm = false;
       }, error => {
-        this.logger.error(error);
+        console.log(error);
         // display error
       });
     } else {
@@ -221,7 +221,7 @@ export class JobtypeComponent implements OnInit {
       },
       // TODO: display message if there was an error retrieving jobs
       error => {
-        this.logger.error(error);
+        console.log(error);
       }
     );
   }
@@ -306,18 +306,18 @@ export class JobtypeComponent implements OnInit {
 
   /**/
   onClickEdit(job: Job) {
-    this.logger.debug('editting...', job);
+    console.log('editting...', job);
     this.displayEdit = true;
     this.jobToEdit = job;
   }
 
   /**/
   onClickDelete(job: Job) {
-    this.logger.debug('deleting...', job);
+    console.log('deleting...', job);
     // call function in manage service to grab jobs based on job type and user id
     this.manage.deleteJob(job.user_id, job.jobs_id).subscribe(
       data => {
-        this.logger.debug(data);
+        console.log(data);
         var arrLength = this.jobsArray.length;
 
         // remove job from array
@@ -329,7 +329,7 @@ export class JobtypeComponent implements OnInit {
       },
       // TODO: display message if there was an error retrieving jobs
       error => {
-        this.logger.error(error);
+        console.log(error);
       }
     );
   }

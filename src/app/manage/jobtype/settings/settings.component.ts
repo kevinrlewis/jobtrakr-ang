@@ -100,7 +100,7 @@ export class SettingsComponent implements OnInit {
       this.user.user_id,
       selectedJobs
     ).subscribe(data => {
-      this.logger.debug(data);
+      console.log(data);
 
       // iterate jobsArray for jobs to remove
       this.jobsArray.forEach((d, i) => {
@@ -118,7 +118,7 @@ export class SettingsComponent implements OnInit {
       // close settings
       this.forceClose();
     }, error => {
-      this.logger.error(error);
+      console.log(error);
       // display error
       this.message = 'Error bulk updating jobs, please retry.';
       this.displayMessage = true;

@@ -1,10 +1,12 @@
+import { File } from './file.model';
+
 export interface User {
   user_id: number,
   email: string,
-  firstname: string,
-  lastname: string,
+  first_name: string,
+  last_name: string,
   bio: string,
-  profile_image: string,
+  profile_image_file_id: File | null,
   share_applied: boolean,
   share_interviews: boolean,
   share_offers: boolean,
