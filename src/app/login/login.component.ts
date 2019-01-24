@@ -4,7 +4,6 @@ import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms'
 import { HttpClient } from '@angular/common/http';
 import { AuthService } from './../auth/auth.service';
 import { CookieService } from 'ngx-cookie-service';
-import { NGXLogger } from 'ngx-logger';
 
 @Component({
   selector: 'app-login',
@@ -29,8 +28,7 @@ export class LoginComponent implements OnInit {
     private fb: FormBuilder,
     private http: HttpClient,
     public auth: AuthService,
-    private cookieService: CookieService,
-    private logger: NGXLogger
+    private cookieService: CookieService
   ) {
     router.events.subscribe((val) => {
         // document.body.style.background = 'rgb(54, 73, 78, 1)';

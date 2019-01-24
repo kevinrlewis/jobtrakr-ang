@@ -4,7 +4,6 @@ import { Observable } from 'rxjs/Observable';
 import { from, of } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 import { environment } from '../environments/environment';
-import { NGXLogger } from 'ngx-logger';
 
 import { Job } from './../models/job.model';
 import { User } from './../models/user.model';
@@ -21,8 +20,7 @@ export class ManageService {
   filesArray: string[];
 
   constructor(
-    private http: HttpClient,
-    private logger: NGXLogger
+    private http: HttpClient
   ) { }
 
 
@@ -321,6 +319,25 @@ export class ManageService {
     );
   }
 
+  /*
+    function to call api to update sharing preferences of a user
+  */
+  updateUserSharing(user_id:number, form_values) {
+    var httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json'
+      })
+    };
+
+    return this.http.post<UpdateUserSharingResponse>(
+      API_URL + '/api/' + user_id + '/sharing/update',
+      {
+        'form_values': form_values
+      },
+      httpOptions
+    );
+  }
+
 }
 
 // interface to get an expected response from the api
@@ -390,4 +407,11 @@ export interface UpdateJobResponse {
 interface GetUserResponse {
   message: string,
   data: User
+}
+
+interface UpdateUserSharingResponse {
+  message: string,
+  data: {
+    update_user_sharing: User
+  }
 }

@@ -8,7 +8,6 @@ import { NgDragDropModule } from 'ng-drag-drop';
 // import { HttpModule } from '@angular/http';
 import { enableProdMode } from '@angular/core';
 import { environment } from '../environments/environment';
-import { LoggerModule, NgxLoggerLevel } from 'ngx-logger';
 
 import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
@@ -79,7 +78,6 @@ if(environment.production) {
     FormsModule,
     ReactiveFormsModule,
     NgDragDropModule.forRoot(),
-    LoggerModule.forRoot({serverLoggingUrl: '/api/logs', level: NgxLoggerLevel.DEBUG, serverLogLevel: NgxLoggerLevel.ERROR}),
     // HttpModule
   ],
   providers: [AuthService, CookieService, JwtHelperService],

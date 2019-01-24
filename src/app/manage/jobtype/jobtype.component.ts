@@ -8,7 +8,6 @@ import { ManageService } from './../../manage.service';
 import { Observable } from 'rxjs/Observable';
 import { from, of } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
-import { NGXLogger } from 'ngx-logger';
 
 import { Job } from './../../../models/job.model';
 import { User } from './../../../models/user.model';
@@ -118,8 +117,7 @@ export class JobtypeComponent implements OnInit {
     private cookieService: CookieService,
     private fb: FormBuilder,
     private http: HttpClient,
-    private manage: ManageService,
-    private logger: NGXLogger
+    private manage: ManageService
   ) {
     // initialize the observable to watch the jobsArray
     this.jobsObservable = of(this.jobsArray);

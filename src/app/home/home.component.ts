@@ -3,7 +3,6 @@ import { Router, RouterEvent, NavigationEnd } from '@angular/router';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { HttpClient, HttpClientModule, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../environments/environment';
-import { NGXLogger } from 'ngx-logger';
 
 // icons
 import { faLayerGroup, faUserTie, faSmileBeam } from '@fortawesome/free-solid-svg-icons';
@@ -51,8 +50,7 @@ export class HomeComponent implements OnInit {
   constructor(
     private router: Router,
     private fb: FormBuilder,
-    private http: HttpClient,
-    private logger: NGXLogger
+    private http: HttpClient
   ) {
 
     router.events.subscribe((val) => {

@@ -8,7 +8,6 @@ import { Observable } from 'rxjs/Observable';
 import { from, of } from 'rxjs';
 import { filter, map } from 'rxjs/operators'
 import { environment } from '../../environments/environment';
-import { NGXLogger } from 'ngx-logger';
 // import { NgDragDropModule } from 'ng-drag-drop';
 
 import { ManageService } from './../manage.service';
@@ -89,8 +88,7 @@ export class ManageComponent implements OnInit {
     private cookieService: CookieService,
     private router: Router,
     private activatedRoute: ActivatedRoute,
-    private manage: ManageService,
-    private logger: NGXLogger
+    private manage: ManageService
   ) {
     this.id = this.email = this.firstName = this.lastName = "";
 

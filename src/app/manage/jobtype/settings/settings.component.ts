@@ -7,7 +7,6 @@ import { HttpClient, HttpClientModule, HttpHeaders } from '@angular/common/http'
 import { Observable } from 'rxjs/Observable';
 import { from, of } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
-import { NGXLogger } from 'ngx-logger';
 
 // icons
 import {
@@ -46,8 +45,7 @@ export class SettingsComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private manage: ManageService,
-    private logger: NGXLogger
+    private manage: ManageService
   ) {
 
   }

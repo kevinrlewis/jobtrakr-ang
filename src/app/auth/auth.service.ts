@@ -4,7 +4,6 @@ import { JwtHelperService } from '@auth0/angular-jwt';
 import { CookieService } from 'ngx-cookie-service';
 import * as jwt_decode from "jwt-decode";
 import { environment } from '../../environments/environment';
-import { NGXLogger } from 'ngx-logger';
 
 const httpOptions = {
   headers: new HttpHeaders({
@@ -24,8 +23,7 @@ export class AuthService {
 
   constructor(
     private http: HttpClient,
-    private cookieService: CookieService,
-    private logger: NGXLogger
+    private cookieService: CookieService
   ) {
     this.jwtHelper = new JwtHelperService();
   }

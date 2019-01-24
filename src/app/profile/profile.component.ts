@@ -5,7 +5,6 @@ import { Router, RouterEvent, NavigationEnd } from '@angular/router';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { HttpClient, HttpClientModule, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../environments/environment';
-import { NGXLogger } from 'ngx-logger';
 
 import { Job } from './../../models/job.model';
 import { User } from './../../models/user.model';
@@ -50,7 +49,6 @@ export class ProfileComponent implements OnInit {
     private fb: FormBuilder,
     private cookieService: CookieService,
     private router: Router,
-    private logger: NGXLogger,
     private manage: ManageService
   ) {
     router.events.subscribe((val) => {
@@ -107,6 +105,15 @@ export class ProfileComponent implements OnInit {
 
   onSharingSubmit() {
     console.log(this.sharingForm.value);
+    this.manage.updateUserSharing(this.user_id, this.sharingForm.value)
+      .subscribe(data => {
+        // display validations that the values were updated
+        console.log(data);
+        this.user = data.data.update_user_sharing;
+      }, error => {
+        console.log(error);
+        // handle errors
+      });
   }
 
   onEditProfileSubmit() {
