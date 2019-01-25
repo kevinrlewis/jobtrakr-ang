@@ -1,5 +1,11 @@
 .settings {
   font-family: monospace;
+  /* margin-top: 1rem; */
+  margin-bottom: 1rem;
+}
+
+.settings > .row > h3 {
+  text-decoration: underline;
 }
 
 .pretty {
@@ -24,4 +30,13 @@ form {
 hr {
   margin-top: 1rem;
   margin-bottom: 1rem;
+}
+
+.updated-alert {
+  color: green;
+}
+
+.sharing-failure-alert {
+  line-height: 2.25rem;
+  color: red;
 }

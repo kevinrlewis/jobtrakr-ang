@@ -3,6 +3,10 @@ import { Router, RouterEvent, NavigationEnd } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
 import * as jwt_decode from "jwt-decode";
 
+import { User } from './../../models/user.model';
+
+import { ManageService } from './../manage.service';
+
 @Component({
   selector: 'app-headerbar',
   templateUrl: './headerbar.component.html',
@@ -13,9 +17,15 @@ export class HeaderbarComponent implements OnInit {
   @Input() name: string;
   // @Output() manageClicked: EventEmitter<any> = new EventEmitter<any>();
 
+  @Input() signedProfileImageUrl: string;
+
   token: string;
 
-  constructor(private cookieService: CookieService, private router: Router) { }
+  constructor(
+    private cookieService: CookieService,
+    private router: Router,
+    private manage: ManageService
+  ) { }
 
   ngOnInit() {
     // initialize the token from the cookie

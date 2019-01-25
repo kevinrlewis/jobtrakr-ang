@@ -338,6 +338,25 @@ export class ManageService {
     );
   }
 
+  /*
+    function to call api to update user information
+  */
+  updateUserProfile(user_id:number, form_values) {
+    var httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json'
+      })
+    };
+
+    return this.http.post<UpdateUserProfileResponse>(
+      API_URL + '/api/' + user_id + '/profile/update',
+      {
+        'form_values': form_values
+      },
+      httpOptions
+    );
+  }
+
 }
 
 // interface to get an expected response from the api
@@ -413,5 +432,12 @@ interface UpdateUserSharingResponse {
   message: string,
   data: {
     update_user_sharing: User
+  }
+}
+
+interface UpdateUserProfileResponse {
+  message: string,
+  data: {
+    update_user_profile: User
   }
 }

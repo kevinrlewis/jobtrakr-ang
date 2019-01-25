@@ -81,6 +81,10 @@ export class ManageComponent implements OnInit {
   //
   droppedData: string;
 
+  // profile image for header
+  defaultProfileImageKey = "default_profile_image.png"
+  signedProfileImageUrl = "";
+
   token: string;
 
   constructor(
@@ -154,6 +158,13 @@ export class ManageComponent implements OnInit {
       this.email = data.data.email;
       this.firstName = data.data.first_name;
       this.lastName = data.data.last_name;
+
+      // update the profile image src url with a signed s3 url
+      if(this.user.profile_image_file_id === null) {
+        this.signedProfileImageUrl = this.manage.getAttachment(this.defaultProfileImageKey);
+      } else {
+        this.signedProfileImageUrl = this.manage.getAttachment(this.user.profile_image_file_id.file_name);
+      }
     });
 
     // call the helper function to refresh the jobs within the grid

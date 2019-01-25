@@ -1,5 +1,5 @@
 <div class="container">
-  <app-headerbar [name]="firstName + ' ' + lastName"></app-headerbar>
+  <app-headerbar [name]="firstName + ' ' + lastName" [signedProfileImageUrl]="signedProfileImageUrl" *ngIf="signedProfileImageUrl"></app-headerbar>
   <!-- <div class="row">
     <h5 class="col-4">{{firstname}} {{lastname}}
       <a class="btn btn-sm btn-outline-info" (click)="settingsClicked()">settings</a>

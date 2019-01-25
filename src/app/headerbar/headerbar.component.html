@@ -3,7 +3,10 @@
 </div>
 <div class="row nav-row">
   <nav class="navbar col-12">
-    <a class="navbar-brand name" (click)="navbarBrandClick()">{{name}}</a>
+    <a class="navbar-brand name" (click)="navbarBrandClick()">
+      <img [src]="signedProfileImageUrl" class="profile-image" width="25" height="25">
+      {{name}}
+    </a>
     <!-- <small>{{name}}</small> -->
     <ul class="nav justify-content-end">
       <li class="nav-item active">
