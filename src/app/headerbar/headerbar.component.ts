@@ -39,12 +39,12 @@ export class HeaderbarComponent implements OnInit {
 
   // handle a click when the user wants to navigate to settings
   settingsClick() {
-    this.router.navigate(['profile/' + jwt_decode(this.token).sub]);
+    this.router.navigate(['settings/' + jwt_decode(this.token).sub]);
   }
 
   // handle a click when user clicks their name
   navbarBrandClick() {
-    this.router.navigate(['manage/' + jwt_decode(this.token).sub]);
+    this.router.navigate(['profile', jwt_decode(this.token).sub]);
   }
 
   // handle button click when user is trying to logout

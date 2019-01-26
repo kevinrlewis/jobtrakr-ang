@@ -12,7 +12,7 @@ import { environment } from '../environments/environment';
 import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
 import { PageNotFoundComponent } from './pagenotfound/pagenotfound.component';
-import { ProfileComponent } from './profile/profile.component';
+import { ProfileSettingsComponent } from './profile-settings/profile-settings.component';
 import { HomeComponent } from './home/home.component';
 
 import { AuthGuard } from './auth/auth.guard';
@@ -23,8 +23,9 @@ import { JwtHelperService } from '@auth0/angular-jwt';
 import { ManageComponent } from './manage/manage.component';
 import { HeaderbarComponent } from './headerbar/headerbar.component';
 import { JobtypeComponent } from './manage/jobtype/jobtype.component';
-import { SettingsComponent } from './manage/jobtype/settings/settings.component';
+import { JobtypeSettingsComponent } from './manage/jobtype/jobtype-settings/jobtype-settings.component';
 import { EditComponent } from './manage/jobtype/edit/edit.component';
+import { ProfileComponent } from './profile/profile.component';
 
 const appRoutes: Routes = [
   { path: '', component: HomeComponent, data: { title: 'JobTrakMe' } },
@@ -32,8 +33,8 @@ const appRoutes: Routes = [
     component: LoginComponent,
     canActivate: [LoginGuard]
   },
-  { path: 'profile/:id',
-    component: ProfileComponent,
+  { path: 'settings/:id',
+    component: ProfileSettingsComponent,
     children: [
       { path: '', redirectTo: '', pathMatch: 'full'}
     ],
@@ -45,6 +46,13 @@ const appRoutes: Routes = [
       { path: '', redirectTo: '', pathMatch: 'full'}
     ],
     canActivate: [AuthGuard]
+  },
+  { path: 'profile/:id',
+    component: ProfileComponent,
+    children: [
+      { path: '', redirectTo: '', pathMatch: 'full'}
+    ],
+    canActivate: []
   },
   { path: '**', component: PageNotFoundComponent }
 ];
@@ -59,13 +67,14 @@ if(environment.production) {
     AppComponent,
     LoginComponent,
     PageNotFoundComponent,
-    ProfileComponent,
+    ProfileSettingsComponent,
     HomeComponent,
     ManageComponent,
     HeaderbarComponent,
     JobtypeComponent,
-    SettingsComponent,
-    EditComponent
+    JobtypeSettingsComponent,
+    EditComponent,
+    ProfileComponent
   ],
   imports: [
     BrowserModule,

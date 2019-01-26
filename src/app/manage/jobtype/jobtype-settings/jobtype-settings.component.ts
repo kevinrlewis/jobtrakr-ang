@@ -18,11 +18,11 @@ import { Job } from './../../../../models/job.model';
 import { User } from './../../../../models/user.model';
 
 @Component({
-  selector: 'app-settings',
-  templateUrl: './settings.component.html',
-  styleUrls: ['./settings.component.css']
+  selector: 'app-jobtype-settings',
+  templateUrl: './jobtype-settings.component.html',
+  styleUrls: ['./jobtype-settings.component.css']
 })
-export class SettingsComponent implements OnInit {
+export class JobtypeSettingsComponent implements OnInit {
 
   // what we want to receive from the parent component
   @Input() jobsArray: Job[];

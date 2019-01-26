@@ -4,11 +4,11 @@
   [job]="jobToEdit"
   [user]="user">
 </app-edit>
-<app-settings *ngIf="displaySettings"
+<app-jobtype-settings *ngIf="displaySettings"
   [(displaySettings)]="displaySettings"
   [(jobsArray)]="jobsArray"
   [user]="user">
-</app-settings>
+</app-jobtype-settings>
 <div class="row">
   <h5 class="col-11">
     {{jobTypeMap[jobType].title}}

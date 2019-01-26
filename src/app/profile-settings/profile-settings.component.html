@@ -1,0 +1,139 @@
+<div class="container">
+  <app-headerbar [name]="user.first_name + ' ' + user.last_name" [signedProfileImageUrl]="signedProfileImageUrl" *ngIf="signedProfileImageUrl"></app-headerbar>
+  <br>
+  <div class="sharing settings row">
+    <div class="col-12 container">
+      <div class="row">
+        <h3>Sharing</h3>
+      </div>
+      <form [formGroup]="sharingForm" (ngSubmit)="onSharingSubmit()" class="row">
+        <div class="col-11 pretty p-smooth p-svg">
+          <div class="row">
+            <input class="col-12" type="checkbox" formControlName="shareOpportunities">
+            <div class="state p-danger">
+              <svg class="svg svg-icon" viewBox="0 0 20 20">
+                  <path d="M7.629,14.566c0.125,0.125,0.291,0.188,0.456,0.188c0.164,0,0.329-0.062,0.456-0.188l8.219-8.221c0.252-0.252,0.252-0.659,0-0.911c-0.252-0.252-0.659-0.252-0.911,0l-7.764,7.763L4.152,9.267c-0.252-0.251-0.66-0.251-0.911,0c-0.252,0.252-0.252,0.66,0,0.911L7.629,14.566z" style="stroke: white;fill:white;"></path>
+              </svg>
+              <label>Share job opportunities with other users</label>
+              <span class="updated-alert" *ngIf="shareOpportunitiesUpdate"><small> Updated!</small></span>
+            </div>
+          </div>
+        </div>
+        <div class="col-11 pretty p-smooth p-svg">
+          <div class="row">
+            <input class="col-12" type="checkbox" formControlName="shareApplied">
+            <div class="state p-danger">
+              <svg class="svg svg-icon" viewBox="0 0 20 20">
+                  <path d="M7.629,14.566c0.125,0.125,0.291,0.188,0.456,0.188c0.164,0,0.329-0.062,0.456-0.188l8.219-8.221c0.252-0.252,0.252-0.659,0-0.911c-0.252-0.252-0.659-0.252-0.911,0l-7.764,7.763L4.152,9.267c-0.252-0.251-0.66-0.251-0.911,0c-0.252,0.252-0.252,0.66,0,0.911L7.629,14.566z" style="stroke: white;fill:white;"></path>
+              </svg>
+              <label>Share applied jobs with other users</label>
+              <span class="updated-alert" *ngIf="shareAppliedUpdate"><small> Updated!</small></span>
+            </div>
+          </div>
+        </div>
+        <div class="col-11 pretty p-smooth p-svg">
+          <div class="row">
+            <input class="col-12" type="checkbox" formControlName="shareInterviews">
+            <div class="state p-danger">
+              <svg class="svg svg-icon" viewBox="0 0 20 20">
+                  <path d="M7.629,14.566c0.125,0.125,0.291,0.188,0.456,0.188c0.164,0,0.329-0.062,0.456-0.188l8.219-8.221c0.252-0.252,0.252-0.659,0-0.911c-0.252-0.252-0.659-0.252-0.911,0l-7.764,7.763L4.152,9.267c-0.252-0.251-0.66-0.251-0.911,0c-0.252,0.252-0.252,0.66,0,0.911L7.629,14.566z" style="stroke: white;fill:white;"></path>
+              </svg>
+              <label>Share interviewing jobs with other users</label>
+              <span class="updated-alert" *ngIf="shareInterviewsUpdate"><small> Updated!</small></span>
+            </div>
+          </div>
+        </div>
+        <div class="col-11 pretty p-smooth p-svg">
+          <div class="row">
+            <input class="col-12" type="checkbox" formControlName="shareOffers">
+            <div class="state p-danger">
+              <svg class="svg svg-icon" viewBox="0 0 20 20">
+                  <path d="M7.629,14.566c0.125,0.125,0.291,0.188,0.456,0.188c0.164,0,0.329-0.062,0.456-0.188l8.219-8.221c0.252-0.252,0.252-0.659,0-0.911c-0.252-0.252-0.659-0.252-0.911,0l-7.764,7.763L4.152,9.267c-0.252-0.251-0.66-0.251-0.911,0c-0.252,0.252-0.252,0.66,0,0.911L7.629,14.566z" style="stroke: white;fill:white;"></path>
+              </svg>
+              <label>Share jobs with offers with other users</label>
+              <span class="updated-alert" *ngIf="shareOffersUpdate"><small> Updated!</small></span>
+            </div>
+          </div>
+        </div>
+        <div class="col-12 submit">
+          <div class="row justify-content-end">
+            <span class="col-8 text-right sharing-failure-alert" *ngIf="sharingFailureAlert">Unable to process your request.</span>
+            <button type="submit" class="col-auto btn btn-outline-success">Save</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+  <div class="settings row">
+    <div class="col-12 container">
+      <div class="row">
+        <h3>Profile Picture</h3>
+      </div>
+      <div class="row" style="margin-top: 1rem;">
+        <div class="form-group col-12">
+          <label class="form-label" for="profileImageInput">
+            <img [src]="signedProfileImageUrl" class="profile-image img-thumbnail rounded-0">
+          </label>
+          <input type="file"
+            class="form-control-file"
+            (change)="onFileChange($event)"
+            id="profileImageInput"/>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="edit settings row">
+    <div class="col-12 container">
+      <div class="row">
+        <h3>Edit Profile</h3>
+      </div>
+      <form [formGroup]="editForm" class="row" (ngSubmit)="onEditProfileSubmit()">
+        <div class="form-group col-12">
+          <label class="form-label" for="firstNameInput">
+            First name
+            <small class="updated-alert" *ngIf="profileFirstNameUpdate">Updated!</small>
+          </label>
+          <input type="text" class="form-control"
+            formControlName="firstName"
+            placeholder="{{user.first_name}}"
+            id="firstNameInput"/>
+        </div>
+        <div class="form-group col-12">
+          <label class="form-label" for="lastNameInput">
+            Last name
+            <small class="updated-alert" *ngIf="profileLastNameUpdate">Updated!</small>
+          </label>
+          <input type="text" class="form-control"
+            formControlName="lastName"
+            placeholder="{{user.last_name}}"
+            id="lastNameInput"/>
+        </div>
+        <div class="form-group col-12">
+          <label class="form-label" for="emailInput">
+            Email
+            <small class="updated-alert" *ngIf="profileEmailUpdate">Updated!</small>
+          </label>
+          <input type="text" class="form-control"
+            formControlName="email"
+            placeholder="{{user.email}}"
+            id="emailInput"/>
+        </div>
+        <div class="form-group col-12">
+          <label class="form-label" for="bioInput">
+            Bio
+            <small class="updated-alert" *ngIf="profileBioUpdate">Updated!</small>
+          </label>
+          <textarea class="form-control"
+            formControlName="bio"
+            placeholder="{{user.bio}}"
+            id="bioInput"></textarea>
+        </div>
+        <div class="col-12 submit">
+          <div class="row justify-content-end">
+            <button class="col-auto btn btn-outline-success">Save</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
