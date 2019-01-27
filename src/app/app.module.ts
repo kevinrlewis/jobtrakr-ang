@@ -35,23 +35,23 @@ const appRoutes: Routes = [
   },
   { path: 'settings/:id',
     component: ProfileSettingsComponent,
-    children: [
-      { path: '', redirectTo: '', pathMatch: 'full'}
-    ],
+    // children: [
+    //   { path: '', redirectTo: '', pathMatch: 'full'}
+    // ],
     canActivate: [AuthGuard]
   },
   { path: 'manage/:id',
     component: ManageComponent,
-    children: [
-      { path: '', redirectTo: '', pathMatch: 'full'}
-    ],
+    // children: [
+    //   { path: '', redirectTo: '', pathMatch: 'full'}
+    // ],
     canActivate: [AuthGuard]
   },
   { path: 'profile/:id',
     component: ProfileComponent,
-    children: [
-      { path: '', redirectTo: '', pathMatch: 'full'}
-    ],
+    // children: [
+    //   { path: '', redirectTo: '', pathMatch: 'full'}
+    // ],
     canActivate: []
   },
   { path: '**', component: PageNotFoundComponent }

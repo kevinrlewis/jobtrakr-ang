@@ -1,11 +1,26 @@
+<router-outlet></router-outlet>
 <div class="container">
-  <app-headerbar [name]="user.first_name + ' ' + user.last_name" [signedProfileImageUrl]="signedProfileImageUrl" *ngIf="signedProfileImageUrl"></app-headerbar>
+  <app-headerbar (navBarClickEmitter)="onNavBarClick($event)" [name]="user.first_name + ' ' + user.last_name" [signedProfileImageUrl]="userSignedProfileImageUrl" *ngIf="userSignedProfileImageUrl"></app-headerbar>
   <br>
-  <div class="col-12 container">
+  <div class="col-12 container info">
     <div class="row">
       <span class="col-4">
-        <img [src]="signedProfileImageUrl" class="profile-image img-thumbnail rounded-0">
+        <img [src]="userLookupSignedProfileImageUrl" class="profile-image img-thumbnail rounded-0">
       </span>
+      <div class="col-8 container">
+        <div class="row">
+          <h1 class="col-8">{{profileUser.first_name}} {{profileUser.last_name}}
+            <button class="btn btn-success btn-sm">Subscribe</button>
+          </h1>
+        </div>
+        <hr>
+        <div style="margin-top: .5rem" class="row">
+          <p class="col-12">{{profileUser.bio}}</p>
+        </div>
+      </div>
     </div>
+  </div>
+  <div class="col-12 container">
+    <a [routerLink]="['/profile/2']">/profile/2</a>
   </div>
 </div>

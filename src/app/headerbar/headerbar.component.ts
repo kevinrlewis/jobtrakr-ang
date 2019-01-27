@@ -1,7 +1,10 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { Router, RouterEvent, NavigationEnd } from '@angular/router';
+import { Router, RouterEvent, NavigationEnd, ActivatedRoute } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
 import * as jwt_decode from "jwt-decode";
+import { Observable } from 'rxjs/Observable';
+import { from, of } from 'rxjs';
+import { filter, map } from 'rxjs/operators'
 
 import { User } from './../../models/user.model';
 
@@ -18,18 +21,24 @@ export class HeaderbarComponent implements OnInit {
   // @Output() manageClicked: EventEmitter<any> = new EventEmitter<any>();
 
   @Input() signedProfileImageUrl: string;
-
+  userId: string;
   token: string;
+
+  @Output() navBarClickEmitter = new EventEmitter();
 
   constructor(
     private cookieService: CookieService,
     private router: Router,
-    private manage: ManageService
-  ) { }
-
-  ngOnInit() {
+    private manage: ManageService,
+    private activatedRoute: ActivatedRoute
+  ) {
     // initialize the token from the cookie
     this.token = this.cookieService.get('SESSIONID');
+    this.userId = jwt_decode(this.token).sub;
+  }
+
+  ngOnInit() {
+
   }
 
   // handle a click when the user wants to go to manage
@@ -44,7 +53,13 @@ export class HeaderbarComponent implements OnInit {
 
   // handle a click when user clicks their name
   navbarBrandClick() {
-    this.router.navigate(['profile', jwt_decode(this.token).sub]);
+    // this.router.navigate(['profile/' + jwt_decode(this.token).sub]);
+    console.log('emitting navbar click');
+    try{
+      this.router.navigate(['profile/' + jwt_decode(this.token).sub])
+    } catch(e) {
+      this.navBarClickEmitter.emit('profile/' + jwt_decode(this.token).sub);
+    }
   }
 
   // handle button click when user is trying to logout
