@@ -5,6 +5,9 @@ import { Router, RouterEvent, NavigationEnd, ActivatedRoute } from '@angular/rou
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { HttpClient, HttpClientModule, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../environments/environment';
+import { Observable } from 'rxjs/Observable';
+import { from, of } from 'rxjs';
+import { filter, map } from 'rxjs/operators';
 
 import { Job } from './../../models/job.model';
 import { User } from './../../models/user.model';
@@ -25,8 +28,12 @@ export class ProfileComponent implements OnInit {
   userLookupSignedProfileImageUrl = "";
   userSignedProfileImageUrl = ""
 
+  // data about the profile being looked up
   profileUserId: number;
   profileUser: User = {} as any;
+
+  jobsArray: Job[] = [];
+  jobsObservable: Observable<Array<Job>>;
 
   token: string;
 
@@ -37,7 +44,9 @@ export class ProfileComponent implements OnInit {
     private router: Router,
     private manage: ManageService,
     private activatedRoute: ActivatedRoute
-  ) { }
+  ) {
+    this.jobsObservable = of(this.jobsArray);
+  }
 
   ngOnInit() {
     this.token = this.cookieService.get('SESSIONID');
@@ -64,23 +73,31 @@ export class ProfileComponent implements OnInit {
       this.profileUserId = +params['id'];
 
       // get requested profile user data
-      this.manage.getUser(this.profileUserId).subscribe(data => {
-        console.log(data);
+      this.manage.getUser(this.profileUserId).subscribe(profileData => {
+        console.log(profileData);
 
         // set this component's user to the data returned
-        this.profileUser = data.data;
+        this.profileUser = profileData.data;
 
-        if(this.profileUser.share_applied || this.profileUser.share_interviews || this.profileUser.share_opportunities || this.profileUser.share_offers) {
-          this.manage.getJobs(this.profileUserId).subscribe(data => {
-            console.log(data);
-          });
-        }
-
-        // update the profile image src url with a signed s3 url
-        if(this.profileUser.profile_image_file_id === null) {
-          this.userLookupSignedProfileImageUrl = this.manage.getAttachment(this.defaultProfileImageKey);
-        } else {
-          this.userLookupSignedProfileImageUrl = this.manage.getAttachment(this.profileUser.profile_image_file_id.file_name);
+        // if the profile user exists
+        if(this.profileUser !== null) {
+          // if the profile user allows jobs to be shared
+          if(this.profileUser.share_applied || this.profileUser.share_interviews || this.profileUser.share_opportunities || this.profileUser.share_offers) {
+            // get jobs for the profile desired
+            this.manage.getJobs(this.profileUserId).subscribe(jobs => {
+              console.log(jobs);
+              // iterate jobs and add to array
+              jobs.data.forEach(job => {
+                this.jobsArray.push(job);
+              })
+            });
+          }
+          // update the profile image src url with a signed s3 url
+          if(this.profileUser.profile_image_file_id === null) {
+            this.userLookupSignedProfileImageUrl = this.manage.getAttachment(this.defaultProfileImageKey);
+          } else {
+            this.userLookupSignedProfileImageUrl = this.manage.getAttachment(this.profileUser.profile_image_file_id.file_name);
+          }
         }
       });
     });

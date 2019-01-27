@@ -206,8 +206,8 @@ export class JobtypeComponent implements OnInit {
     // call function in manage service to grab jobs based on job type and user id
     this.manage.getJobs(this.user.user_id).subscribe(
       data => {
-        if(data.data.get_jobs_by_user_id !== null) {
-          data.data.get_jobs_by_user_id.forEach(job => {
+        if(data.data !== null) {
+          data.data.forEach(job => {
             if(job.job_type_id === this.jobType) {
               // if the job is part of this job type then store it to be
               // displayed

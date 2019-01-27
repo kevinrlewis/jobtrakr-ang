@@ -24,8 +24,6 @@ export class HeaderbarComponent implements OnInit {
   userId: string;
   token: string;
 
-  @Output() navBarClickEmitter = new EventEmitter();
-
   constructor(
     private cookieService: CookieService,
     private router: Router,
@@ -53,13 +51,7 @@ export class HeaderbarComponent implements OnInit {
 
   // handle a click when user clicks their name
   navbarBrandClick() {
-    // this.router.navigate(['profile/' + jwt_decode(this.token).sub]);
-    console.log('emitting navbar click');
-    try{
-      this.router.navigate(['profile/' + jwt_decode(this.token).sub])
-    } catch(e) {
-      this.navBarClickEmitter.emit('profile/' + jwt_decode(this.token).sub);
-    }
+    this.router.navigate(['profile/' + jwt_decode(this.token).sub]);
   }
 
   // handle button click when user is trying to logout

@@ -356,15 +356,15 @@ export class ManageComponent implements OnInit {
 
       console.log('/api/job/id response', data);
       // store all jobs in array
-      this.jobsArray = data.data.get_jobs_by_user_id;
+      this.jobsArray = data.data;
 
       /*
         check if there are no jobs, if so then we do not want to create
         an observable out of null
       */
-      if(data.data.get_jobs_by_user_id !== null) {
+      if(data.data !== null) {
         // temp observable
-        var temp = from(data.data.get_jobs_by_user_id);
+        var temp = from(data.data);
 
         // filter and add all jobs to their specific array
         temp.subscribe(job => {

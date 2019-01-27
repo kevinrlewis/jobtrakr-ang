@@ -390,9 +390,7 @@ export interface AddJobResponse {
 // when we call the api to get all jobs interviewing
 export interface GetJobsResponse {
   message: string,
-  data: {
-    get_jobs_by_user_id: Job[]
-  }
+  data: Job[]
 }
 
 export interface UpdateJobTypeResponse {
