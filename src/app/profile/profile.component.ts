@@ -35,6 +35,16 @@ export class ProfileComponent implements OnInit {
   jobsArray: Job[] = [];
   jobsObservable: Observable<Array<Job>>;
 
+  opportunitiesArray: Job[] = [];
+  appliedArray: Job[] = [];
+  interviewsArray: Job[] = [];
+  offersArray: Job[] = [];
+
+  opportunitiesObservable: Observable<Array<Job>>;
+  appliedObservable: Observable<Array<Job>>;
+  interviewsObservable: Observable<Array<Job>>;
+  offersObservable: Observable<Array<Job>>;
+
   token: string;
 
   constructor(
@@ -46,6 +56,10 @@ export class ProfileComponent implements OnInit {
     private activatedRoute: ActivatedRoute
   ) {
     this.jobsObservable = of(this.jobsArray);
+    this.opportunitiesObservable = of(this.opportunitiesArray);
+    this.appliedObservable = of(this.appliedArray);
+    this.interviewsObservable = of(this.interviewsArray);
+    this.offersObservable = of(this.offersArray);
   }
 
   ngOnInit() {
@@ -88,6 +102,15 @@ export class ProfileComponent implements OnInit {
               console.log(jobs);
               // iterate jobs and add to array
               jobs.data.forEach(job => {
+                if(job.job_type_id === 1) {
+                  this.opportunitiesArray.push(job);
+                } else if(job.job_type_id === 2) {
+                  this.appliedArray.push(job);
+                } else if(job.job_type_id === 3) {
+                  this.interviewsArray.push(job);
+                } else if(job.job_type_id === 4) {
+                  this.offersArray.push(job);
+                }
                 this.jobsArray.push(job);
               })
             });

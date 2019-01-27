@@ -2,7 +2,7 @@
   <app-headerbar [name]="user.first_name + ' ' + user.last_name" [signedProfileImageUrl]="userSignedProfileImageUrl" *ngIf="userSignedProfileImageUrl"></app-headerbar>
   <br>
   <div *ngIf="!profileUser" class="col-12 container does-not-exist">
-    <h1>No user found.</h1>
+    <h3>No user found.</h3>
   </div>
   <div *ngIf="profileUser" class="col-12 container info">
     <div class="row">
@@ -11,20 +11,69 @@
       </span>
       <div class="col-8 container">
         <div class="row">
-          <h1 class="col-8">{{profileUser.first_name}} {{profileUser.last_name}}
-            <button class="btn btn-success btn-sm">Subscribe</button>
-          </h1>
+          <h3 class="col-12">{{profileUser.first_name}} {{profileUser.last_name}}</h3>
         </div>
         <hr>
         <div style="margin-top: .5rem" class="row">
           <p class="col-12">{{profileUser.bio}}</p>
         </div>
+        <div class="row">
+          <button class="col-auto align-self-end btn btn-success btn-sm">Subscribe</button>
+        </div>
       </div>
     </div>
-    <div class="row" *ngFor="let job of jobsObservable | async">
-      <h2 class="col-12">{{job.company_name}}</h2>
+    <div class="row" *ngIf="opportunitiesArray.length != 0">
+      <h4 class="col-12 job-header">Opportunities</h4>
+      <div class="col-12 container">
+        <div class="row" *ngFor="let job of opportunitiesObservable | async">
+          <span class="col-8">{{job.company_name}}
+            <small> {{job.job_title}}</small>
+          </span>
+          <a class="col align-self-end text-right" href="{{job.link}}" target="_blank">
+            <small>job posting</small>
+          </a>
+        </div>
+      </div>
     </div>
-  </div>
+    <div class="row" *ngIf="appliedArray.length != 0">
+      <h4 class="col-12 job-header">Applied</h4>
+      <div class="col-12 container">
+        <div class="row" *ngFor="let job of appliedObservable | async">
+          <span class="col-8">{{job.company_name}}
+            <small> {{job.job_title}}</small>
+          </span>
+          <a class="col align-self-end text-right" href="{{job.link}}" target="_blank">
+            <small>job posting</small>
+          </a>
+        </div>
+      </div>
+    </div>
+    <div class="row" *ngIf="interviewsArray.length != 0">
+      <h4 class="col-12 job-header">Interviews</h4>
+      <div class="col-12 container">
+        <div class="row" *ngFor="let job of interviewsObservable | async">
+          <span class="col-8">{{job.company_name}}
+            <small> {{job.job_title}}</small>
+          </span>
+          <a class="col align-self-end text-right" href="{{job.link}}" target="_blank">
+            <small>job posting</small>
+          </a>
+        </div>
+      </div>
+    </div>
+    <div class="row" *ngIf="offersArray.length != 0">
+      <h4 class="col-12 job-header">Offers</h4>
+      <div class="col-12 container">
+        <div class="row" *ngFor="let job of offersObservable | async">
+          <span class="col-8">{{job.company_name}}
+            <small> {{job.job_title}}</small>
+          </span>
+          <a class="col align-self-end text-right" href="{{job.link}}" target="_blank">
+            <small>job posting</small>
+          </a>
+        </div>
+      </div>
+    </div>
   <div class="col-12 container">
     <a [routerLink]="['/profile/2']">/profile/2</a>
   </div>
