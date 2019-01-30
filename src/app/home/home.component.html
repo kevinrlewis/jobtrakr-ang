@@ -4,15 +4,24 @@
 <!-- <div id="triangle2" class="triangle2"></div> -->
 <title>Home | JobTrakMe</title>
 <div class="cutoff"></div>
-<div class="container-fluid home d-flex align-items-center">
+<!-- <svg viewbox="100 100 100 100" width="100%" height="100%" class="svg-back">
+  <defs>
+    <mask id="mask" x="0" y="0" width="100%" height="100%">
+      <rect x="0" y="0" width="100%" height="100%" fill="#fff"/>
+      <circle cx="50%" cy="50%" r="45%" />
+    </mask>
+  </defs>
+  <rect x="0" y="0" width="100%" height="100%" mask="url(#mask)"/>
+</svg> -->
+<app-headerbar-out></app-headerbar-out>
+<div class="container-fluid d-flex align-items-center">
   <div class="row col-12 outer">
-    <div class="align-items-center description-area-sm justify-content-center col-12 col-md-6">
+    <div class="align-items-center logo-title justify-content-center col-12 col-md-12">
       <div class="container-fluid col-12">
-        <h1 id="logoTitle" class="logo-title">J</h1>
+        <h1 id="logoTitle" class="text-center">J</h1>
       </div>
-      <!-- <img id="logo" class="" src="../../assets/logo-3.png"> -->
     </div>
-    <div class="align-items-center action-area col-12 col-md-6">
+    <div class="align-items-center action-area col-12 offset-md-2 col-md-8 offset-xl-3 col-xl-6">
       <div class="container-fluid col-12 home-title">
         <div class="row justify-content-center">
           <h1>Sign Up</h1>
@@ -25,13 +34,13 @@
       </div>
       <div class="container-fluid col-12 home-buttons">
         <form [formGroup]="signupForm" (ngSubmit)="onSubmit()">
-          <div class="form-group">
+          <div class="form-group row">
             <input id="email" type="text" class="form-control" placeholder="E-mail" formControlName="email">
           </div>
-          <div class="form-group">
+          <div class="form-group row">
             <input id="passwordInput" type="password" class="form-control" placeholder="Password" formControlName="password">
           </div>
-          <div class="form-group">
+          <div class="form-group row">
             <input id="rePasswordInput" type="password" class="form-control" placeholder="Re-enter Password" formControlName="rePassword">
           </div>
           <div class="row">
@@ -42,20 +51,13 @@
               <input id="lastNameInput" type="text" class="form-control" placeholder="Last Name" formControlName="lastName">
             </div>
           </div>
-          <div class="row justify-content-center" style="padding-top: 1rem;">
-            <button type="submit" class="btn btn-outline-light col-12 col-md-8">Sign Up</button>
-          </div>
-          <hr style="background-color: #FFFFFF;">
-          <div class="row justify-content-center" style="padding-bottom: 1rem;">
-            <button routerLink="/login" class="btn btn-outline-light col-12 col-md-8">Login</button>
-          </div>
-          <div class="row justify-content-center">
-            <button routerLink="/" class="btn btn-outline-light col-12 col-md-8" disabled>Demo</button>
+          <div class="row justify-content-center" style="padding-top: 1rem; padding-right: 15px; padding-left: 15px;">
+            <button type="submit" class="btn btn-outline-light col-12 col-md-12">Sign Up</button>
           </div>
         </form>
       </div>
     </div>
-    <div class="align-items-center description-area-md justify-content-center col-12 col-md-6">
+    <!-- <div class="align-items-center description-area-md justify-content-center col-12 col-md-6">
       <div class="col-12">
         <h1 id="logoTitle" class="logo-title">J</h1>
       </div>
@@ -73,6 +75,6 @@
           <h4 class="col-6">Track your life.</h4>
         </div>
       </div>
-    </div>
+    </div> -->
   </div>
 </div>

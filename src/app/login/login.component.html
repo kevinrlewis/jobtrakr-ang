@@ -1,4 +1,5 @@
 <title>Login | JobTrakMe</title>
+<app-headerbar-out></app-headerbar-out>
 <div class="container-fluid">
   <div class="justify-content-center row" *ngIf="displayMessage">
     <div class="alert alert-danger col-8 col-sm-6 col-lg-4">
@@ -16,15 +17,26 @@
     </div>
   </div>
 </div>
-<div class="container-fluid area col-10 col-sm-8 col-lg-6">
+<!-- <svg viewbox="100 100 100 100" width="100%" height="100%" class="svg-back">
+  <defs>
+    <mask id="mask" x="0" y="0" width="100%" height="100%">
+      <rect x="0" y="0" width="100%" height="100%" fill="#fff"/>
+      <circle cx="50%" cy="50%" r="45%" />
+    </mask>
+  </defs>
+  <rect x="0" y="0" width="100%" height="100%" mask="url(#mask)"/>
+</svg> -->
+<div class="container-fluid area col-10 col-lg-6">
   <a href="/">
     <div class="row logo justify-content-center">
       <h1 id="logoTitle" class="logo-title">J</h1>
     </div>
-    <div class="row justify-content-center">
-      <h2 class="col-12 title">JobTrakMe</h2>
-    </div>
   </a>
+  <div class="container-fluid col-12 home-title">
+    <div class="row justify-content-center">
+      <h1>Login</h1>
+    </div>
+  </div>
   <div class="row action-area justify-content-center">
     <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="col-12 col-sm-10">
       <div class="form-group">
@@ -33,7 +45,7 @@
       <div class="form-group">
         <input id="passwordInput" type="password" class="form-control" placeholder="Password" formControlName="password">
       </div>
-      <button type="submit" class="btn btn-outline-light col-12">Submit</button>
+      <button type="submit" class="btn btn-outline-light col-12" style="margin-top: 1rem;">Submit</button>
     </form>
   </div>
 </div>

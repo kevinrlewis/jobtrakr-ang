@@ -1,0 +1,32 @@
+nav {
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+.navbar-toggler {
+  align-self: baseline;
+}
+
+.navbar-brand {
+  color: #FFFFFF;
+  font-family: 'adamas-regular';
+  font-size: 250%;
+  padding: 0;
+}
+
+.collapse {
+  padding-bottom: 0.625rem;
+}
+
+a:hover {
+  color: #FFFFFF;
+  text-decoration: none;
+}
+
+a {
+  color: #FFFFFF;
+}
+
+.navbar-toggler-icon {
+  background-image: url(data:image/svg+xml,%3csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000…p='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e);
+}

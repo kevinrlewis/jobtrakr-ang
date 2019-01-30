@@ -78,3 +78,13 @@ hr {
 .job:hover {
   background-color: rgba(50, 153, 204, 0.25);
 }
+
+@media (max-width: 576px) {
+  .container-fluid {
+
+  }
+
+  .container {
+
+  }
+}

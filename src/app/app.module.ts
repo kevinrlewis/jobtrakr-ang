@@ -26,12 +26,19 @@ import { JobtypeComponent } from './manage/jobtype/jobtype.component';
 import { JobtypeSettingsComponent } from './manage/jobtype/jobtype-settings/jobtype-settings.component';
 import { EditComponent } from './manage/jobtype/edit/edit.component';
 import { ProfileComponent } from './profile/profile.component';
+import { AboutComponent } from './about/about.component';
+import { HeaderbarOutComponent } from './headerbar-out/headerbar-out.component';
 
 const appRoutes: Routes = [
   { path: '', component: HomeComponent, data: { title: 'JobTrakMe' } },
   { path: 'login',
     component: LoginComponent,
     canActivate: [LoginGuard]
+  },
+  { path: 'about',
+    component: AboutComponent,
+    canActivate: [],
+    data: { title: 'About | JobTrakMe' }
   },
   { path: 'settings/:id',
     component: ProfileSettingsComponent,
@@ -74,7 +81,9 @@ if(environment.production) {
     JobtypeComponent,
     JobtypeSettingsComponent,
     EditComponent,
-    ProfileComponent
+    ProfileComponent,
+    AboutComponent,
+    HeaderbarOutComponent
   ],
   imports: [
     BrowserModule,

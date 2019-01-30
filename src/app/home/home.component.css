@@ -3,16 +3,15 @@
   opacity: 0.65;
 }
 
-/* fa-icon {
-  text-align: right;
-} */
+.about-link {
+  color: #FFFFFF!important;
+  margin-top: 1rem;
+  font-size: 150%;
+}
 
-.alert-danger {
-  border-radius: 0;
-  background-color: rgb(132, 28, 38, 0.65);
-  color: #FFFFFF;
-  position: absolute;
-  z-index: 1;
+.svg-back {
+  position: fixed;
+  z-index: 0;
 }
 
 hr {
@@ -24,36 +23,22 @@ hr {
   margin: 0;
 }
 
-.info > .row {
-  margin-bottom: 2rem;
-}
-
-.info > .row > fa-icon {
-  border-right: 2px solid #FFFFFF;
-  text-align: right;
-}
-
-.info > .row > h4 {
-  font-size: 125%;
-}
-
 .logo-title {
   color: #FFFFFF;
   font-family: 'adamas-regular';
-  /* position: absolute; */
+  /* transform: translateY(22%); */
+  margin-top: 10%;
+  display: block;
 }
 
 .action-area {
-  background-color: rgb(54, 73, 78, 0.25);
-  height: 100%;
+  top: 25%;
+  width: 100%;
+  margin-top: 0;
 }
 
 .outer {
   height: 100%;
-}
-
-.description-area-md {
-  background-color: rgb(54, 73, 78, 1);
 }
 
 .form-control {
@@ -62,19 +47,18 @@ hr {
   border-radius: 0;
   background-color: transparent;
   color: #FFFFFF;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
 }
 
 .form-control:focus {
   box-shadow: -0.2rem 0 0 0 rgba(0,255,0,.25)
+  
 }
 
 form > .form-group {
   margin-left: 0;
   margin-right: 0;
-}
-
-fa-icon {
-  color: #FFFFFF;
 }
 
 .home-title {
@@ -86,144 +70,87 @@ fa-icon {
   border-radius: 0;
 }
 
-.info {
-  text-align: left;
-}
-
-.info > p {
-  font-size: 200%;
-}
-
 @media (max-width: 576px) {
-  .home {
-    width: 100%;
-    /*padding: 0;*/
-  }
-
   .home-buttons>div {
     padding: 0.25em;
   }
 
-  .action-area {
-    width: 100%;
-    /* margin-top: 50%; */
+  #logoTitle {
+    font-size: 500%;
   }
 
   .logo-title {
-    /*top: 50%;
-    transform: translateY(15%);
-    font-size: 1500%;*/
+    position: fixed;
+    bottom: 0%;
+    left: 0%;
+  }
+
+  .action-area {
+    margin-top: 40%;
+  }
+
+  .svg-back {
     display: none;
-  }
-
-  .description-area-sm {
-    display: block;
-    text-align: center;
-  }
-
-  .description-area-md {
-    display: none;
-  }
-
-  .alert-danger {
-    border-radius: 0;
-    background-color: rgb(132, 28, 38, 0.65);
-    color: #FFFFFF;
-    position: inherit;
-    z-index: 1;
   }
 }
 
 /*sm*/
 @media (min-width: 576px) {
-  .home {
-    width: 100%;
-    /*padding: 0;*/
-  }
-
   .home-buttons>div {
     padding: 0.25em;
   }
 
-  .action-area {
-    width: 100%;
-    /* margin-top: 50%; */
+  #logoTitle {
+    font-size: 500%;
   }
 
   .logo-title {
-    /*top: 50%;
-    transform: translateY(15%);
-    font-size: 1800%;*/
-    display: none;
+    position: fixed;
+    bottom: 0%;
+    left: 0%;
   }
 
-  .description-area-sm {
-    display: block;
-    text-align: center;
-  }
-
-  .description-area-md {
-    display: none;
-  }
-
-  .description-area-md * {
-    color: #FFFFFF;
-  }
-
-  .alert-danger {
-    border-radius: 0;
-    background-color: rgb(132, 28, 38, 0.65);
-    color: #FFFFFF;
-    position: inherit;
-    z-index: 1;
+  .action-area {
+    margin-top: 40%;
   }
 }
 
 /*md*/
 @media (min-width: 768px) {
-  .home {
-    height: 100%;
-    width: 100%;
-  }
-
-  .action-area {
-    width: 100%;
-    margin-top: 0;
-  }
-
-  .description-area-sm {
-    display: none;
-  }
-
-  .description-area-md {
-    display: block;
-    width: 50%;
-    height: 100%;
-    text-align: center;
+  #logoTitle {
+    font-size: 1000%;
   }
 
   .logo-title {
-    top: 50%;
-    transform: translateY(15%);
-    display: block;
-    font-size: 2000%;
+    margin-top: 22%;
+    position: relative;
   }
 
-  .alert-danger {
-    right: -100%;
-    top: 5%;
-    border-radius: 0;
-    background-color: rgb(132, 28, 38, 0.65);
-    color: #FFFFFF;
-    position: absolute;
-    z-index: 1;
+  .action-area {
+    margin-top: 0%;
   }
 }
 
 /*lg*/
 @media (min-width: 992px) {
+  #logoTitle {
+    font-size: 1000%;
+  }
 
+  .logo-title {
+    margin-top: 15%;
+    position: relative;
+  }
 }
 
 /*xlg*/
-@media (min-width: 1200px) { }
+@media (min-width: 1200px) {
+  #logoTitle {
+    font-size: 1250%;
+  }
+
+  .logo-title {
+    margin-top: 10%;
+    position: relative;
+  }
+}

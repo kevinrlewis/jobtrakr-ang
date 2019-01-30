@@ -55,7 +55,7 @@ export class HomeComponent implements OnInit {
 
     router.events.subscribe((val) => {
       // document.body.style.background = '#393E41';
-      document.body.style.background = 'url(\'../../assets/mountains.jpg\') no-repeat center center fixed';
+      document.body.style.background = 'url(\'../../assets/home1.jpg\') no-repeat center center fixed';
       document.body.style.backgroundSize = 'cover';
       document.body.style.height = '100%';
       // console.log(val instanceof NavigationEnd);
