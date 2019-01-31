@@ -6,8 +6,8 @@ import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms'
 import { HttpClient, HttpClientModule, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { Observable } from 'rxjs/Observable';
-import { from, of } from 'rxjs';
-import { filter, map, take } from 'rxjs/operators';
+import { from, of, forkJoin, empty } from 'rxjs';
+import { filter, map, take, switchMap, flatMap } from 'rxjs/operators';
 
 import { Job } from './../../models/job.model';
 import { User } from './../../models/user.model';
@@ -55,11 +55,11 @@ export class ProfileComponent implements OnInit {
     private manage: ManageService,
     private activatedRoute: ActivatedRoute
   ) {
-    this.jobsObservable = of(this.jobsArray);
-    this.opportunitiesObservable = of(this.opportunitiesArray);
-    this.appliedObservable = of(this.appliedArray);
-    this.interviewsObservable = of(this.interviewsArray);
-    this.offersObservable = of(this.offersArray);
+    // this.jobsObservable = of(this.jobsArray);
+    // this.opportunitiesObservable = of(this.opportunitiesArray);
+    // this.appliedObservable = of(this.appliedArray);
+    // this.interviewsObservable = of(this.interviewsArray);
+    // this.offersObservable = of(this.offersArray);
   }
 
   ngOnInit() {
@@ -98,43 +98,24 @@ export class ProfileComponent implements OnInit {
     this.jobsArray = [];
     this.opportunitiesArray = [];
     // get requested profile user data
-    let getUserObservable = this.manage.getUser(id);
-    getUserObservable.subscribe(profileData => {
-        console.log(profileData);
-
+    this.jobsObservable = this.manage.getUser(id)
+      .pipe(map(profileData => {
         // set this component's user to the data returned
         this.profileUser = profileData.data;
-        if(this.profileUser !== null) {
-          let getJobsObservable = this.manage.getJobs(id);
-          getJobsObservable.subscribe(response => {
-            console.log(response);
-            if(response.data !== null) {
-              let tempJobsObservable = from(response.data);
-              // let opportunitiesFilter = getJobsObservable.pipe(filter(job => job.job_type_id === 1));
-              // let appliedFilter = getJobsObservable.pipe(filter(job => job.job_type_id === 2));
-              // let interviewsFilter = getJobsObservable.pipe(filter(job => job.job_type_id === 3));
-              // let offersFilter = getJobsObservable.pipe(filter(job => job.job_type_id === 4));
-              tempJobsObservable.subscribe(data => console.log(data));
-              tempJobsObservable.pipe(filter(job => job.job_type_id === 1))
-                .subscribe(job => {
-                  this.opportunitiesArray.push(job);
-                });
-              tempJobsObservable.pipe(filter(job => job.job_type_id === 2))
-                .subscribe(job => {
-                  this.appliedArray.push(job);
-                });
-              tempJobsObservable.pipe(filter(job => job.job_type_id === 3))
-                .subscribe(job => {
-                  this.interviewsArray.push(job);
-                });
-              tempJobsObservable.pipe(filter(job => job.job_type_id === 4))
-                .subscribe(job => {
-                  this.offersArray.push(job);
-                });
-            }
-          });
-        }
-    })
+        return (this.profileUser) ? this.manage.getJobs(id) : empty();
+      }))
+      .pipe(switchMap(getJobs => {
+        return getJobs;
+      }))
+      .pipe(map(({ data }) => {
+        console.log('data', data);
+        return data;
+      }));
+
+    this.opportunitiesObservable = this.jobsObservable.pipe(map(jobs => jobs.filter(job => job.job_type_id === 1)));
+    this.appliedObservable = this.jobsObservable.pipe(map(jobs => jobs.filter(job => job.job_type_id === 2)));
+    this.interviewsObservable = this.jobsObservable.pipe(map(jobs => jobs.filter(job => job.job_type_id === 3)));
+    this.offersObservable = this.jobsObservable.pipe(map(jobs => jobs.filter(job => job.job_type_id === 4)));
 
 
     // .subscribe(profileData => {

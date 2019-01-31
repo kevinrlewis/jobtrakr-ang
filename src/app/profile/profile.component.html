@@ -22,7 +22,7 @@
         </div>
       </div>
     </div>
-    <div class="row" *ngIf="opportunitiesArray.length != 0">
+    <div class="row" >
       <h4 class="col-12 job-header">Opportunities</h4>
       <div class="col-12 container">
         <div class="row job" *ngFor="let job of opportunitiesObservable | async">
@@ -35,7 +35,7 @@
         </div>
       </div>
     </div>
-    <div class="row" *ngIf="appliedArray.length != 0">
+    <div class="row">
       <h4 class="col-12 job-header">Applied</h4>
       <div class="col-12 container">
         <div class="row job" *ngFor="let job of appliedObservable | async">
@@ -48,7 +48,7 @@
         </div>
       </div>
     </div>
-    <div class="row" *ngIf="interviewsArray.length != 0">
+    <div class="row" >
       <h4 class="col-12 job-header">Interviews</h4>
       <div class="col-12 container">
         <div class="row job" *ngFor="let job of interviewsObservable | async">
@@ -61,7 +61,7 @@
         </div>
       </div>
     </div>
-    <div class="row" *ngIf="offersArray.length != 0">
+    <div class="row" >
       <h4 class="col-12 job-header">Offers</h4>
       <div class="col-12 container">
         <div class="row job" *ngFor="let job of offersObservable | async">
