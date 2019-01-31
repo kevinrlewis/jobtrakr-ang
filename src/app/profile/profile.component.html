@@ -18,14 +18,14 @@
           <p class="col-12">{{profileUser.bio}}</p>
         </div>
         <div class="row">
-          <button class="col-auto align-self-end btn btn-success btn-sm">Subscribe</button>
+          <button class="col-auto align-self-end btn btn-success btn-sm disabled">Subscribe</button>
         </div>
       </div>
     </div>
     <div class="row" *ngIf="opportunitiesArray.length != 0">
       <h4 class="col-12 job-header">Opportunities</h4>
       <div class="col-12 container">
-        <div class="row" *ngFor="let job of opportunitiesObservable | async">
+        <div class="row job" *ngFor="let job of opportunitiesObservable | async">
           <span class="col-8">{{job.company_name}}
             <small> {{job.job_title}}</small>
           </span>
@@ -38,7 +38,7 @@
     <div class="row" *ngIf="appliedArray.length != 0">
       <h4 class="col-12 job-header">Applied</h4>
       <div class="col-12 container">
-        <div class="row" *ngFor="let job of appliedObservable | async">
+        <div class="row job" *ngFor="let job of appliedObservable | async">
           <span class="col-8">{{job.company_name}}
             <small> {{job.job_title}}</small>
           </span>
@@ -51,7 +51,7 @@
     <div class="row" *ngIf="interviewsArray.length != 0">
       <h4 class="col-12 job-header">Interviews</h4>
       <div class="col-12 container">
-        <div class="row" *ngFor="let job of interviewsObservable | async">
+        <div class="row job" *ngFor="let job of interviewsObservable | async">
           <span class="col-8">{{job.company_name}}
             <small> {{job.job_title}}</small>
           </span>
@@ -64,7 +64,7 @@
     <div class="row" *ngIf="offersArray.length != 0">
       <h4 class="col-12 job-header">Offers</h4>
       <div class="col-12 container">
-        <div class="row" *ngFor="let job of offersObservable | async">
+        <div class="row job" *ngFor="let job of offersObservable | async">
           <span class="col-8">{{job.company_name}}
             <small> {{job.job_title}}</small>
           </span>
@@ -75,6 +75,6 @@
       </div>
     </div>
   <div class="col-12 container">
-    <a [routerLink]="['/profile/2']">/profile/2</a>
+    <a routerLink='/profile/2'>/profile/2</a>
   </div>
 </div>

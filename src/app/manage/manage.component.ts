@@ -134,9 +134,9 @@ export class ManageComponent implements OnInit {
       } else {
         this.job_type_view = 0;
         this.setInitVariables();
-        // don't show grid first
-        this.show_buttons = true;
-        this.show_grid = false;
+        
+        this.show_buttons = false;
+        this.show_grid = true;
 
         // testing grid
         // this.show_buttons = false;
