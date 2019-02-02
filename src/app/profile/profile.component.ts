@@ -102,6 +102,14 @@ export class ProfileComponent implements OnInit {
       .pipe(map(profileData => {
         // set this component's user to the data returned
         this.profileUser = profileData.data;
+
+        // update the profile image src url with a signed s3 url
+        if(this.profileUser.profile_image_file_id === null) {
+          this.userLookupSignedProfileImageUrl = this.manage.getAttachment(this.defaultProfileImageKey);
+        } else {
+          this.userLookupSignedProfileImageUrl = this.manage.getAttachment(this.profileUser.profile_image_file_id.file_name);
+        }
+
         return (this.profileUser) ? this.manage.getJobs(id) : empty();
       }))
       .pipe(switchMap(getJobs => {
