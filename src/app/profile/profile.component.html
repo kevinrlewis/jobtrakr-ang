@@ -11,14 +11,12 @@
       </span>
       <div class="col-8 container">
         <div class="row">
-          <h3 class="col-12">{{profileUser.first_name}} {{profileUser.last_name}}</h3>
+          <h3 class="col-8">{{profileUser.first_name}} {{profileUser.last_name}}</h3>
+          <button [disabled]="disableSubscribe" class="offset-2 col-2 btn btn-success btn-sm">Subscribe</button>
         </div>
         <hr>
         <div style="margin-top: .5rem" class="row">
           <p class="col-12">{{profileUser.bio}}</p>
-        </div>
-        <div class="row">
-          <button class="col-auto align-self-end btn btn-success btn-sm disabled">Subscribe</button>
         </div>
       </div>
     </div>
@@ -74,7 +72,19 @@
         </div>
       </div>
     </div>
-  <div class="col-12 container">
-    <a routerLink='/profile/2'>/profile/2</a>
+  </div>
+  <br><hr><br>
+  <div class="container other-users">
+    <div class="row">
+      <h3>Other users:</h3>
+    </div>
+    <div class="d-inline-flex other-user" *ngFor="let user of usersObservable | async">
+      <a class="" (click)="userClick(user.user_id)">
+        <span class="" style="padding-right: 0.5rem;">
+          <img [src]="manage.getAttachment(user.profile_image_file_id === null ? null : user.profile_image_file_id.file_name)" class="profile-image rounded-0">
+        </span>
+        <span class="">{{user.first_name}} {{user.last_name}}</span>
+      </a>
+    </div>
   </div>
 </div>

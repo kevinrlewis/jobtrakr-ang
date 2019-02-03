@@ -7,7 +7,7 @@ import { HttpClient, HttpClientModule, HttpHeaders } from '@angular/common/http'
 import { ManageService } from './../../manage.service';
 import { Observable } from 'rxjs/Observable';
 import { from, of } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
+import { filter, map, merge } from 'rxjs/operators';
 
 import { Job } from './../../../models/job.model';
 import { User } from './../../../models/user.model';
@@ -19,7 +19,8 @@ import {
   faExternalLinkAlt,
   faEdit,
   faCog,
-  faFileDownload
+  faFileDownload,
+  faPlus
 } from '@fortawesome/free-solid-svg-icons';
 
 const httpOptions = {
@@ -27,6 +28,8 @@ const httpOptions = {
     'Content-Type': 'application/json'
   })
 };
+
+const jobTypeArr = ['opportunities', 'applied', 'interviews', 'offers'];
 
 /*
   modify titles and descriptions here or add dynamic fields
@@ -70,8 +73,11 @@ export class JobtypeComponent implements OnInit {
 
   // initialize the jobTypeMap constant as part of this component
   jobTypeMap = jobTypeMap;
+  jobFragmentsToIdMap = { 'opportunities': 1, 'applied': 2, 'interviews': 3, 'offers': 4 };
   jobNameToIdMap = { 'opportunity': 1, 'applied': 2, 'interview': 3, 'offer': 4 };
   jobIdToNameMap = { 1: 'opportunity', 2: 'applied', 3: 'interview', 4: 'offer' };
+
+  jobTypeArr = jobTypeArr;
 
   // font awesome icons
   faTimes = faTimes;
@@ -80,6 +86,7 @@ export class JobtypeComponent implements OnInit {
   faEdit = faEdit;
   faCog = faCog;
   faFileDownload = faFileDownload;
+  faPlus = faPlus;
 
   // form variables
   addForm: FormGroup;
@@ -117,7 +124,8 @@ export class JobtypeComponent implements OnInit {
     private cookieService: CookieService,
     private fb: FormBuilder,
     private http: HttpClient,
-    private manage: ManageService
+    private manage: ManageService,
+    private activatedRoute: ActivatedRoute
   ) {
     // initialize the observable to watch the jobsArray
     this.jobsObservable = of(this.jobsArray);
@@ -136,8 +144,12 @@ export class JobtypeComponent implements OnInit {
       'files': [this.files, []],
     });
 
-    // get all user jobs to display
-    this.getJobs();
+
+    this.activatedRoute.fragment.subscribe( fragment => {
+      this.jobType = this.jobFragmentsToIdMap[fragment];
+      // get all user jobs to display
+      this.getJobs();
+    });
   }
 
   /*
@@ -162,6 +174,20 @@ export class JobtypeComponent implements OnInit {
       // if so then create the string to pass to db
       var temp = this.manage.formatFileNamePayload(this.filesArray);
 
+      let responseObservable = this.manage.addJob(
+        this.addForm.get('companyName').value,
+        this.addForm.get('jobTitle').value,
+        this.addForm.get('link').value,
+        this.addForm.get('notes').value,
+        this.jobIdToNameMap[this.jobType],
+        temp,
+        this.user.user_id
+      ).pipe(map(({ data.insert_job }) => { return from([data.insert_job]); }));
+
+      this.jobsObservable = this.jobsObservable.pipe(
+        merge(responseObservable)
+      );
+
       // call api to post a job
       this.manage.addJob(
         this.addForm.get('companyName').value,
@@ -172,6 +198,7 @@ export class JobtypeComponent implements OnInit {
         temp,
         this.user.user_id
       ).subscribe(data => {
+        console.log('onAdd:', data);
         // add job to observable
         if(data.data.insert_job.job_type_id === this.jobType) {
           this.jobsArray.push(data.data.insert_job);
@@ -203,25 +230,32 @@ export class JobtypeComponent implements OnInit {
     helper function to get the array of jobs
   */
   getJobs() {
-    // call function in manage service to grab jobs based on job type and user id
-    this.manage.getJobs(this.user.user_id).subscribe(
-      data => {
-        if(data.data !== null) {
-          data.data.forEach(job => {
-            if(job.job_type_id === this.jobType) {
-              // if the job is part of this job type then store it to be
-              // displayed
-              this.jobsArray.push(job);
-            }
-          });
-        }
-        return;
-      },
-      // TODO: display message if there was an error retrieving jobs
-      error => {
-        console.log(error);
-      }
-    );
+    this.jobsObservable = this.manage.getJobs(this.user.user_id)
+      .pipe(
+        map(({ data }) => { return data;}),
+        map(jobs => (jobs != null) ? jobs.filter(job => job.job_type_id === this.jobType) : null));
+
+
+    // // call function in manage service to grab jobs based on job type and user id
+    // this.manage.getJobs(this.user.user_id).subscribe(
+    //   data => {
+    //     console.log('getJobs:', data);
+    //     if(data.data !== null) {
+    //       data.data.forEach(job => {
+    //         if(job.job_type_id === this.jobType) {
+    //           // if the job is part of this job type then store it to be
+    //           // displayed
+    //           this.jobsArray.push(job);
+    //         }
+    //       });
+    //     }
+    //     return;
+    //   },
+    //   // TODO: display message if there was an error retrieving jobs
+    //   error => {
+    //     console.log(error);
+    //   }
+    // );
   }
 
   /*

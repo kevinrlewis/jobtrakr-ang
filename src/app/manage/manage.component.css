@@ -149,6 +149,9 @@ fa-icon {
 
 /*xs*/
 @media (max-width: 576px) {
+  .options {
+    display: none;
+  }
 }
 
 /*sm*/

@@ -80,6 +80,10 @@ hr {
 }
 
 @media (max-width: 576px) {
+  .title {
+    display: none;
+  }
+
   .container-fluid {
 
   }

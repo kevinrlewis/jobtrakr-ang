@@ -22,7 +22,7 @@ import { ManageService } from './../manage.service';
 })
 export class ProfileComponent implements OnInit {
 
-  user_id: number;
+  userId: number;
   user: User = {} as any;
   defaultProfileImageKey = "default_profile_image.png"
   userLookupSignedProfileImageUrl = "";
@@ -32,20 +32,18 @@ export class ProfileComponent implements OnInit {
   profileUserId: number;
   profileUser: User = {} as any;
 
-  jobsArray: Job[] = [];
   jobsObservable: Observable<Array<Job>>;
-
-  opportunitiesArray: Job[] = [];
-  appliedArray: Job[] = [];
-  interviewsArray: Job[] = [];
-  offersArray: Job[] = [];
-
   opportunitiesObservable: Observable<Array<Job>>;
   appliedObservable: Observable<Array<Job>>;
   interviewsObservable: Observable<Array<Job>>;
   offersObservable: Observable<Array<Job>>;
 
+  usersObservable: Observable<Array<User>>;
+
   token: string;
+
+  // boolean trigger values
+  disableSubscribe: boolean = true;
 
   constructor(
     private http: HttpClient,
@@ -55,17 +53,13 @@ export class ProfileComponent implements OnInit {
     private manage: ManageService,
     private activatedRoute: ActivatedRoute
   ) {
-    // this.jobsObservable = of(this.jobsArray);
-    // this.opportunitiesObservable = of(this.opportunitiesArray);
-    // this.appliedObservable = of(this.appliedArray);
-    // this.interviewsObservable = of(this.interviewsArray);
-    // this.offersObservable = of(this.offersArray);
+
   }
 
   ngOnInit() {
     this.token = this.cookieService.get('SESSIONID');
 
-    this.user_id = jwt_decode(this.token).sub.toString();
+    this.userId = jwt_decode(this.token).sub.toString();
 
     this.getCurrentUserData();
 
@@ -73,12 +67,16 @@ export class ProfileComponent implements OnInit {
       // set user id of request profile to view
       this.profileUserId = +params['id'];
       this.getProfileUserData(this.profileUserId);
+
+      this.disableSubscribe = (this.profileUserId == this.userId);
+
+      this.getUsersToDisplay();
     });
   }
 
   getCurrentUserData() {
     // get user data
-    this.manage.getUser(this.user_id).subscribe(data => {
+    this.manage.getUser(this.userId).subscribe(data => {
       console.log(data);
 
       // set this component's user to the data returned
@@ -95,8 +93,6 @@ export class ProfileComponent implements OnInit {
 
   // https://medium.com/@paynoattn/3-common-mistakes-i-see-people-use-in-rx-and-the-observable-pattern-ba55fee3d031
   getProfileUserData(id) {
-    this.jobsArray = [];
-    this.opportunitiesArray = [];
     // get requested profile user data
     this.jobsObservable = this.manage.getUser(id)
       .pipe(map(profileData => {
@@ -116,63 +112,33 @@ export class ProfileComponent implements OnInit {
         return getJobs;
       }))
       .pipe(map(({ data }) => {
-        console.log('data', data);
         return data;
       }));
 
-    this.opportunitiesObservable = this.jobsObservable.pipe(map(jobs => jobs.filter(job => job.job_type_id === 1)));
-    this.appliedObservable = this.jobsObservable.pipe(map(jobs => jobs.filter(job => job.job_type_id === 2)));
-    this.interviewsObservable = this.jobsObservable.pipe(map(jobs => jobs.filter(job => job.job_type_id === 3)));
-    this.offersObservable = this.jobsObservable.pipe(map(jobs => jobs.filter(job => job.job_type_id === 4)));
-
-
-    // .subscribe(profileData => {
-    //   console.log(profileData);
-    //
-    //   // set this component's user to the data returned
-    //   this.profileUser = profileData.data;
-    //
-    //   // if the profile user exists
-    //   if(this.profileUser !== null) {
-    //     this.appliedArray = [];
-    //     this.opportunitiesArray = [];
-    //     // if the profile user allows jobs to be shared
-    //     if(this.profileUser.share_applied || this.profileUser.share_interviews || this.profileUser.share_opportunities || this.profileUser.share_offers) {
-    //       // get jobs for the profile desired
-    //       this.manage.getJobs(id).subscribe(jobs => {
-    //         console.log(jobs);
-    //         if(jobs.data != null) {
-    //           // iterate jobs and add to array
-    //           jobs.data.forEach(job => {
-    //             if(job.job_type_id === 1) {
-    //               this.opportunitiesArray.push(job);
-    //             } else if(job.job_type_id === 2) {
-    //               this.appliedArray.push(job);
-    //             } else if(job.job_type_id === 3) {
-    //               this.interviewsArray.push(job);
-    //             } else if(job.job_type_id === 4) {
-    //               this.offersArray.push(job);
-    //             }
-    //             this.jobsArray.push(job);
-    //           });
-    //         }
-    //       });
-    //     }
-    //     // update the profile image src url with a signed s3 url
-    //     if(this.profileUser.profile_image_file_id === null) {
-    //       this.userLookupSignedProfileImageUrl = this.manage.getAttachment(this.defaultProfileImageKey);
-    //     } else {
-    //       this.userLookupSignedProfileImageUrl = this.manage.getAttachment(this.profileUser.profile_image_file_id.file_name);
-    //     }
-    //   }
-    // });
+    // TODO: figure out how to apply filters without calling the api per job type (4 times)
+    // filter observables by job type
+    this.opportunitiesObservable = this.jobsObservable.pipe(map(jobs => (jobs != null) ? jobs.filter(job => job.job_type_id === 1) : null));
+    this.appliedObservable = this.jobsObservable.pipe(map(jobs => (jobs != null) ? jobs.filter(job => job.job_type_id === 2) : null));
+    this.interviewsObservable = this.jobsObservable.pipe(map(jobs => (jobs != null) ? jobs.filter(job => job.job_type_id === 3) : null));
+    this.offersObservable = this.jobsObservable.pipe(map(jobs => (jobs != null) ? jobs.filter(job => job.job_type_id === 4) : null));
   }
 
-  onNavBarClick(link) {
-    console.log('profile component navbar click!');
-    console.log(link);
-    // this.compRef.destroy();
-    this.router.navigate([link]);
+  /*
+    retrieve other users to display
+  */
+  getUsersToDisplay() {
+    this.usersObservable = this.manage.getUsers(10)
+      .pipe(
+        map(({ data }) => { return data; })
+      )
+      .pipe(
+        map(users => (users != null) ? users.filter(u => u.user_id != this.userId) : null)
+      );
+  }
+
+  // handle a click when user clicks other users
+  userClick(id) {
+    this.router.navigate(['profile/' + id]);
   }
 
 }

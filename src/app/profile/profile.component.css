@@ -7,6 +7,24 @@
   margin-top: 1rem;
 }
 
+.other-user {
+  padding: 0.5rem;
+}
+
+.other-user:hover {
+  background-color: rgba(50, 153, 204, 0.25);
+}
+
+.btn-sm {
+  margin-top: 0.25rem;
+  margin-bottom: 0.25rem;
+}
+
+.other-users img {
+  height: 25px;
+  width: 25px;
+}
+
 /*xs*/
 @media (max-width: 576px) {
 }

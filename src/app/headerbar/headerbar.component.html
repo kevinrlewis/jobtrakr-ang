@@ -1,23 +1,16 @@
-<div class="row">
-  <h4 class="title col-12">JobTrakMe</h4>
-</div>
-<div class="row nav-row">
-  <nav class="navbar col-12">
-    <a class="navbar-brand name" (click)="navbarBrandClick()">
-      <img [src]="signedProfileImageUrl" class="profile-image" width="25" height="25">
-      {{name}}
-    </a>
-    <!-- <small>{{name}}</small> -->
-    <ul class="nav justify-content-end">
-      <li class="nav-item active">
-        <a class="nav-link" (click)="manageClick()">Manage</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" (click)="settingsClick()">Settings</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" (click)="logoutClick()">Logout</a>
-      </li>
-    </ul>
-  </nav>
-</div>
+<nav class="row navbar nav-row navbar-expand-lg text-right">
+  <a class="navbar-brand name" (click)="navbarBrandClick()">
+    <img [src]="signedProfileImageUrl" class="profile-image" width="25" height="25">
+    {{name}}
+  </a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navHeaderbar" aria-controls="navHeaderbar" aria-expanded="false" aria-label="Toggle navigation">
+    <fa-icon class="" [icon]="faBars" size="lg"></fa-icon>
+  </button>
+  <div class="collapse navbar-collapse w-100 order-1 order-md-0 dual-collapse2" id="navHeaderbar">
+    <div class="navbar-nav ml-auto">
+      <a class="nav-item nav-link" (click)="manageClick()">Manage Jobs</a>
+      <a class="nav-item nav-link" (click)="settingsClick()">Settings</a>
+      <a class="nav-item nav-link" (click)="logoutClick()" style="color: red">Logout</a>
+    </div>
+  </div>
+</nav>

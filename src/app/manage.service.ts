@@ -11,6 +11,7 @@ import { User } from './../models/user.model';
 import * as AWS from 'aws-sdk';
 var cred = require('./../../../aws_cred.json');
 const API_URL = environment.apiUrl;
+const defaultProfileImageKey = "default_profile_image.png"
 
 @Injectable({
   providedIn: 'root'
@@ -200,10 +201,10 @@ export class ManageService {
     get a signed url from aws for a specific key in S3
   */
   getAttachment(key):any {
-    // console.log('getAttachment:', key);
-
     // initialize s3 with credentials
     var s3 = new AWS.S3(cred);
+
+    key = (key === null || key === undefined) ? defaultProfileImageKey : key;
 
     var params = {
       Bucket: environment.s3FileBucket,
@@ -357,6 +358,25 @@ export class ManageService {
     );
   }
 
+  /*
+    calls api to retrieve an amount of users
+  */
+  getUsers(amount:number) {
+    var httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json'
+      })
+    };
+
+    return this.http.post<GetUsersResponse>(
+      API_URL + '/api/users',
+      {
+        'amount': amount
+      },
+      httpOptions
+    );
+  }
+
 }
 
 // interface to get an expected response from the api
@@ -424,6 +444,11 @@ export interface UpdateJobResponse {
 interface GetUserResponse {
   message: string,
   data: User
+}
+
+interface GetUsersResponse {
+  message: string,
+  data: User[]
 }
 
 interface UpdateUserSharingResponse {

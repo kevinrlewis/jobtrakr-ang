@@ -6,6 +6,8 @@ import { Observable } from 'rxjs/Observable';
 import { from, of } from 'rxjs';
 import { filter, map } from 'rxjs/operators'
 
+import { faBars } from '@fortawesome/free-solid-svg-icons';
+
 import { User } from './../../models/user.model';
 
 import { ManageService } from './../manage.service';
@@ -23,6 +25,10 @@ export class HeaderbarComponent implements OnInit {
   @Input() signedProfileImageUrl: string;
   userId: string;
   token: string;
+
+  faBars = faBars;
+
+  displayHamburgerMenu: boolean = false;
 
   constructor(
     private cookieService: CookieService,
@@ -60,4 +66,8 @@ export class HeaderbarComponent implements OnInit {
     this.router.navigate(['/login']);
   }
 
+  toggleHamburgerMenu() {
+    document.getElementById('overlay').style.width = '100%';
+    this.displayHamburgerMenu = !this.displayHamburgerMenu;
+  }
 }

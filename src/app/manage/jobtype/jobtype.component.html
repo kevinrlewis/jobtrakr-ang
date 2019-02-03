@@ -9,21 +9,23 @@
   [(jobsArray)]="jobsArray"
   [user]="user">
 </app-jobtype-settings>
-<div class="row">
-  <h5 class="col-11">
-    {{jobTypeMap[jobType].title}}
-  </h5>
-  <a class="col-1 text-right" (click)="close()">
-    <fa-icon [icon]="faTimes"></fa-icon>
-  </a>
+<div class="action-row row align-items-end">
+  <div class="dropdown col-12 col-sm-auto mr-auto">
+    <button class="btn btn-sm btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      {{jobTypeMap[jobType].title}}
+    </button>
+    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+      <a class="dropdown-item" *ngFor="let jobtype of jobTypeArr" href="manage/{{user.user_id}}#{{jobtype}}">{{jobtype}}</a>
+    </div>
+  </div>
+  <div class="action-buttons col-12 col-sm-auto text-right">
+    <button class="col-auto btn btn-sm btn-outline-success" style="margin-right: 0.15rem;" (click)="toggleAddForm()">
+      <fa-icon class="add-btn-icon" [icon]="faPlus"></fa-icon>
+    </button>
+    <button class="col-auto btn btn-sm btn-outline-info" (click)="toggleSettings()"><fa-icon [icon]="faCog"></fa-icon></button>
+  </div>
 </div>
-<div class="row description">
-  <p class="col-12">{{jobTypeMap[jobType].description}}</p>
-</div>
-<div class="row action-buttons">
-  <button class="col-11 mr-auto btn btn-outline-success add-opportunity" (click)="toggleAddForm()">Add</button>
-  <button class="col-auto btn btn-outline-info" (click)="toggleSettings()"><fa-icon [icon]="faCog"></fa-icon></button>
-</div>
+
 <div class="row" *ngIf="displayAddForm">
   <div class="justify-content-center col-12 validation-message" *ngIf="displayMessage">
     <div class="alert alert-danger">
@@ -32,9 +34,9 @@
       </li>
     </div>
   </div>
-  <div class="container op-area">
-    <div class="row add-jobs">
-      <form [formGroup]="addForm" (ngSubmit)="onAddSubmit()" class="col-12">
+  <div class="col-12 container op-area">
+    <div class="add-jobs">
+      <form [formGroup]="addForm" (ngSubmit)="onAddSubmit()" class="container">
         <div class="row">
           <div class="form-group col-6">
             <input type="text" class="form-control" placeholder="Company Name" formControlName="companyName"/>
@@ -58,8 +60,8 @@
               multiple/>
           </div>
           <div class="col-12">
-            <div class="row justify-content-center">
-              <button type="submit" class="btn btn-outline-success col-2">Add</button>
+            <div class="row justify-content-end">
+              <button type="submit" class="btn btn-outline-success col-4 col-sm-2">Add</button>
             </div>
           </div>
         </div>
@@ -104,4 +106,8 @@
     </div>
     <hr>
   </div>
+</div>
+<br>
+<div class="row description">
+  <p class="col-12 text-center">{{jobTypeMap[jobType].description}}</p>
 </div>

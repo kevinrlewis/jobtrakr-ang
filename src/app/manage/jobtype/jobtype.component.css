@@ -14,3 +14,43 @@
 .action-buttons {
   margin-bottom: 0.25rem;
 }
+
+.dropdown-item {
+  text-transform: capitalize;
+}
+
+.dropdown {
+  margin-bottom: 0.5rem;
+}
+
+.description {
+  color: rgba(0,0,0,.5);
+}
+
+/*xs*/
+@media (max-width: 576px) {
+  .description {
+    display: none;
+  }
+
+  .dropdown > button {
+    width: 100%;
+  }
+}
+
+/*sm*/
+@media (min-width: 576px) {
+
+}
+
+/*md*/
+@media (min-width: 768px) {
+}
+
+/*lg*/
+@media (min-width: 992px) {
+
+}
+
+/*xlg*/
+@media (min-width: 1200px) { }
