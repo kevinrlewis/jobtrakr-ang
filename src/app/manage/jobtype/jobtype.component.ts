@@ -3,11 +3,11 @@ import { CookieService } from 'ngx-cookie-service';
 import * as jwt_decode from "jwt-decode";
 import { Router, RouterEvent, NavigationEnd, ActivatedRoute } from '@angular/router';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
-import { HttpClient, HttpClientModule, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpClientModule, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 import { ManageService } from './../../manage.service';
 import { Observable } from 'rxjs/Observable';
-import { from, of } from 'rxjs';
-import { filter, map, merge } from 'rxjs/operators';
+import { from, of, forkJoin } from 'rxjs';
+import { filter, map, merge, switchMap, pairwise, catchError, concat, mergeAll, combineLatest, combineAll, zip, concatAll } from 'rxjs/operators';
 
 import { Job } from './../../../models/job.model';
 import { User } from './../../../models/user.model';
@@ -182,34 +182,46 @@ export class JobtypeComponent implements OnInit {
         this.jobIdToNameMap[this.jobType],
         temp,
         this.user.user_id
-      ).pipe(map(({ data.insert_job }) => { return from([data.insert_job]); }));
-
-      this.jobsObservable = this.jobsObservable.pipe(
-        merge(responseObservable)
+      ).pipe(
+        map(({ data }) => { return data; }),
+        switchMap(({ insert_job }) => {
+          let insert_job_arr: Job[] = [insert_job];
+          let insert_job_arr_observable: Observable<Array<Job>> = of(insert_job_arr);
+          return insert_job_arr_observable;
+        })
       );
+      // .subscribe(data => console.log('responseObservable', data));
+
+      this.jobsObservable = forkJoin(this.jobsObservable, responseObservable).pipe(map(([a1, a2]) => [...a1, ...a2]));
+      // this.jobsObservable.pipe(
+      //   merge(responseObservable),
+      //   catchError(error => { return of(error); })
+      // ).subscribe(data => console.log(data));
+
+      this.displayAddForm = false;
 
       // call api to post a job
-      this.manage.addJob(
-        this.addForm.get('companyName').value,
-        this.addForm.get('jobTitle').value,
-        this.addForm.get('link').value,
-        this.addForm.get('notes').value,
-        this.jobIdToNameMap[this.jobType],
-        temp,
-        this.user.user_id
-      ).subscribe(data => {
-        console.log('onAdd:', data);
-        // add job to observable
-        if(data.data.insert_job.job_type_id === this.jobType) {
-          this.jobsArray.push(data.data.insert_job);
-        }
-
-        // close add form
-        this.displayAddForm = false;
-      }, error => {
-        console.log(error);
-        // display error
-      });
+      // this.manage.addJob(
+      //   this.addForm.get('companyName').value,
+      //   this.addForm.get('jobTitle').value,
+      //   this.addForm.get('link').value,
+      //   this.addForm.get('notes').value,
+      //   this.jobIdToNameMap[this.jobType],
+      //   temp,
+      //   this.user.user_id
+      // ).subscribe(data => {
+      //   console.log('onAdd:', data);
+      //   // add job to observable
+      //   if(data.data.insert_job.job_type_id === this.jobType) {
+      //     this.jobsArray.push(data.data.insert_job);
+      //   }
+      //
+      //   // close add form
+      //   this.displayAddForm = false;
+      // }, error => {
+      //   console.log(error);
+      //   // display error
+      // });
     } else {
       this.displayMessage = true;
       this.validationMessage = validated.message;
