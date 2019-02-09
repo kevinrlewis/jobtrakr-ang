@@ -6,8 +6,8 @@ import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms'
 import { HttpClient, HttpClientModule, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 import { ManageService } from './../../manage.service';
 import { Observable } from 'rxjs/Observable';
-import { from, of, forkJoin } from 'rxjs';
-import { filter, map, merge, switchMap, pairwise, catchError, concat, mergeAll, combineLatest, combineAll, zip, concatAll } from 'rxjs/operators';
+import { from, of, forkJoin, combineLatest } from 'rxjs';
+import { filter, map, merge, switchMap, pairwise, catchError, concat, mergeAll, combineAll, zip, concatAll, share, shareReplay } from 'rxjs/operators';
 
 import { Job } from './../../../models/job.model';
 import { User } from './../../../models/user.model';
@@ -128,7 +128,7 @@ export class JobtypeComponent implements OnInit {
     private activatedRoute: ActivatedRoute
   ) {
     // initialize the observable to watch the jobsArray
-    this.jobsObservable = of(this.jobsArray);
+    // this.jobsObservable = of(this.jobsArray);
   }
 
   ngOnInit() {
@@ -174,7 +174,7 @@ export class JobtypeComponent implements OnInit {
       // if so then create the string to pass to db
       var temp = this.manage.formatFileNamePayload(this.filesArray);
 
-      let responseObservable = this.manage.addJob(
+      var responseObservable = this.manage.addJob(
         this.addForm.get('companyName').value,
         this.addForm.get('jobTitle').value,
         this.addForm.get('link').value,
@@ -192,7 +192,20 @@ export class JobtypeComponent implements OnInit {
       );
       // .subscribe(data => console.log('responseObservable', data));
 
-      this.jobsObservable = forkJoin(this.jobsObservable, responseObservable).pipe(map(([a1, a2]) => [...a1, ...a2]));
+      this.jobsObservable = forkJoin(this.jobsObservable, responseObservable)
+        .pipe(map(([a1, a2]) => {
+          console.log('a1:', a1);
+          console.log('a2:', a2);
+          console.log('concat:', a1.concat(a2));
+          return a1.concat(a2);
+        }),
+        shareReplay(1)
+      );
+      // .subscribe(data => console.log(data));
+
+      // responseObservable.subscribe(data => console.log('responseObservable:', data));
+      // this.jobsObservable.subscribe(data => console.log('jobsObservable:', data));
+
       // this.jobsObservable.pipe(
       //   merge(responseObservable),
       //   catchError(error => { return of(error); })
