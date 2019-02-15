@@ -49,6 +49,7 @@ export class ProfileSettingsComponent implements OnInit {
   shareAppliedUpdate = false;
   shareInterviewsUpdate = false;
   shareOffersUpdate = false;
+  isPrivateUpdate = false;
   profileFirstNameUpdate = false;
   profileLastNameUpdate = false;
   profileEmailUpdate = false;
@@ -90,6 +91,7 @@ export class ProfileSettingsComponent implements OnInit {
       'shareApplied': [this.user.share_applied, []],
       'shareInterviews': [this.user.share_interviews, []],
       'shareOffers': [this.user.share_offers, []],
+      'isPrivate': [this.user.is_private, []],
     });
 
     // set values retrieved from user
@@ -113,6 +115,8 @@ export class ProfileSettingsComponent implements OnInit {
       this.sharingForm.get('shareInterviews').setValue(this.user.share_interviews);
       this.sharingForm.get('shareOffers').setValue(this.user.share_offers);
 
+      this.sharingForm.get('isPrivate').setValue(this.user.is_private);
+
       // update the profile image src url with a signed s3 url
       if(this.user.profile_image_file_id === null) {
         this.signedProfileImageUrl = this.manage.getAttachment(this.defaultProfileImageKey);
@@ -125,7 +129,11 @@ export class ProfileSettingsComponent implements OnInit {
   // function called when the sharing settings form is submitted
   onSharingSubmit() {
     // reset alerts
-    this.shareOpportunitiesUpdate = this.shareAppliedUpdate = this.shareInterviewsUpdate = this.shareOffersUpdate = false;
+    this.shareOpportunitiesUpdate = false;
+    this.shareAppliedUpdate = false;
+    this.shareInterviewsUpdate = false;
+    this.shareOffersUpdate = false;
+    this.isPrivateUpdate = false;
 
     // update user sharing by calling the api
     this.manage.updateUserSharing(this.user_id, this.sharingForm.value)
@@ -145,6 +153,9 @@ export class ProfileSettingsComponent implements OnInit {
         }
         if(this.user.share_offers !== data.data.update_user_sharing.share_offers) {
           this.shareOffersUpdate = true;
+        }
+        if(this.user.is_private !== data.data.update_user_sharing.is_private) {
+          this.isPrivateUpdate = true;
         }
 
         // set user to the updated user

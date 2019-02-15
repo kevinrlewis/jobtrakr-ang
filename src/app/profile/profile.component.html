@@ -11,16 +11,16 @@
       </span>
       <div class="col-8 container">
         <div class="row">
-          <h3 class="col-8">{{profileUser.first_name}} {{profileUser.last_name}}</h3>
+          <h3 class="col-8">{{(profileUserObservable | async)?.first_name}} {{(profileUserObservable | async)?.last_name}}</h3>
           <button [disabled]="disableSubscribe" class="offset-2 col-2 btn btn-success btn-sm">Subscribe</button>
         </div>
         <hr>
         <div style="margin-top: .5rem" class="row">
-          <p class="col-12">{{profileUser.bio}}</p>
+          <p class="col-12">{{(profileUserObservable | async)?.bio}}</p>
         </div>
       </div>
     </div>
-    <div class="row" >
+    <div class="row" *ngIf="profileUser && !profileUser.is_private && profileUser.share_opportunities === 1">
       <h4 class="col-12 job-header">Opportunities</h4>
       <div class="col-12 container">
         <div class="row job" *ngFor="let job of opportunitiesObservable | async">
@@ -33,7 +33,7 @@
         </div>
       </div>
     </div>
-    <div class="row">
+    <div class="row" *ngIf="profileUser && !profileUser.is_private && profileUser.share_applied === 1">
       <h4 class="col-12 job-header">Applied</h4>
       <div class="col-12 container">
         <div class="row job" *ngFor="let job of appliedObservable | async">
@@ -46,7 +46,7 @@
         </div>
       </div>
     </div>
-    <div class="row" >
+    <div class="row" *ngIf="profileUser && !profileUser.is_private && profileUser.share_interviews === 1">
       <h4 class="col-12 job-header">Interviews</h4>
       <div class="col-12 container">
         <div class="row job" *ngFor="let job of interviewsObservable | async">
@@ -59,7 +59,7 @@
         </div>
       </div>
     </div>
-    <div class="row" >
+    <div class="row" *ngIf="profileUser && !profileUser.is_private && profileUser.share_offers === 1">
       <h4 class="col-12 job-header">Offers</h4>
       <div class="col-12 container">
         <div class="row job" *ngFor="let job of offersObservable | async">

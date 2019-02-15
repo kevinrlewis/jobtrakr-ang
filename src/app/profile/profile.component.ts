@@ -7,7 +7,7 @@ import { HttpClient, HttpClientModule, HttpHeaders } from '@angular/common/http'
 import { environment } from '../../environments/environment';
 import { Observable } from 'rxjs/Observable';
 import { from, of, forkJoin, empty } from 'rxjs';
-import { filter, map, take, switchMap, flatMap } from 'rxjs/operators';
+import { filter, map, take, switchMap, flatMap, share } from 'rxjs/operators';
 
 import { Job } from './../../models/job.model';
 import { User } from './../../models/user.model';
@@ -32,6 +32,8 @@ export class ProfileComponent implements OnInit {
   profileUserId: number;
   profileUser: User = {} as any;
 
+  profileUserObservable: Observable<User>;
+
   jobsObservable: Observable<Array<Job>>;
   opportunitiesObservable: Observable<Array<Job>>;
   appliedObservable: Observable<Array<Job>>;
@@ -53,7 +55,6 @@ export class ProfileComponent implements OnInit {
     private manage: ManageService,
     private activatedRoute: ActivatedRoute
   ) {
-
   }
 
   ngOnInit() {
@@ -66,10 +67,49 @@ export class ProfileComponent implements OnInit {
     this.activatedRoute.params.subscribe(params => {
       // set user id of request profile to view
       this.profileUserId = +params['id'];
-      this.getProfileUserData(this.profileUserId);
 
+      // get requested profile user data
+      this.profileUserObservable = this.manage.getUser(this.profileUserId)
+        .pipe(map(profileData => {
+          // set this component's user to the data returned
+          this.profileUser = profileData.data;
+
+          // update the profile image src url with a signed s3 url
+          if(this.profileUser.profile_image_file_id === null) {
+            this.userLookupSignedProfileImageUrl = this.manage.getAttachment(this.defaultProfileImageKey);
+          } else {
+            this.userLookupSignedProfileImageUrl = this.manage.getAttachment(this.profileUser.profile_image_file_id.file_name);
+          }
+
+          return this.profileUser;
+        }));
+
+
+
+      // get jobs for the profile requested
+      this.jobsObservable = this.manage.getJobs(this.profileUserId)
+        .pipe(
+          map(getJobs => {
+            return getJobs;
+          }),
+          switchMap(({ data }) => {
+            console.log(data);
+            return of(data);
+          })
+        );
+
+      // filter observables by job type
+      this.jobsObservable.subscribe(data => {
+        this.opportunitiesObservable = data ? of(data.filter(job => job.job_type_id === 1)) : empty();
+        this.appliedObservable = data ? of(data.filter(job => job.job_type_id === 2)) : empty();
+        this.interviewsObservable = data ? of(data.filter(job => job.job_type_id === 3)) : empty();
+        this.offersObservable = data ? of(data.filter(job => job.job_type_id === 4)) : empty();
+      });
+
+      // disable the subscribe button if user is looking at their own profile
       this.disableSubscribe = (this.profileUserId == this.userId);
 
+      // get other users to display
       this.getUsersToDisplay();
     });
   }
@@ -89,38 +129,6 @@ export class ProfileComponent implements OnInit {
         this.userSignedProfileImageUrl = this.manage.getAttachment(this.user.profile_image_file_id.file_name);
       }
     });
-  }
-
-  // https://medium.com/@paynoattn/3-common-mistakes-i-see-people-use-in-rx-and-the-observable-pattern-ba55fee3d031
-  getProfileUserData(id) {
-    // get requested profile user data
-    this.jobsObservable = this.manage.getUser(id)
-      .pipe(map(profileData => {
-        // set this component's user to the data returned
-        this.profileUser = profileData.data;
-
-        // update the profile image src url with a signed s3 url
-        if(this.profileUser.profile_image_file_id === null) {
-          this.userLookupSignedProfileImageUrl = this.manage.getAttachment(this.defaultProfileImageKey);
-        } else {
-          this.userLookupSignedProfileImageUrl = this.manage.getAttachment(this.profileUser.profile_image_file_id.file_name);
-        }
-
-        return (this.profileUser) ? this.manage.getJobs(id) : empty();
-      }))
-      .pipe(switchMap(getJobs => {
-        return getJobs;
-      }))
-      .pipe(map(({ data }) => {
-        return data;
-      }));
-
-    // TODO: figure out how to apply filters without calling the api per job type (4 times)
-    // filter observables by job type
-    this.opportunitiesObservable = this.jobsObservable.pipe(map(jobs => (jobs != null) ? jobs.filter(job => job.job_type_id === 1) : null));
-    this.appliedObservable = this.jobsObservable.pipe(map(jobs => (jobs != null) ? jobs.filter(job => job.job_type_id === 2) : null));
-    this.interviewsObservable = this.jobsObservable.pipe(map(jobs => (jobs != null) ? jobs.filter(job => job.job_type_id === 3) : null));
-    this.offersObservable = this.jobsObservable.pipe(map(jobs => (jobs != null) ? jobs.filter(job => job.job_type_id === 4) : null));
   }
 
   /*

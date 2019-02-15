@@ -11,5 +11,6 @@ export interface User {
   share_interviews: boolean,
   share_offers: boolean,
   share_opportunities: boolean,
+  is_private: boolean,
   update_datetime: string
 }

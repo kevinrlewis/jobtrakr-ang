@@ -7,7 +7,9 @@ import { HttpClient, HttpClientModule, HttpHeaders, HttpErrorResponse } from '@a
 import { ManageService } from './../../manage.service';
 import { Observable } from 'rxjs/Observable';
 import { from, of, forkJoin, combineLatest } from 'rxjs';
-import { filter, map, merge, switchMap, pairwise, catchError, concat, mergeAll, combineAll, zip, concatAll, share, shareReplay } from 'rxjs/operators';
+import { filter, map, merge, switchMap, pairwise, catchError,
+  concat, mergeAll, combineAll, zip, concatAll, share, shareReplay,
+  toArray } from 'rxjs/operators';
 
 import { Job } from './../../../models/job.model';
 import { User } from './../../../models/user.model';
@@ -193,14 +195,17 @@ export class JobtypeComponent implements OnInit {
       // .subscribe(data => console.log('responseObservable', data));
 
       this.jobsObservable = forkJoin(this.jobsObservable, responseObservable)
-        .pipe(map(([a1, a2]) => {
+      .pipe(
+        map(([a1, a2]) => {
           console.log('a1:', a1);
           console.log('a2:', a2);
           console.log('concat:', a1.concat(a2));
-          return a1.concat(a2);
+          var tempSet = new Set([...a1, ...a2]);
+          return Array.from(tempSet);
         }),
         shareReplay(1)
       );
+
       // .subscribe(data => console.log(data));
 
       // responseObservable.subscribe(data => console.log('responseObservable:', data));
@@ -306,7 +311,10 @@ export class JobtypeComponent implements OnInit {
     helper function to toggle the settings display
   */
   toggleSettings() {
-    this.displaySettings = !this.displaySettings;
+    this.jobsObservable.subscribe(data => {
+      this.jobsArray = data;
+      this.displaySettings = !this.displaySettings;
+    });
   }
 
   /*
