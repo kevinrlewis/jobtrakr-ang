@@ -106,7 +106,7 @@ export class JobtypeComponent implements OnInit {
 
   // arrays/observables to display jobs
   @Input() jobsArray: Job[] = [];
-  jobsObservable: Observable<Array<Job>>;
+  @Input() jobsObservable: Observable<Array<Job>>;
 
   // display toggles
   displayAddForm = false;
@@ -176,6 +176,8 @@ export class JobtypeComponent implements OnInit {
       // if so then create the string to pass to db
       var temp = this.manage.formatFileNamePayload(this.filesArray);
 
+      // get the response of add a new job
+      // convert the returned job to an array to merge
       var responseObservable = this.manage.addJob(
         this.addForm.get('companyName').value,
         this.addForm.get('jobTitle').value,
@@ -192,54 +194,23 @@ export class JobtypeComponent implements OnInit {
           return insert_job_arr_observable;
         })
       );
-      // .subscribe(data => console.log('responseObservable', data));
 
+      // merge the new job in with the current jobs
       this.jobsObservable = forkJoin(this.jobsObservable, responseObservable)
-      .pipe(
-        map(([a1, a2]) => {
-          console.log('a1:', a1);
-          console.log('a2:', a2);
-          console.log('concat:', a1.concat(a2));
-          var tempSet = new Set([...a1, ...a2]);
-          return Array.from(tempSet);
-        }),
-        shareReplay(1)
-      );
+        .pipe(
+          map(([a1, a2]) => {
+            console.log('a1:', a1);
+            console.log('a2:', a2);
+            a1 = (a1 === null) ? [] : a1;
+            a2 = (a2 === null) ? [] : a2;
+            var tempSet = new Set([...a1, ...a2]);
+            return Array.from(tempSet);
+          }),
+          shareReplay(1)
+        );
 
-      // .subscribe(data => console.log(data));
-
-      // responseObservable.subscribe(data => console.log('responseObservable:', data));
-      // this.jobsObservable.subscribe(data => console.log('jobsObservable:', data));
-
-      // this.jobsObservable.pipe(
-      //   merge(responseObservable),
-      //   catchError(error => { return of(error); })
-      // ).subscribe(data => console.log(data));
-
+      // hide the add form
       this.displayAddForm = false;
-
-      // call api to post a job
-      // this.manage.addJob(
-      //   this.addForm.get('companyName').value,
-      //   this.addForm.get('jobTitle').value,
-      //   this.addForm.get('link').value,
-      //   this.addForm.get('notes').value,
-      //   this.jobIdToNameMap[this.jobType],
-      //   temp,
-      //   this.user.user_id
-      // ).subscribe(data => {
-      //   console.log('onAdd:', data);
-      //   // add job to observable
-      //   if(data.data.insert_job.job_type_id === this.jobType) {
-      //     this.jobsArray.push(data.data.insert_job);
-      //   }
-      //
-      //   // close add form
-      //   this.displayAddForm = false;
-      // }, error => {
-      //   console.log(error);
-      //   // display error
-      // });
     } else {
       this.displayMessage = true;
       this.validationMessage = validated.message;
@@ -260,32 +231,13 @@ export class JobtypeComponent implements OnInit {
     helper function to get the array of jobs
   */
   getJobs() {
+    // TODO: catch errors
+    // call api to get jobs, filter by job type
     this.jobsObservable = this.manage.getJobs(this.user.user_id)
       .pipe(
         map(({ data }) => { return data;}),
-        map(jobs => (jobs != null) ? jobs.filter(job => job.job_type_id === this.jobType) : null));
-
-
-    // // call function in manage service to grab jobs based on job type and user id
-    // this.manage.getJobs(this.user.user_id).subscribe(
-    //   data => {
-    //     console.log('getJobs:', data);
-    //     if(data.data !== null) {
-    //       data.data.forEach(job => {
-    //         if(job.job_type_id === this.jobType) {
-    //           // if the job is part of this job type then store it to be
-    //           // displayed
-    //           this.jobsArray.push(job);
-    //         }
-    //       });
-    //     }
-    //     return;
-    //   },
-    //   // TODO: display message if there was an error retrieving jobs
-    //   error => {
-    //     console.log(error);
-    //   }
-    // );
+        map(jobs => (jobs != null) ? jobs.filter(job => job.job_type_id === this.jobType) : null)
+      );
   }
 
   /*
@@ -370,27 +322,27 @@ export class JobtypeComponent implements OnInit {
   }
 
   /**/
-  onClickEdit(job: Job) {
-    console.log('editting...', job);
-    this.displayEdit = true;
-    this.jobToEdit = job;
+  onClickEdit(index: number) {
+    this.jobsObservable.subscribe(data => {
+      console.log('editting...', index);
+      this.jobsArray = data;
+      this.displayEdit = true;
+      this.jobToEdit = this.jobsArray[index];
+    });
   }
 
   /**/
   onClickDelete(job: Job) {
     console.log('deleting...', job);
     // call function in manage service to grab jobs based on job type and user id
-    this.manage.deleteJob(job.user_id, job.jobs_id).subscribe(
-      data => {
-        console.log(data);
-        var arrLength = this.jobsArray.length;
-
+    this.manage.deleteJob(job.user_id, job.jobs_id)
+      .pipe(
+        map(data => data),
+        switchMap(de => this.jobsObservable)
+      )
+      .subscribe(data => {
         // remove job from array
-        for(var i = 0; i < arrLength; i++) {
-          if(this.jobsArray[i].jobs_id === job.jobs_id) {
-            this.jobsArray.splice(i, 1);
-          }
-        }
+        data.splice(data.indexOf(job), 1);
       },
       // TODO: display message if there was an error retrieving jobs
       error => {

@@ -31,7 +31,8 @@ export class JobtypeSettingsComponent implements OnInit {
 
   // what we want to relay the parent component
   @Output() displaySettingsChange = new EventEmitter<boolean>();
-  @Output() jobsArrayUpdate = new EventEmitter<Job[]>();
+  @Output() jobsArrayUpdate = new EventEmitter<Observable<Array<Job>>>();
+  jobsObservable: Observable<Array<Job>>;
 
   // font awesome icons
   faCheck = faCheck;
@@ -99,19 +100,20 @@ export class JobtypeSettingsComponent implements OnInit {
       selectedJobs
     ).subscribe(data => {
       console.log(data);
-
+      console.log(selectedJobs);
       // iterate jobsArray for jobs to remove
-      this.jobsArray.forEach((d, i) => {
+      let len = this.jobsArray.length;
+      for(var i = len - 1; i >= 0; i--) {
         // if job should be removed then remove it
-        if(selectedJobs.includes(d.jobs_id)) {
+        if(selectedJobs.includes(this.jobsArray[i].jobs_id)) {
           this.jobsArray.splice(i, 1);
         }
-      },
-      // after iteration
-      function done() {
-        // emit to parent the updated jobsArray
-        this.jobsArrayUpdate.emit(this.jobsArray);
-      });
+      }
+
+      this.jobsObservable = of(this.jobsArray);
+
+      // emit to parent the updated jobsArray
+      // this.jobsArrayUpdate.emit(of(this.jobsArray));
 
       // close settings
       this.forceClose();

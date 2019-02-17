@@ -31,7 +31,8 @@ export class EditComponent implements OnInit {
   @Input() jobsArray: Job[];
 
   @Output() displayEditChange = new EventEmitter<boolean>();
-  @Output() jobsArrayUpdate = new EventEmitter<Job[]>();
+  @Output() jobsArrayUpdate = new EventEmitter<Observable<Array<Job>>>();
+  jobsObservable: Observable<Array<Job>>;
 
   // font awesome icons
   faFileDownload = faFileDownload;
@@ -149,21 +150,20 @@ export class EditComponent implements OnInit {
       ).subscribe(data => {
         console.log(data);
         // set the job to the updated job
-        this.job = data.data.update_job;
+        // this.job = data.data.update_job;
 
-        // iterate jobs array to find the job to update
-        this.jobsArray.forEach((d, i) => {
-          // when found
-          if(this.job.jobs_id === d.jobs_id) {
-            // set the job with jobs_id to the updated job
-            this.jobsArray[i] = this.job;
-          }
-        },
-        // after iteration
-        function done() {
-          // emit the updated jobsArray to the parent component
-          this.jobsArrayUpdate.emit(this.jobsArray);
-        });
+        console.log('before:', this.jobsArray);
+
+        if(this.jobsArray.indexOf(this.job) > -1) {
+          // update job within the array
+          this.jobsArray[this.jobsArray.indexOf(this.job)] = data.data.update_job;
+
+          console.log('after:', this.jobsArray);
+        }
+
+        // emit the updated jobsArray to the parent component
+        this.jobsObservable = of(this.jobsArray);
+        this.jobsArrayUpdate.emit(of(this.jobsArray));
 
         // close the edit component
         this.forceClose();

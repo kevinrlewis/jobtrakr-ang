@@ -272,7 +272,7 @@ export class ManageService {
     };
 
     // call api
-    return this.http.post<UpdateJobResponse>(
+    return this.http.post<DeleteJobResponse>(
       API_URL + '/api/' + user_id + '/delete/job',
       {
         'jobs_id': jobs_id
@@ -407,6 +407,10 @@ export interface UpdateJobTypeResponse {
 }
 
 export interface DeleteFileResponse {
+  message: string
+}
+
+export interface DeleteJobResponse {
   message: string
 }
 

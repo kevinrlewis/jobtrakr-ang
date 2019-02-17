@@ -1,12 +1,14 @@
 <app-edit *ngIf="displayEdit"
   [(displayEdit)]="displayEdit"
-  [(jobsArray)]="jobsArray"
+  [jobsArray]="jobsArray"
+  (jobsArrayUpdate)="jobsObservable"
   [job]="jobToEdit"
   [user]="user">
 </app-edit>
 <app-jobtype-settings *ngIf="displaySettings"
   [(displaySettings)]="displaySettings"
-  [(jobsArray)]="jobsArray"
+  [jobsArray]="jobsArray"
+  (jobsArrayUpdate)="jobsObservable"
   [user]="user">
 </app-jobtype-settings>
 <div class="action-row row align-items-end">
@@ -69,7 +71,7 @@
     </div>
   </div>
 </div>
-<div class="row" *ngFor="let job of jobsObservable | async">
+<div class="row" *ngFor="let job of jobsObservable | async; let i = index;">
   <div class="container job-container">
     <div class="row job" (click)="job.more = !job.more">
       <h4 class="col-8">{{job.company_name}}
@@ -97,7 +99,7 @@
             <fa-icon [icon]="faTimes" size="s"></fa-icon>
             Delete
           </a>
-          <a class="edit col-auto" (click)="onClickEdit(job)">
+          <a class="edit col-auto" (click)="onClickEdit(i)">
             <fa-icon [icon]="faEdit" size="s"></fa-icon>
             Edit
           </a>
