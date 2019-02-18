@@ -150,19 +150,12 @@ export class EditComponent implements OnInit {
       ).subscribe(data => {
         console.log(data);
         // set the job to the updated job
-        // this.job = data.data.update_job;
-
-        console.log('before:', this.jobsArray);
-
         if(this.jobsArray.indexOf(this.job) > -1) {
           // update job within the array
           this.jobsArray[this.jobsArray.indexOf(this.job)] = data.data.update_job;
-
-          console.log('after:', this.jobsArray);
         }
 
         // emit the updated jobsArray to the parent component
-        this.jobsObservable = of(this.jobsArray);
         this.jobsArrayUpdate.emit(of(this.jobsArray));
 
         // close the edit component

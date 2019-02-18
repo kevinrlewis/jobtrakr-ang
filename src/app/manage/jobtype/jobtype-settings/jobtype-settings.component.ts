@@ -99,21 +99,18 @@ export class JobtypeSettingsComponent implements OnInit {
       this.user.user_id,
       selectedJobs
     ).subscribe(data => {
-      console.log(data);
-      console.log(selectedJobs);
       // iterate jobsArray for jobs to remove
       let len = this.jobsArray.length;
       for(var i = len - 1; i >= 0; i--) {
         // if job should be removed then remove it
         if(selectedJobs.includes(this.jobsArray[i].jobs_id)) {
+          console.log('removing:', i, ' job:', this.jobsArray[i]);
           this.jobsArray.splice(i, 1);
         }
       }
 
-      this.jobsObservable = of(this.jobsArray);
-
       // emit to parent the updated jobsArray
-      // this.jobsArrayUpdate.emit(of(this.jobsArray));
+      this.jobsArrayUpdate.emit(of(this.jobsArray));
 
       // close settings
       this.forceClose();

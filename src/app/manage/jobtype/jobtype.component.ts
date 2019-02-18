@@ -4,12 +4,13 @@ import * as jwt_decode from "jwt-decode";
 import { Router, RouterEvent, NavigationEnd, ActivatedRoute } from '@angular/router';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { HttpClient, HttpClientModule, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
-import { ManageService } from './../../manage.service';
 import { Observable } from 'rxjs/Observable';
 import { from, of, forkJoin, combineLatest } from 'rxjs';
 import { filter, map, merge, switchMap, pairwise, catchError,
   concat, mergeAll, combineAll, zip, concatAll, share, shareReplay,
   toArray } from 'rxjs/operators';
+
+import { ManageService } from './../../manage.service';
 
 import { Job } from './../../../models/job.model';
 import { User } from './../../../models/user.model';
@@ -217,6 +218,10 @@ export class JobtypeComponent implements OnInit {
     }
   }
 
+  onObservableUpdate(jobs: Observable<Array<Job>>) {
+    this.jobsObservable = jobs;
+  }
+
   /*
     listen to changes to the file input tag
     upload files that are attached and store their location
@@ -304,6 +309,8 @@ export class JobtypeComponent implements OnInit {
   */
   resetAddForm() {
     this.addForm.reset();
+    this.validationMessage = [];
+    this.displayMessage = false;
   }
 
   /*
@@ -321,7 +328,9 @@ export class JobtypeComponent implements OnInit {
     window.open(url);
   }
 
-  /**/
+  /*
+    when the user clicks the edit button on a specific job
+  */
   onClickEdit(index: number) {
     this.jobsObservable.subscribe(data => {
       console.log('editting...', index);
@@ -331,23 +340,23 @@ export class JobtypeComponent implements OnInit {
     });
   }
 
-  /**/
+  /*
+    when the user clicks the delete button on a specific job
+  */
   onClickDelete(job: Job) {
     console.log('deleting...', job);
     // call function in manage service to grab jobs based on job type and user id
-    this.manage.deleteJob(job.user_id, job.jobs_id)
-      .pipe(
-        map(data => data),
-        switchMap(de => this.jobsObservable)
-      )
-      .subscribe(data => {
-        // remove job from array
-        data.splice(data.indexOf(job), 1);
-      },
-      // TODO: display message if there was an error retrieving jobs
-      error => {
-        console.log(error);
-      }
+    this.manage.deleteJob(job.user_id, job.jobs_id).subscribe(data => {
+      console.log(data);
+    },
+    // TODO: display message if there was an error retrieving jobs
+    error => {
+      console.log(error);
+    });
+
+    // filter out deleted value
+    this.jobsObservable = this.jobsObservable.pipe(
+      map(jobs => { return jobs.filter(j => j.jobs_id !== job.jobs_id); })
     );
   }
 

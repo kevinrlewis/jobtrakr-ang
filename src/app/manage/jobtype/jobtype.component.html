@@ -1,14 +1,14 @@
 <app-edit *ngIf="displayEdit"
   [(displayEdit)]="displayEdit"
   [jobsArray]="jobsArray"
-  (jobsArrayUpdate)="jobsObservable"
+  (jobsArrayUpdate)="onObservableUpdate($event)"
   [job]="jobToEdit"
   [user]="user">
 </app-edit>
 <app-jobtype-settings *ngIf="displaySettings"
   [(displaySettings)]="displaySettings"
   [jobsArray]="jobsArray"
-  (jobsArrayUpdate)="jobsObservable"
+  (jobsArrayUpdate)="onObservableUpdate($event)"
   [user]="user">
 </app-jobtype-settings>
 <div class="action-row row align-items-end">
