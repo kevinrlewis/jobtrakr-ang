@@ -2,7 +2,7 @@ import { Component, OnInit, Input, HostListener } from '@angular/core';
 import { CookieService } from 'ngx-cookie-service';
 import * as jwt_decode from "jwt-decode";
 import { Router, RouterEvent, NavigationEnd, ActivatedRoute } from '@angular/router';
-import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormControl, FormArray } from '@angular/forms';
 import { HttpClient, HttpClientModule, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 import { from, of, forkJoin, combineLatest } from 'rxjs';
@@ -93,6 +93,7 @@ export class JobtypeComponent implements OnInit {
 
   // form variables
   addForm: FormGroup;
+  pocs: FormArray;
   companyName: string;
   jobTitle: string;
   link: string;
@@ -110,7 +111,7 @@ export class JobtypeComponent implements OnInit {
   @Input() jobsObservable: Observable<Array<Job>>;
 
   // display toggles
-  displayAddForm = false;
+  displayAddForm = true;
   @Input() displaySettings = false;
   @Input() displayEdit = false;
 
@@ -145,6 +146,7 @@ export class JobtypeComponent implements OnInit {
       'link': [this.link, [Validators.required]],
       'notes': [this.notes, []],
       'files': [this.files, []],
+      'pocs': this.fb.array([this.createPoc()])
     });
 
 
@@ -153,6 +155,27 @@ export class JobtypeComponent implements OnInit {
       // get all user jobs to display
       this.getJobs();
     });
+  }
+
+  /*
+    create contact form
+  */
+  createPoc(): FormGroup {
+    return this.fb.group({
+      name: '',
+      title: '',
+      email: '',
+      phone: '',
+      notes: ''
+    });
+  }
+
+  /*
+    when multiple contact forms are desired
+  */
+  addPocForm(): void {
+    this.pocs = this.addForm.get('pocs') as FormArray;
+    this.pocs.push(this.createPoc());
   }
 
   /*

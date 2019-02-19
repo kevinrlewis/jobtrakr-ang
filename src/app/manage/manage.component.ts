@@ -18,6 +18,7 @@ import { User } from './../../models/user.model';
 // icons
 import { faBars } from '@fortawesome/free-solid-svg-icons';
 import { faTh } from '@fortawesome/free-solid-svg-icons';
+import { faQuestionCircle } from '@fortawesome/free-solid-svg-icons';
 
 const httpOptions = {
   headers: new HttpHeaders({
@@ -41,6 +42,7 @@ export class ManageComponent implements OnInit {
 
   faBars = faBars;
   faTh = faTh;
+  faQuestionCircle = faQuestionCircle;
 
   // @Input() email: string;
   user: User;

@@ -19,6 +19,7 @@
 
 .nav-link:hover {
   cursor: pointer;
+  font-weight: bold;
 }
 
 a {

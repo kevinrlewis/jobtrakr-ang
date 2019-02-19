@@ -10,6 +10,8 @@ import { Job } from './../../models/job.model';
 import { User } from './../../models/user.model';
 import { File } from './../../models/file.model';
 
+import { faQuestionCircle } from '@fortawesome/free-solid-svg-icons';
+
 import { ManageService } from './../manage.service';
 
 const httpOptions = {
@@ -32,6 +34,8 @@ const imgPath = './../../assets/.profile_images/default_profile.png';
   styleUrls: ['./profile-settings.component.css']
 })
 export class ProfileSettingsComponent implements OnInit {
+
+  faQuestionCircle = faQuestionCircle;
 
   // @Input() email: string;
   sharingForm: FormGroup;

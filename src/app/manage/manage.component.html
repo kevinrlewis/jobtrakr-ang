@@ -8,8 +8,8 @@
   </div> -->
   <app-jobtype *ngIf="user && job_type_view != 0" [user]="user" [jobType]="job_type_view"></app-jobtype>
   <div class="options row justify-content-end" *ngIf="!isSubComponentActive()">
-    <a class="col-auto text-right" (click)="selectButtons()"><fa-icon [icon]="faBars"></fa-icon></a>
-    <a class="col-auto text-left" (click)="selectGrid()"><fa-icon [icon]="faTh"></fa-icon></a>
+    <a class="col-auto text-right" (click)="selectButtons()"><fa-icon [icon]="faBars" size="lg"></fa-icon></a>
+    <a class="col-auto text-left" (click)="selectGrid()"><fa-icon [icon]="faTh" size="lg"></fa-icon></a>
   </div>
   <div class="buttons-section" *ngIf="!isSubComponentActive() && show_buttons">
     <div class="row section-button">
