@@ -38,6 +38,15 @@ hr {
   margin-bottom: 0.25rem;
 }
 
+.poc-form-group > .form-group > .form-control {
+  height: 2rem;
+}
+
+.heading {
+  padding: 0.5rem;
+  text-decoration: underline;
+}
+
 /*xs*/
 @media (max-width: 576px) {
   .description {
