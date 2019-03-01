@@ -2,7 +2,7 @@ import { Component, OnInit, Input, HostListener, EventEmitter, Output } from '@a
 import { CookieService } from 'ngx-cookie-service';
 import * as jwt_decode from "jwt-decode";
 import { Router, RouterEvent, NavigationEnd, ActivatedRoute } from '@angular/router';
-import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormControl, FormArray } from '@angular/forms';
 import { HttpClient, HttpClientModule, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 import { from, of } from 'rxjs';
@@ -17,6 +17,7 @@ import {
 import { ManageService } from './../../../manage.service';
 import { Job } from './../../../../models/job.model';
 import { User } from './../../../../models/user.model';
+import { Contact } from './../../../../models/contact.model';
 
 @Component({
   selector: 'app-edit',
@@ -38,6 +39,8 @@ export class EditComponent implements OnInit {
   faFileDownload = faFileDownload;
 
   editForm: FormGroup;
+  existingContacts: FormArray;
+  newContacts: FormArray;
   companyName: string;
   jobTitle: string;
   link: string;
@@ -45,6 +48,7 @@ export class EditComponent implements OnInit {
   files: string;
 
   attachmentsObservable: Observable<Array<any>>;
+  contactsObservable: Observable<Array<any>>;
 
   displayMessage: boolean;
   validationMessage = [];
@@ -60,14 +64,49 @@ export class EditComponent implements OnInit {
   ngOnInit() {
     // initialize edit form
     this.editForm = this.fb.group({
-      'companyName': [this.companyName, [Validators.required]],
-      'jobTitle': [this.jobTitle, [Validators.required]],
-      'link': [this.link, [Validators.required]],
-      'notes': [this.notes, []],
+      'companyName': [this.companyName, [Validators.required, Validators.maxLength(128)]],
+      'jobTitle': [this.jobTitle, [Validators.required, Validators.maxLength(64)]],
+      'link': [this.link, [Validators.required, Validators.maxLength(512)]],
+      'notes': [this.notes, [Validators.maxLength(128)]],
       'files': [this.files, []],
+      'existingContacts': this.fb.array([]),
+      'newContacts': this.fb.array([])
     });
 
     this.attachmentsObservable = of(this.job.attachments);
+
+    // create form for existing contacts
+    if(this.job.contacts) {
+      this.job.contacts.forEach((contact: Contact) => {
+        this.addExistingContactForm(contact.name, contact.job_title, contact.email, contact.phone_number, contact.notes);
+      });
+    }
+  }
+
+  /*
+    create contact form
+  */
+  createPoc(name?, title?, email?, phone?, notes?): FormGroup {
+    return this.fb.group({
+      name: [(name == undefined) ? '' : name, [Validators.required, Validators.maxLength(32)]],
+      title: [(title == undefined) ? '' : title, [Validators.maxLength(64)]],
+      email: [(email == undefined) ? '' : email, [Validators.email, Validators.maxLength(64)]],
+      phone: [(phone == undefined) ? '' : phone, [Validators.maxLength(64)]],
+      notes: [(notes == undefined) ? '' : notes, [Validators.maxLength(128)]]
+    });
+  }
+
+  /*
+    when multiple contact forms are desired
+  */
+  addExistingContactForm(name, title, email, phone, notes): void {
+    this.existingContacts = this.editForm.get('existingContacts') as FormArray;
+    this.existingContacts.push(this.createPoc(name, title, email, phone, notes));
+  }
+
+  addNewContactForm(): void {
+    this.newContacts = this.editForm.get('newContacts') as FormArray;
+    this.newContacts.push(this.createPoc());
   }
 
   /*
@@ -104,6 +143,7 @@ export class EditComponent implements OnInit {
     // validate fields
     // iterate properties
     for(var property in formVar) {
+
       // if value isn't null
       if(formVar.hasOwnProperty(property) && formVar[property] != null) {
         // if value is a link then validate the link
@@ -117,6 +157,14 @@ export class EditComponent implements OnInit {
         if(this.editForm.get(property).invalid) {
           status = false;
           messageList.push(this.editForm.get(property) + ' invalid.');
+        } else if((property == 'existingContacts' || property == 'newContacts') && formVar[property] != null) {
+          let arr = this.editForm.get(property) as FormArray;
+          for(let pocProp of arr.controls) {
+            if(pocProp.invalid) {
+              status = false;
+              messageList.push('Contact invalid.');
+            }
+          }
         }
       }
     }
@@ -130,6 +178,8 @@ export class EditComponent implements OnInit {
     to a job
   */
   editFormSubmit() {
+    this.displayMessage = false;
+    this.validationMessage = [];
     var validated = this.validateForm(this.editForm);
 
     // handle invalid entries
@@ -140,9 +190,18 @@ export class EditComponent implements OnInit {
       // check if any files are attached
       // if so then create the string to pass to db
       var temp = this.manage.formatFileNamePayload(this.filesArray);
-
       this.editForm.value.files = temp;
 
+      // get the contacts_id of existing contact to pass to be updated
+      if(this.existingContacts && this.existingContacts.length > 0) {
+        var exLen = this.existingContacts.length;
+        for(var i = 0; i < exLen; i++) {
+          this.existingContacts.controls[i].value.contacts_id = this.job.contacts[i].contacts_id;
+        }
+      }
+
+      // call the api to update the values
+      // send the form
       this.manage.updateJob(
         this.user.user_id,
         this.job.jobs_id,
@@ -152,7 +211,7 @@ export class EditComponent implements OnInit {
         // set the job to the updated job
         if(this.jobsArray.indexOf(this.job) > -1) {
           // update job within the array
-          this.jobsArray[this.jobsArray.indexOf(this.job)] = data.data.update_job;
+          this.jobsArray[this.jobsArray.indexOf(this.job)] = data.data;
         }
 
         // emit the updated jobsArray to the parent component

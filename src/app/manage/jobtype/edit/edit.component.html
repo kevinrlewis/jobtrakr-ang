@@ -29,19 +29,76 @@
         <label class="form-label" for="notes">Notes</label>
         <input id="notes" type="text-area" class="form-control" placeholder="{{job.notes}}" formControlName="notes"/>
       </div>
+      <div class="form-group col-12">
+        <div class="row">
+          <label class="col-auto form-label" for="jobContacts">Contacts</label>
+          <a class="col-auto btn btn-success add-contact" style="color: #FFFFFF;" (click)="addNewContactForm()">Add</a>
+        </div>
+        <div class="row" formArrayName="existingContacts" *ngFor="let poc of editForm.get('existingContacts').controls; let i = index;">
+          <small class="col-12">Existing Contact {{i + 1}}</small>
+          <div class="col-12 poc-form-group" [formGroupName]="i">
+            <div class="row" style="margin: 0;">
+              <div class="col-3 form-group">
+                <input type="text" class="form-control" formControlName="name" placeholder="Name">
+              </div>
+              <div class="col-3 form-group">
+                <input type="text" class="form-control" formControlName="title" placeholder="Job Title">
+              </div>
+              <div class="col-3 form-group">
+                <input type="text" class="form-control" formControlName="email" placeholder="E-mail">
+              </div>
+              <div class="col-3 form-group">
+                <input type="text" class="form-control" formControlName="phone" placeholder="Phone Number">
+              </div>
+              <div class="col-12 form-group">
+                <input type="text" class="col-12 form-control" formControlName="notes" placeholder="Notes">
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row" formArrayName="newContacts" *ngFor="let poc of editForm.get('newContacts').controls; let i = index;">
+          <small class="col-12">New Contact {{i + 1}}</small>
+          <div class="col-12 poc-form-group" [formGroupName]="i">
+            <div class="row" style="margin: 0;">
+              <div class="col-3 form-group">
+                <input type="text" class="form-control" formControlName="name" placeholder="Name">
+              </div>
+              <div class="col-3 form-group">
+                <input type="text" class="form-control" formControlName="title" placeholder="Job Title">
+              </div>
+              <div class="col-3 form-group">
+                <input type="text" class="form-control" formControlName="email" placeholder="E-mail">
+              </div>
+              <div class="col-3 form-group">
+                <input type="text" class="form-control" formControlName="phone" placeholder="Phone Number">
+              </div>
+              <div class="col-12 form-group">
+                <input type="text" class="col-12 form-control" formControlName="notes" placeholder="Notes">
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- <div class="row contact" *ngFor="let contact of contactsObservable | async">
+          <span class="col-auto">{{contact.name}} -</span>
+          <span class="col-auto"> {{contact.job_title}} -</span>
+          <span class="col-auto"> {{contact.email}} -</span>
+          <span class="col-auto mr-auto"> {{contact.phone_number}}</span>
+          <button class="col-auto btn btn-danger">Remove</button>
+        </div> -->
+      </div>
       <div class="form-group col-12 container">
-        <label class="form-label" for="jobAttachments">Add attachments</label>
+        <label class="form-label" for="jobAttachments">Attachments</label>
         <input type="file"
           formControlName="files"
           class="form-control-file"
           (change)="onFileChange($event)"
           id="jobAttachments"
           multiple/>
-        <div class="row attachment border-bottom border-top" *ngFor="let attachment of attachmentsObservable | async">
+        <div class="row attachment" *ngFor="let attachment of attachmentsObservable | async">
           <a class="col-8 mr-auto attachment" (click)="getFile(attachment.file_path)">{{attachment.original_name}}
             <fa-icon [icon]="faFileDownload" size="xs"></fa-icon>
           </a>
-          <button class="col-auto btn btn-danger" (click)="removeAttachment(attachment)">Remove</button>
+          <a class="col-auto btn btn-danger" (click)="removeAttachment(attachment)">Remove</a>
         </div>
       </div>
       <hr class="col-12">

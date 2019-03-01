@@ -9,6 +9,14 @@
   top: 15%;
 }
 
+.btn-danger {
+  color: #FFFFFF!important;
+}
+
+.btn-danger:hover {
+  color: #FFFFFF!important;
+}
+
 label {
   margin-bottom: 0;
   font-size: 12px;
@@ -21,11 +29,29 @@ label {
 }
 
 .attachment {
-  margin-bottom: 0.2rem;
+  /* margin-bottom: 0.2rem; */
 }
 
-.attachment > .btn {
-  font-size: 12px;
+.add-contact {
+  line-height: 0.75;
+  font-size: small;
+  margin-left: 0.5rem;
+  padding: 0.25rem!important;
+  padding-left: 0.5rem!important;
+  padding-right: 0.5rem!important;
+}
+
+.poc-form-group {
+  line-height: 0.75;
+}
+
+.poc-form-group > .row > .form-group > .form-control {
+  height: 1.5rem;
+  font-size: small;
+}
+
+.btn-danger {
+  font-size: small;
 }
 
 .edit * {

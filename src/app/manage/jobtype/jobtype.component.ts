@@ -111,7 +111,7 @@ export class JobtypeComponent implements OnInit {
   @Input() jobsObservable: Observable<Array<Job>>;
 
   // display toggles
-  displayAddForm = true;
+  displayAddForm = false;
   @Input() displaySettings = false;
   @Input() displayEdit = false;
 
@@ -141,12 +141,12 @@ export class JobtypeComponent implements OnInit {
 
     // initialize add form
     this.addForm = this.fb.group({
-      'companyName': [this.companyName, [Validators.required]],
-      'jobTitle': [this.jobTitle, [Validators.required]],
-      'link': [this.link, [Validators.required]],
-      'notes': [this.notes, []],
+      'companyName': [this.companyName, [Validators.required, Validators.maxLength(128)]],
+      'jobTitle': [this.jobTitle, [Validators.required, Validators.maxLength(64)]],
+      'link': [this.link, [Validators.required, Validators.maxLength(512)]],
+      'notes': [this.notes, [Validators.maxLength(128)]],
       'files': [this.files, []],
-      'pocs': this.fb.array([this.createPoc()])
+      'pocs': this.fb.array([])
     });
 
 
@@ -162,11 +162,11 @@ export class JobtypeComponent implements OnInit {
   */
   createPoc(): FormGroup {
     return this.fb.group({
-      name: '',
-      title: '',
-      email: '',
-      phone: '',
-      notes: ''
+      name: ['', [Validators.required, Validators.maxLength(32)]],
+      title: ['', [Validators.maxLength(64)]],
+      email: ['', [Validators.email, Validators.maxLength(64)]],
+      phone: ['', [Validators.maxLength(64)]],
+      notes: ['', [Validators.maxLength(128)]]
     });
   }
 
@@ -194,25 +194,32 @@ export class JobtypeComponent implements OnInit {
     // validate form
     var validated = this.validateAddForm(this.addForm);
 
-
     if(validated.status) {
+
+      console.log(this.addForm.value);
+
       // check if any files are attached
       // if so then create the string to pass to db
       var temp = this.manage.formatFileNamePayload(this.filesArray);
+      console.log('formatFileNamePayload:', temp);
 
+      // create the body to be sent
+      var body = this.addForm.value;
+      body.type = this.jobIdToNameMap[this.jobType];
+      body.userId = this.user.user_id;
+      body.files = temp;
+
+      console.log(JSON.stringify(body));
       // get the response of add a new job
       // convert the returned job to an array to merge
       var responseObservable = this.manage.addJob(
-        this.addForm.get('companyName').value,
-        this.addForm.get('jobTitle').value,
-        this.addForm.get('link').value,
-        this.addForm.get('notes').value,
-        this.jobIdToNameMap[this.jobType],
-        temp,
-        this.user.user_id
+        JSON.stringify(body)
       ).pipe(
-        map(({ data }) => { return data; }),
-        switchMap(({ insert_job }) => {
+        map(({ data }) => {
+          console.log(data);
+          return data;
+        }),
+        switchMap((insert_job) => {
           let insert_job_arr: Job[] = [insert_job];
           let insert_job_arr_observable: Observable<Array<Job>> = of(insert_job_arr);
           return insert_job_arr_observable;
@@ -253,6 +260,8 @@ export class JobtypeComponent implements OnInit {
   onFileChange(event) {
     // save the file with the specific job type
     this.filesArray = this.manage.saveFile(event, 2);
+
+    console.log('onFileChange:', this.filesArray);
   }
 
   /*
@@ -322,6 +331,20 @@ export class JobtypeComponent implements OnInit {
       status = false;
       messageList.push('Link invalid.');
     }
+
+    // check contacts validity
+    var contacts = this.addForm.get("pocs") as FormArray;
+    // iterate contacts controls
+    contacts.controls.forEach((fg: FormGroup) => {
+      // access FormControls of the object
+      Object.keys(fg.controls).forEach(field => {
+        // check if field is invalid
+        if(fg.controls[field].invalid) {
+          status = false;
+          messageList.push('Contact ' + field + ' invalid.');
+        }
+      });
+    });
 
     // return object
     return { status: status, message: messageList };

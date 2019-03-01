@@ -107,7 +107,7 @@ export class ManageService {
   /*
 
   */
-  addJob(company_name:string, job_title:string, link:string, notes:string, type:string, attachments:string, user_id:number) {
+  addJob(body:string) {
     var httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json'
@@ -117,15 +117,7 @@ export class ManageService {
     // call api to post a job
     return this.http.post<AddJobResponse>(
       API_URL + '/api/job',
-      {
-        'company_name': company_name,
-        'job_title': job_title,
-        'link': link,
-        'notes': notes,
-        'type': type,
-        'attachments': attachments,
-        'user_id': user_id
-      },
+      body,
       httpOptions
     );
   }
@@ -247,7 +239,7 @@ export class ManageService {
         'Content-Type': 'application/json'
       })
     };
-
+    
     // call api
     return this.http.post<UpdateJobResponse>(
       API_URL + '/api/' + user_id + '/job/update',
@@ -390,9 +382,7 @@ export interface UploadResponse {
 // when we call the add job endpoint
 export interface AddJobResponse {
   message: string,
-  data: {
-    insert_job: Job
-  }
+  data: Job
 }
 
 // interface to get an expected response from the api
@@ -418,20 +408,7 @@ export interface DeleteJobResponse {
 // when we call the update job endpoint
 export interface UpdateJobResponse {
   message: string,
-  data: {
-    update_job: {
-      jobs_id: number,
-      job_title: string,
-      company_name: string,
-      link: string,
-      notes: string,
-      attachments: string[],
-      user_id: number,
-      create_datetime: string,
-      update_datetime: string,
-      job_type_id: number
-    }
-  }
+  data: Job
 }
 
 interface GetUserResponse {

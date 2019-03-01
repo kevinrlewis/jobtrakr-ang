@@ -47,6 +47,11 @@ hr {
   text-decoration: underline;
 }
 
+.contact {
+  font-size: 90%;
+  padding-left: 1rem;
+}
+
 /*xs*/
 @media (max-width: 576px) {
   .description {

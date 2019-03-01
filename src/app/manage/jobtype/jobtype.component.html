@@ -37,7 +37,7 @@
   </div>
   <div class="col-12 op-area">
     <div class="row add-jobs">
-      <form [formGroup]="addForm" (ngSubmit)="onAddSubmit()" class="">
+      <form [formGroup]="addForm" (ngSubmit)="onAddSubmit()" class="" style="width: 100%;">
         <small class="heading">Job</small>
         <div class="col-12">
           <div class="row">
@@ -58,7 +58,7 @@
         <hr>
         <div>
           <small class="heading">Contacts</small>
-          <a class="btn btn-sm btn-success" style="line-height: 0.75; margin: 0.25rem; margin-left: 0.5rem;" (click)="addPocForm()">+ Add Contact</a>
+          <a class="btn btn-sm btn-success" style="line-height: 0.75; margin: 0.25rem; margin-left: 0.5rem; color: #FFFFFF;" (click)="addPocForm()">+ Add Contact</a>
         </div>
         <div class="row poc-area" style="margin-left: 0; margin-right: 0;">
           <div class="col-12" formArrayName="pocs" *ngFor="let poc of addForm.get('pocs').controls; let i = index;">
@@ -122,6 +122,14 @@
               <a class="col-auto attachment" (click)="getFile(attachment.file_path)">{{attachment.original_name}}
                 <fa-icon [icon]="faFileDownload" size="xs"></fa-icon>
               </a>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-12">Contacts:
+            <div *ngFor="let contact of job.contacts" class="row contact">
+              <span class="col-auto">{{contact.name}}</span>
+              <span class="col-auto">{{contact.job_title}}</span>
             </div>
           </div>
         </div>
