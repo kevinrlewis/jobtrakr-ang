@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, AfterViewInit, ChangeDetectorRef } from '@angular/core';
 import { CookieService } from 'ngx-cookie-service';
 import * as jwt_decode from "jwt-decode";
 import { Router, RouterEvent, NavigationEnd, ActivatedRoute } from '@angular/router';
@@ -8,6 +8,13 @@ import { Observable } from 'rxjs/Observable';
 import { from, of } from 'rxjs';
 import { filter, map } from 'rxjs/operators'
 import { environment } from '../../environments/environment';
+import {
+  trigger,
+  state,
+  style,
+  animate,
+  transition
+} from '@angular/animations';
 // import { NgDragDropModule } from 'ng-drag-drop';
 
 import { ManageService } from './../manage.service';
@@ -36,10 +43,45 @@ const POSSIBLE_JOB_TYPES = ['opportunity', 'applied', 'interview', 'offer'];
 @Component({
   selector: 'app-manage',
   templateUrl: './manage.component.html',
-  styleUrls: ['./manage.component.css']
+  styleUrls: ['./manage.component.css'],
+  animations: [
+    trigger('openClose', [
+      state('open', style({
+        display: 'block',
+        opacity: '1'
+      })),
+      state('closed', style({
+        display: 'none',
+        opacity: '0'
+      })),
+      transition('open => closed', [
+        animate('.1s')
+      ]),
+      transition('closed => open', [
+        animate('.5s')
+      ]),
+    ]),
+    trigger('slideDown', [
+      state('open', style({
+        display: 'block',
+        opacity: '1'
+      })),
+      state('closed', style({
+        display: 'none',
+        opacity: '0'
+      })),
+      transition('open => closed', [
+        animate('2s')
+      ]),
+      transition('closed => open', [
+        animate('2s')
+      ]),
+    ])
+  ]
 })
-export class ManageComponent implements OnInit {
-
+export class ManageComponent implements OnInit, AfterViewInit {
+  state:string = 'closed';
+  jobTypeState:string = 'closed';
   faBars = faBars;
   faTh = faTh;
   faQuestionCircle = faQuestionCircle;
@@ -94,8 +136,11 @@ export class ManageComponent implements OnInit {
     private cookieService: CookieService,
     private router: Router,
     private activatedRoute: ActivatedRoute,
-    private manage: ManageService
+    private manage: ManageService,
+    private change: ChangeDetectorRef
   ) {
+    this.state = 'closed';
+    this.jobTypeState = 'closed';
     this.id = this.email = this.firstName = this.lastName = "";
 
     router.events.subscribe((val) => {
@@ -143,6 +188,7 @@ export class ManageComponent implements OnInit {
         // testing grid
         // this.show_buttons = false;
         // this.show_grid = true;
+        
       }
     });
 
@@ -172,6 +218,11 @@ export class ManageComponent implements OnInit {
     // call the helper function to refresh the jobs within the grid
     this.refreshJobs();
 
+  }
+
+  ngAfterViewInit() {
+    this.state = 'open';
+    this.change.detectChanges();
   }
 
   /*
@@ -280,6 +331,8 @@ export class ManageComponent implements OnInit {
     // this.opportunities_active = !this.opportunities_active;
     this.show_buttons = false;
     this.router.navigate([this.router.url], { fragment: 'opportunities' });
+    this.jobTypeState = 'open';
+    this.change.detectChanges();
   }
 
   /*
@@ -290,6 +343,8 @@ export class ManageComponent implements OnInit {
     // this.applied_active = !this.applied_active;
     this.show_buttons = false;
     this.router.navigate([this.router.url], { fragment: 'applied' });
+    this.jobTypeState = 'open';
+    this.change.detectChanges();
   }
 
   /*
@@ -300,6 +355,8 @@ export class ManageComponent implements OnInit {
     // this.interviews_active = !this.interviews_active;
     this.show_buttons = false;
     this.router.navigate([this.router.url], { fragment: 'interviews' });
+    this.jobTypeState = 'open';
+    this.change.detectChanges();
   }
 
   /*
@@ -310,6 +367,8 @@ export class ManageComponent implements OnInit {
     // this.offers_active = !this.offers_active;
     this.show_buttons = false;
     this.router.navigate([this.router.url], { fragment: 'offers' });
+    this.jobTypeState = 'open';
+    this.change.detectChanges();
   }
 
   /*

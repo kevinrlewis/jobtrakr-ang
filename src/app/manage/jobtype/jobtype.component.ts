@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, HostListener } from '@angular/core';
+import { Component, OnInit, Input, HostListener, AfterViewInit, ChangeDetectorRef } from '@angular/core';
 import { CookieService } from 'ngx-cookie-service';
 import * as jwt_decode from "jwt-decode";
 import { Router, RouterEvent, NavigationEnd, ActivatedRoute } from '@angular/router';
@@ -9,6 +9,13 @@ import { from, of, forkJoin, combineLatest } from 'rxjs';
 import { filter, map, merge, switchMap, pairwise, catchError,
   concat, mergeAll, combineAll, zip, concatAll, share, shareReplay,
   toArray } from 'rxjs/operators';
+import {
+  trigger,
+  state,
+  style,
+  animate,
+  transition
+} from '@angular/animations';
 
 import { ManageService } from './../../manage.service';
 
@@ -64,9 +71,46 @@ const jobTypeMap = {
 @Component({
   selector: 'app-jobtype',
   templateUrl: './jobtype.component.html',
-  styleUrls: ['./jobtype.component.css']
+  styleUrls: ['./jobtype.component.css'],
+  animations: [
+    trigger('openClose', [
+      state('open', style({
+        display: 'block',
+        opacity: '1'
+      })),
+      state('closed', style({
+        display: 'none',
+        opacity: '0'
+      })),
+      transition('open => closed', [
+        animate('1s')
+      ]),
+      transition('closed => open', [
+        animate('1s')
+      ]),
+    ]),
+    trigger('slideDown', [
+      state('open', style({
+        display: 'block',
+        opacity: '1'
+      })),
+      state('closed', style({
+        display: 'none',
+        opacity: '0'
+      })),
+      transition('open => closed', [
+        animate('2s')
+      ]),
+      transition('closed => open', [
+        animate('2s')
+      ]),
+    ])
+  ]
 })
-export class JobtypeComponent implements OnInit {
+export class JobtypeComponent implements OnInit, AfterViewInit {
+  jobState:string = 'closed';
+  addJobState:string = 'closed';
+  state:string = 'closed';
 
   // user information retrieved from the parent component
   @Input() user: User;
@@ -129,8 +173,12 @@ export class JobtypeComponent implements OnInit {
     private fb: FormBuilder,
     private http: HttpClient,
     private manage: ManageService,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private change: ChangeDetectorRef
   ) {
+    this.addJobState = 'closed';
+    this.jobState = 'closed';
+    this.state = 'closed';
     // initialize the observable to watch the jobsArray
     // this.jobsObservable = of(this.jobsArray);
   }
@@ -155,6 +203,11 @@ export class JobtypeComponent implements OnInit {
       // get all user jobs to display
       this.getJobs();
     });
+  }
+
+  ngAfterViewInit() {
+    this.state = 'open';
+    this.change.detectChanges();
   }
 
   /*
@@ -290,6 +343,7 @@ export class JobtypeComponent implements OnInit {
   */
   toggleAddForm() {
     this.displayAddForm = !this.displayAddForm;
+    this.addJobState = (this.addJobState === 'open') ? 'closed' : 'open';
     // if the form is already being display, close should reset the values
     if(this.displayAddForm) {
       this.resetAddForm();

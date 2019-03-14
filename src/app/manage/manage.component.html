@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container" [@openClose]="state">
   <app-headerbar [name]="firstName + ' ' + lastName" [signedProfileImageUrl]="signedProfileImageUrl" *ngIf="signedProfileImageUrl"></app-headerbar>
   <!-- <div class="row">
     <h5 class="col-4">{{firstname}} {{lastname}}

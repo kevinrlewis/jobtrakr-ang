@@ -34,7 +34,7 @@
           <label class="col-auto form-label" for="jobContacts">Contacts</label>
           <a class="col-auto btn btn-success add-contact" style="color: #FFFFFF;" (click)="addNewContactForm()">Add</a>
         </div>
-        <div class="row" formArrayName="existingContacts" *ngFor="let poc of editForm.get('existingContacts').controls; let i = index;">
+        <div class="row" formArrayName="existingContacts" *ngFor="let poc of editForm.get('existingContacts')['controls']; let i = index;">
           <small class="col-12">Existing Contact {{i + 1}}</small>
           <div class="col-12 poc-form-group" [formGroupName]="i">
             <div class="row" style="margin: 0;">
@@ -56,7 +56,7 @@
             </div>
           </div>
         </div>
-        <div class="row" formArrayName="newContacts" *ngFor="let poc of editForm.get('newContacts').controls; let i = index;">
+        <div class="row" formArrayName="newContacts" *ngFor="let poc of editForm.get('newContacts')['controls']; let i = index;">
           <small class="col-12">New Contact {{i + 1}}</small>
           <div class="col-12 poc-form-group" [formGroupName]="i">
             <div class="row" style="margin: 0;">

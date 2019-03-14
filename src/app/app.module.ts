@@ -4,6 +4,8 @@ import { RouterModule, Routes } from '@angular/router';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
 import { NgDragDropModule } from 'ng-drag-drop';
 // import { HttpModule } from '@angular/http';
 import { enableProdMode } from '@angular/core';
@@ -96,6 +98,7 @@ if(environment.production) {
     FormsModule,
     ReactiveFormsModule,
     NgDragDropModule.forRoot(),
+    BrowserAnimationsModule,
     // HttpModule
   ],
   providers: [AuthService, CookieService, JwtHelperService],

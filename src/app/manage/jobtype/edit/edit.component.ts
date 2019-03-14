@@ -83,6 +83,10 @@ export class EditComponent implements OnInit {
     }
   }
 
+  // getExistingContacts():FormArray {
+  //   return <FormArray>this.editForm.get('existingContacts');
+  // }
+
   /*
     create contact form
   */

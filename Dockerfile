@@ -15,21 +15,16 @@ ENV NODE_ENV=prod
 
 # app directory
 WORKDIR /app
-RUN ls
 
 # copy required files
 COPY jobtrakr-ang/package*.json ./
 COPY aws_cred.json /
-RUN ls
 
 # install dependencies
 RUN npm set progress=false && npm install
-RUN ls /app
 
 # copy project files into the docker image
 COPY ./jobtrakr-ang  /app
-RUN ls /app
-RUN ls /app/src
 
 # build angular app
 RUN npm run-script deploy
