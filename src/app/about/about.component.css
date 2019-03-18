@@ -16,3 +16,15 @@
   top: 5%;
   position: fixed;
 }
+
+.content h2 {
+  font-weight: 200;
+}
+
+.content h1 {
+  font-weight: 200;
+}
+
+.content * {
+  font-weight: 400;
+}

@@ -239,7 +239,7 @@ export class ManageService {
         'Content-Type': 'application/json'
       })
     };
-    
+
     // call api
     return this.http.post<UpdateJobResponse>(
       API_URL + '/api/' + user_id + '/job/update',
@@ -369,6 +369,26 @@ export class ManageService {
     );
   }
 
+  /*
+    calls api to delete a user
+  */
+  deleteUser(user_id:number) {
+    var httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json'
+      })
+    };
+
+    return this.http.post<MessageResponse>(
+      API_URL + '/api/delete/' + user_id,
+      httpOptions
+    );
+  }
+
+}
+
+export interface MessageResponse {
+  message: string
 }
 
 // interface to get an expected response from the api

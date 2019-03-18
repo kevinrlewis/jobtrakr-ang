@@ -14,6 +14,11 @@
   z-index: 0;
 }
 
+h1 {
+  font-weight: 200;
+  font-size: 400%;
+}
+
 hr {
   margin-top: 1rem;
   margin-bottom: 1rem;
@@ -64,6 +69,7 @@ form > .form-group {
 .home-title {
   color: #FFFFFF;
   margin-top: 2rem;
+  margin-bottom: 2rem;
 }
 
 .btn {

@@ -14,7 +14,8 @@ import {
   state,
   style,
   animate,
-  transition
+  transition,
+  group
 } from '@angular/animations';
 
 import { ManageService } from './../../manage.service';
@@ -90,27 +91,32 @@ const jobTypeMap = {
       ]),
     ]),
     trigger('slideDown', [
-      state('open', style({
-        display: 'block',
-        opacity: '1'
+      state('up', style({
+        'max-height': '0px',
+        'opacity': '0',
+        // 'visibility': 'hidden'
+        'display': 'none'
       })),
-      state('closed', style({
-        display: 'none',
-        opacity: '0'
+      state('down', style({
+        'max-height': '500px',
+        'opacity': '1',
+        // 'visibility': 'visible'
+        'display': 'block'
       })),
-      transition('open => closed', [
-        animate('2s')
+      transition('down => up', [
+        // style({height: '*'}),
+        animate('300ms')
       ]),
-      transition('closed => open', [
-        animate('2s')
-      ]),
+      transition('up => down', [
+        // style({height: '0px'}),
+        animate('300ms')
+      ])
     ])
   ]
 })
 export class JobtypeComponent implements OnInit, AfterViewInit {
-  jobState:string = 'closed';
-  addJobState:string = 'closed';
   state:string = 'closed';
+  addJobState:string = 'up';
 
   // user information retrieved from the parent component
   @Input() user: User;
@@ -176,9 +182,8 @@ export class JobtypeComponent implements OnInit, AfterViewInit {
     private activatedRoute: ActivatedRoute,
     private change: ChangeDetectorRef
   ) {
-    this.addJobState = 'closed';
-    this.jobState = 'closed';
     this.state = 'closed';
+    this.addJobState = 'up';
     // initialize the observable to watch the jobsArray
     // this.jobsObservable = of(this.jobsArray);
   }
@@ -343,7 +348,8 @@ export class JobtypeComponent implements OnInit, AfterViewInit {
   */
   toggleAddForm() {
     this.displayAddForm = !this.displayAddForm;
-    this.addJobState = (this.addJobState === 'open') ? 'closed' : 'open';
+    this.addJobState = (this.addJobState === 'up') ? 'down' : 'up';
+
     // if the form is already being display, close should reset the values
     if(this.displayAddForm) {
       this.resetAddForm();

@@ -40,3 +40,7 @@ hr {
   line-height: 2.25rem;
   color: red;
 }
+
+.alert {
+  border-radius: 0;
+}

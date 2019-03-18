@@ -15,19 +15,19 @@
     <form [formGroup]="editForm" (ngSubmit)="editFormSubmit()" class="form row">
       <div class="form-group col-6">
         <label class="form-label" for="companyName">Company Name</label>
-        <input id="companyName" type="text" class="form-control" placeholder="{{job.company_name}}" formControlName="companyName"/>
+        <input id="companyName" type="text" class="form-control" placeholder="Company Name" formControlName="companyName"/>
       </div>
       <div class="form-group col-6">
         <label class="form-label" for="jobTitle">Job Title</label>
-        <input id="jobTitle" type="text" class="form-control" placeholder="{{job.job_title}}" formControlName="jobTitle"/>
+        <input id="jobTitle" type="text" class="form-control" placeholder="Job Title" formControlName="jobTitle"/>
       </div>
       <div class="form-group col-12">
         <label class="form-label" for="link">Link</label>
-        <input id="link" type="text" class="form-control" placeholder="{{job.link}}" formControlName="link"/>
+        <input id="link" type="text" class="form-control" placeholder="Link" formControlName="link"/>
       </div>
       <div class="form-group col-12">
         <label class="form-label" for="notes">Notes</label>
-        <input id="notes" type="text-area" class="form-control" placeholder="{{job.notes}}" formControlName="notes"/>
+        <input id="notes" type="text-area" class="form-control" placeholder="Notes" formControlName="notes"/>
       </div>
       <div class="form-group col-12">
         <div class="row">

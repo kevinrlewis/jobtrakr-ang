@@ -8,6 +8,11 @@ a:hover {
   text-decoration: none;
 }
 
+h1 {
+  font-weight: 200;
+  font-size: 400%;
+}
+
 .title {
   color: #FFFFFF;
   text-align: center;
@@ -58,6 +63,7 @@ form > .form-group {
 .home-title {
   color: #FFFFFF;
   margin-top: 2rem;
+  margin-bottom: 2rem;
 }
 
 .btn {

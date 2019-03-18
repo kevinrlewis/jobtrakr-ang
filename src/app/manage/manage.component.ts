@@ -188,7 +188,7 @@ export class ManageComponent implements OnInit, AfterViewInit {
         // testing grid
         // this.show_buttons = false;
         // this.show_grid = true;
-        
+
       }
     });
 
@@ -201,17 +201,22 @@ export class ManageComponent implements OnInit, AfterViewInit {
       httpOptions
     ).subscribe(data => {
       console.log(data);
-      this.user = data.data;
-
-      this.email = data.data.email;
-      this.firstName = data.data.first_name;
-      this.lastName = data.data.last_name;
-
-      // update the profile image src url with a signed s3 url
-      if(this.user.profile_image_file_id === null) {
-        this.signedProfileImageUrl = this.manage.getAttachment(this.defaultProfileImageKey);
+      if(data.data === null) {
+        this.cookieService.delete('SESSIONID', '/');
+        this.router.navigate(['/login']);
       } else {
-        this.signedProfileImageUrl = this.manage.getAttachment(this.user.profile_image_file_id.file_name);
+        this.user = data.data;
+
+        this.email = data.data.email;
+        this.firstName = data.data.first_name;
+        this.lastName = data.data.last_name;
+
+        // update the profile image src url with a signed s3 url
+        if(this.user.profile_image_file_id === null) {
+          this.signedProfileImageUrl = this.manage.getAttachment(this.defaultProfileImageKey);
+        } else {
+          this.signedProfileImageUrl = this.manage.getAttachment(this.user.profile_image_file_id.file_name);
+        }
       }
     });
 

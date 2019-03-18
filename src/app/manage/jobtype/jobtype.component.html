@@ -27,7 +27,7 @@
     <button class="col-auto btn btn-sm btn-outline-info" (click)="toggleSettings()"><fa-icon [icon]="faCog"></fa-icon></button>
   </div>
 </div>
-<div class="row" *ngIf="displayAddForm" [@slideDown]='addJobState'>
+<div class="row">
   <div class="justify-content-center col-12 validation-message" *ngIf="displayMessage">
     <div class="alert alert-danger">
       <li class="" *ngFor="let message of validationMessage">
@@ -35,7 +35,7 @@
       </li>
     </div>
   </div>
-  <div class="col-12 op-area">
+  <div class="col-12 op-area" *ngIf="displayAddForm">
     <div class="row add-jobs">
       <form [formGroup]="addForm" (ngSubmit)="onAddSubmit()" class="" style="width: 100%;">
         <small class="heading">Job</small>

@@ -64,10 +64,10 @@ export class EditComponent implements OnInit {
   ngOnInit() {
     // initialize edit form
     this.editForm = this.fb.group({
-      'companyName': [this.companyName, [Validators.required, Validators.maxLength(128)]],
-      'jobTitle': [this.jobTitle, [Validators.required, Validators.maxLength(64)]],
-      'link': [this.link, [Validators.required, Validators.maxLength(512)]],
-      'notes': [this.notes, [Validators.maxLength(128)]],
+      'companyName': [this.job.company_name, [Validators.required, Validators.maxLength(128)]],
+      'jobTitle': [this.job.job_title, [Validators.required, Validators.maxLength(64)]],
+      'link': [this.job.link, [Validators.required, Validators.maxLength(512)]],
+      'notes': [this.job.notes, [Validators.maxLength(128)]],
       'files': [this.files, []],
       'existingContacts': this.fb.array([]),
       'newContacts': this.fb.array([])

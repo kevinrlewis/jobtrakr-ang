@@ -68,6 +68,9 @@ export class ProfileSettingsComponent implements OnInit {
   lastNameHasChanged = false;
   bioHasChanged = false;
 
+  displayDeleteAccountModal = false;
+  displayDeleteError = false;
+
   constructor(
     private http: HttpClient,
     private fb: FormBuilder,
@@ -109,23 +112,27 @@ export class ProfileSettingsComponent implements OnInit {
     // get user data
     this.manage.getUser(this.user_id).subscribe(data => {
       console.log(data);
-
-      // set this component's user to the data returned
-      this.user = data.data;
-
-      // set check box values
-      this.sharingForm.get('shareOpportunities').setValue(this.user.share_opportunities);
-      this.sharingForm.get('shareApplied').setValue(this.user.share_applied);
-      this.sharingForm.get('shareInterviews').setValue(this.user.share_interviews);
-      this.sharingForm.get('shareOffers').setValue(this.user.share_offers);
-
-      this.sharingForm.get('isPrivate').setValue(this.user.is_private);
-
-      // update the profile image src url with a signed s3 url
-      if(this.user.profile_image_file_id === null) {
-        this.signedProfileImageUrl = this.manage.getAttachment(this.defaultProfileImageKey);
+      if(data.data === null) {
+        this.cookieService.delete('SESSIONID', '/');
+        this.router.navigate(['/login']);
       } else {
-        this.signedProfileImageUrl = this.manage.getAttachment(this.user.profile_image_file_id.file_name);
+        // set this component's user to the data returned
+        this.user = data.data;
+
+        // set check box values
+        this.sharingForm.get('shareOpportunities').setValue(this.user.share_opportunities);
+        this.sharingForm.get('shareApplied').setValue(this.user.share_applied);
+        this.sharingForm.get('shareInterviews').setValue(this.user.share_interviews);
+        this.sharingForm.get('shareOffers').setValue(this.user.share_offers);
+
+        this.sharingForm.get('isPrivate').setValue(this.user.is_private);
+
+        // update the profile image src url with a signed s3 url
+        if(this.user.profile_image_file_id === null) {
+          this.signedProfileImageUrl = this.manage.getAttachment(this.defaultProfileImageKey);
+        } else {
+          this.signedProfileImageUrl = this.manage.getAttachment(this.user.profile_image_file_id.file_name);
+        }
       }
     });
   }
@@ -208,6 +215,30 @@ export class ProfileSettingsComponent implements OnInit {
         console.log(error);
         // handle errors
       });
+  }
+
+  // display the are you sure option
+  deleteAccountClicked() {
+    this.displayDeleteAccountModal = true;
+  }
+
+  // call api to delete account
+  onYesDeleteClick() {
+    console.log('deleting user:', this.user_id);
+    this.manage.deleteUser(this.user_id)
+      .subscribe(data => {
+        console.log(data);
+        this.cookieService.delete('SESSIONID', '/');
+        this.router.navigate(['/login']);
+      }, err => {
+        console.log(err);
+
+      });
+  }
+
+  // revert back to the delete account button
+  onNoDeleteClick() {
+    this.displayDeleteAccountModal = false;
   }
 
   // when the profile image file has changed

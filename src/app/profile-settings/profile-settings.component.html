@@ -1,6 +1,8 @@
 <div class="container">
   <app-headerbar [name]="user.first_name + ' ' + user.last_name" [signedProfileImageUrl]="signedProfileImageUrl" *ngIf="signedProfileImageUrl"></app-headerbar>
-  <br>
+  <div *ngIf="displayDeleteError" class="row sticky-top fixed-top alert alert-danger">
+    <span>Error deleting account, please try again.</span>
+  </div>
   <div class="sharing settings row">
     <div class="col-12 container">
       <div class="row">
@@ -56,7 +58,7 @@
           </div>
         </div>
         <hr style="width: 100%; margin-top: 0;">
-        <div class="col-11 pretty p-smooth p-svg">
+        <div class="col-10 col-md-11 pretty p-smooth p-svg">
           <div class="row">
             <input class="col-12" type="checkbox" formControlName="isPrivate">
             <div class="state p-danger">
@@ -151,5 +153,13 @@
         </div>
       </form>
     </div>
+  </div>
+  <div *ngIf="!displayDeleteAccountModal" class="settings row">
+    <button class="col-12 btn btn-outline-danger" (click)="deleteAccountClicked()">Delete Account</button>
+  </div>
+  <div *ngIf="displayDeleteAccountModal" class="settings row">
+    <span class="col-auto">Are you sure?</span>
+    <button class="col-2 btn btn-outline-danger" (click)="onYesDeleteClick()">Yes</button>
+    <button class="col-2 btn btn-outline-success" (click)="onNoDeleteClick()">No</button>
   </div>
 </div>
