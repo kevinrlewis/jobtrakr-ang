@@ -12,7 +12,7 @@
     <div class="alert alert-danger col-8 col-sm-6 col-lg-4">
       <li class="" *ngFor="let message of errorMessage">
         {{message}}
-        <a href="/" *ngIf="errorLink">({{errorLink}})</a>
+        <a href="" (click)="router.navigateByUrl('/')" *ngIf="errorLink">({{errorLink}})</a>
       </li>
     </div>
   </div>
