@@ -34,7 +34,7 @@
             ]
           },
           "configurations": {
-            "prod": {
+            "production": {
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
@@ -59,7 +59,7 @@
             "browserTarget": "jobtrakr-ang:build"
           },
           "configurations": {
-            "prod": {
+            "production": {
               "browserTarget": "jobtrakr-ang:build:production"
             }
           }
@@ -112,7 +112,7 @@
             "devServerTarget": "jobtrakr-ang:serve"
           },
           "configurations": {
-            "prod": {
+            "production": {
               "devServerTarget": "jobtrakr-ang:serve:production"
             }
           }
