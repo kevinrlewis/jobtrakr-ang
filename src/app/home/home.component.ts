@@ -10,12 +10,10 @@ import { faLayerGroup, faUserTie, faSmileBeam } from '@fortawesome/free-solid-sv
 const httpOptions = {
   headers: new HttpHeaders({
     'Content-Type': 'application/json',
-    // 'Access-Control-Allow-Credentials': 'true'
   }),
-  // withCredentials: true,
-  // credentials: 'include'
 };
 
+// url for the jobtrakr api
 const API_URL = environment.apiUrl;
 
 @Component({
@@ -25,6 +23,7 @@ const API_URL = environment.apiUrl;
 })
 export class HomeComponent implements OnInit {
 
+  // font awesome icons
   faLayerGroup = faLayerGroup;
   faUserTie = faUserTie;
   faSmileBeam = faSmileBeam;
@@ -37,6 +36,7 @@ export class HomeComponent implements OnInit {
   // private signupSubmitted: boolean;
   private submitSuccess: boolean;
 
+  // form variables
   signupForm:FormGroup;
   email:string;
   password:string;
@@ -44,6 +44,7 @@ export class HomeComponent implements OnInit {
   firstname:string;
   lastname:string;
 
+  // error messages
   displayMessage:boolean;
   validationMessage:string[];
 
@@ -54,11 +55,9 @@ export class HomeComponent implements OnInit {
   ) {
 
     router.events.subscribe((val) => {
-      // document.body.style.background = '#393E41';
       document.body.style.background = 'url(\'../../assets/home1.jpg\') no-repeat center center fixed';
       document.body.style.backgroundSize = 'cover';
       document.body.style.height = '100%';
-      // console.log(val instanceof NavigationEnd);
     });
   }
 
@@ -73,14 +72,11 @@ export class HomeComponent implements OnInit {
   }
 
   onSubmit() {
-    // console.log(this.signupForm.value);
-
     // validate form
     var validated = this.validateSignUpForm(this.signupForm);
     console.log(validated);
     // if valid, attempt to signup
     if (validated.status) {
-      // console.log(this.signupForm.get('email').value);
       // attempt to sign up
       this.signUp(this.signupForm.get('email').value, this.signupForm.get('password').value, this.signupForm.get('firstName').value, this.signupForm.get('lastName').value);
     } else {
@@ -89,13 +85,6 @@ export class HomeComponent implements OnInit {
       this.validationMessage = validated.message;
     }
   }
-
-  // listen to the width and height of the screen being resized
-  // @HostListener('window:resize', ['$event'])
-  // onResize(event) {
-  //   this.innerWidth = window.innerWidth;
-  //   this.innerHeight = window.innerHeight;
-  // }
 
   private validateSignUpForm(s:FormGroup) {
     // variables to return
@@ -131,6 +120,7 @@ export class HomeComponent implements OnInit {
     return { status: status, message: messageList };
   }
 
+  // function to call the jobtrakr api to create a new user
   private signUp(email:string, password:string, firstname:string, lastname:string) {
     console.log(API_URL + '/api/signup');
     // call api
@@ -152,6 +142,7 @@ export class HomeComponent implements OnInit {
   }
 }
 
+// interface for the response we expect to get back
 export interface SignUpResponse {
   message: string,
   data: {

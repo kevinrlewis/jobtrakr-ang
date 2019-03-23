@@ -10,17 +10,14 @@ import { Job } from './../../models/job.model';
 import { User } from './../../models/user.model';
 import { File } from './../../models/file.model';
 
-import { faQuestionCircle } from '@fortawesome/free-solid-svg-icons';
+import { faQuestionCircle, faTimes } from '@fortawesome/free-solid-svg-icons';
 
 import { ManageService } from './../manage.service';
 
 const httpOptions = {
   headers: new HttpHeaders({
     'Content-Type': 'application/json',
-    // 'Access-Control-Allow-Credentials': 'true'
   }),
-  // withCredentials: true,
-  // credentials: 'include'
 };
 
 const API_URL = environment.apiUrl;
@@ -34,8 +31,9 @@ const imgPath = './../../assets/.profile_images/default_profile.png';
   styleUrls: ['./profile-settings.component.css']
 })
 export class ProfileSettingsComponent implements OnInit {
-
+  // font awesome variables
   faQuestionCircle = faQuestionCircle;
+  faTimes = faTimes;
 
   // @Input() email: string;
   sharingForm: FormGroup;
@@ -58,9 +56,12 @@ export class ProfileSettingsComponent implements OnInit {
   profileLastNameUpdate = false;
   profileEmailUpdate = false;
   profileBioUpdate = false;
+  displayImageUpdate = false;
 
   // failure alerts
   sharingFailureAlert = false;
+  editProfileFailureAlert = false;
+  displayDeleteError = true;
 
   // watch changes
   emailHasChanged = false;
@@ -69,7 +70,6 @@ export class ProfileSettingsComponent implements OnInit {
   bioHasChanged = false;
 
   displayDeleteAccountModal = false;
-  displayDeleteError = false;
 
   constructor(
     private http: HttpClient,
@@ -79,12 +79,6 @@ export class ProfileSettingsComponent implements OnInit {
     private manage: ManageService
   ) {
     this.user.first_name = this.user.last_name = '';
-    router.events.subscribe((val) => {
-        // document.body.style.background = 'rgb(54, 73, 78, 1)';
-        // document.body.style.background = 'url(\'../../assets/mountains.jpg\') no-repeat center center fixed';
-        // document.body.style.backgroundSize = 'cover';
-        // document.body.style.height = '100%';
-    });
   }
 
   ngOnInit() {
@@ -111,7 +105,7 @@ export class ProfileSettingsComponent implements OnInit {
 
     // get user data
     this.manage.getUser(this.user_id).subscribe(data => {
-      console.log(data);
+      // console.log(data);
       if(data.data === null) {
         this.cookieService.delete('SESSIONID', '/');
         this.router.navigate(['/login']);
@@ -124,7 +118,6 @@ export class ProfileSettingsComponent implements OnInit {
         this.sharingForm.get('shareApplied').setValue(this.user.share_applied);
         this.sharingForm.get('shareInterviews').setValue(this.user.share_interviews);
         this.sharingForm.get('shareOffers').setValue(this.user.share_offers);
-
         this.sharingForm.get('isPrivate').setValue(this.user.is_private);
 
         // update the profile image src url with a signed s3 url
@@ -172,7 +165,7 @@ export class ProfileSettingsComponent implements OnInit {
         // set user to the updated user
         this.user = data.data.update_user_sharing;
       }, error => {
-        console.log(error);
+        // console.log(error);
         // handle errors
         this.sharingFailureAlert = true;
       });
@@ -191,7 +184,7 @@ export class ProfileSettingsComponent implements OnInit {
     // call api to update user profile changes
     this.manage.updateUserProfile(this.user_id, this.editForm.value)
       .subscribe(data => {
-        console.log(data);
+        // console.log(data);
         // reset form
         this.editForm.reset();
 
@@ -212,8 +205,9 @@ export class ProfileSettingsComponent implements OnInit {
         // set user to the updated user returned
         this.user = data.data.update_user_profile;
       }, error => {
-        console.log(error);
+        // console.log(error);
         // handle errors
+        this.editProfileFailureAlert = true;
       });
   }
 
@@ -224,15 +218,15 @@ export class ProfileSettingsComponent implements OnInit {
 
   // call api to delete account
   onYesDeleteClick() {
-    console.log('deleting user:', this.user_id);
+    // console.log('deleting user:', this.user_id);
     this.manage.deleteUser(this.user_id)
       .subscribe(data => {
-        console.log(data);
+        // console.log(data);
         this.cookieService.delete('SESSIONID', '/');
         this.router.navigate(['/login']);
       }, err => {
-        console.log(err);
-
+        // console.log(err);
+        this.displayDeleteError = true;
       });
   }
 
@@ -243,13 +237,14 @@ export class ProfileSettingsComponent implements OnInit {
 
   // when the profile image file has changed
   onFileChange(event) {
-    console.log(event);
+    // console.log(event);
     // save profile image to database and assign the user to it
     this.manage.saveProfileImage(event, this.user_id)
       .subscribe(data => {
-        console.log(data);
+        // console.log(data);
         // update the current profile image src url
         this.signedProfileImageUrl = this.manage.getAttachment(data.file);
+        this.displayImageUpdate = true;
       });
   }
 }

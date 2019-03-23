@@ -12,6 +12,7 @@ export class LoginGuard implements CanActivate {
 
   constructor(public router: Router, private auth: AuthService, private cookieService: CookieService) {}
 
+  // check if a user can reach the page
   canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
     const token = this.cookieService.get('SESSIONID');
 
@@ -20,7 +21,6 @@ export class LoginGuard implements CanActivate {
       this.router.navigate(['manage/' + jwt_decode(token).sub]);
       return false;
     }
-
     return true;
   }
 }

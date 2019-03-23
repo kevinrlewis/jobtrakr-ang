@@ -1,7 +1,27 @@
 <div class="container">
   <app-headerbar [name]="user.first_name + ' ' + user.last_name" [signedProfileImageUrl]="signedProfileImageUrl" *ngIf="signedProfileImageUrl"></app-headerbar>
-  <div *ngIf="displayDeleteError" class="row sticky-top fixed-top alert alert-danger">
-    <span>Error deleting account, please try again.</span>
+  <a *ngIf="displayDeleteError" class="row sticky-top fixed-top alert alert-danger justify-content-between" (click)="displayDeleteError=false">
+    <span class="col-auto">Error deleting account, please try again.</span>
+    <fa-icon class="col-auto" [icon]="faTimes" size="xs"></fa-icon>
+  </a>
+  <div class="settings row">
+    <div class="col-12 container">
+      <div class="row">
+        <h3>Profile Picture</h3>
+      </div>
+      <div class="row" style="margin-top: 1rem;">
+        <div class="form-group col-12">
+          <label class="form-label" for="profileImageInput">
+            <img [src]="signedProfileImageUrl" class="profile-image img-thumbnail rounded-0">
+          </label>
+          <input type="file"
+            class="form-control-file"
+            (change)="onFileChange($event)"
+            id="profileImageInput"/>
+          <span class="updated-alert align-top" *ngIf="displayImageUpdate">Updated!</span>
+        </div>
+      </div>
+    </div>
   </div>
   <div class="sharing settings row">
     <div class="col-12 container">
@@ -74,30 +94,12 @@
           <fa-icon [icon]="faQuestionCircle"> help</fa-icon>
         </span>
         <div class="col-12 submit">
-          <div class="row justify-content-end">
-            <span class="col-8 text-right sharing-failure-alert" *ngIf="sharingFailureAlert">Unable to process your request.</span>
-            <button type="submit" class="col-auto btn btn-outline-success">Save</button>
+          <div class="row justify-content-center">
+            <span class="col-12 col-sm-12 text-center sharing-failure-alert" *ngIf="sharingFailureAlert">Unable to process your request.</span>
+            <button type="submit" class="col-12 col-sm-6 btn btn-outline-success">Save</button>
           </div>
         </div>
       </form>
-    </div>
-  </div>
-  <div class="settings row">
-    <div class="col-12 container">
-      <div class="row">
-        <h3>Profile Picture</h3>
-      </div>
-      <div class="row" style="margin-top: 1rem;">
-        <div class="form-group col-12">
-          <label class="form-label" for="profileImageInput">
-            <img [src]="signedProfileImageUrl" class="profile-image img-thumbnail rounded-0">
-          </label>
-          <input type="file"
-            class="form-control-file"
-            (change)="onFileChange($event)"
-            id="profileImageInput"/>
-        </div>
-      </div>
     </div>
   </div>
   <div class="edit settings row">
@@ -147,17 +149,18 @@
             id="bioInput"></textarea>
         </div>
         <div class="col-12 submit">
-          <div class="row justify-content-end">
-            <button class="col-auto btn btn-outline-success">Save</button>
+          <div class="row justify-content-center">
+            <span class="col-12 col-sm-12 text-center sharing-failure-alert" *ngIf="editProfileFailureAlert">Unable to process your request.</span>
+            <button class="col-12 col-sm-6 btn btn-outline-success">Save</button>
           </div>
         </div>
       </form>
     </div>
   </div>
-  <div *ngIf="!displayDeleteAccountModal" class="settings row">
-    <button class="col-12 btn btn-outline-danger" (click)="deleteAccountClicked()">Delete Account</button>
+  <div *ngIf="!displayDeleteAccountModal" class="settings row justify-content-center">
+    <button class="col-12 col-sm-6 btn btn-outline-danger" (click)="deleteAccountClicked()">Delete Account</button>
   </div>
-  <div *ngIf="displayDeleteAccountModal" class="settings row">
+  <div *ngIf="displayDeleteAccountModal" class="settings row justify-content-center">
     <span class="col-auto">Are you sure?</span>
     <button class="col-2 btn btn-outline-danger" (click)="onYesDeleteClick()">Yes</button>
     <button class="col-2 btn btn-outline-success" (click)="onNoDeleteClick()">No</button>

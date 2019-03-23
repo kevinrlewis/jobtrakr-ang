@@ -82,11 +82,29 @@ hr {
     display: none;
   }
 
-  .container-fluid {
-
-  }
-
-  .container {
-
+  .job {
+    margin: 1rem;
+    background-color: rgba(50, 153, 204, 0.25);
+    -webkit-box-shadow: 4px 4px 0px 0px rgba(0,0,0,0.75);
+    -moz-box-shadow: 4px 4px 0px 0px rgba(0,0,0,0.75);
+    box-shadow: 4px 4px 0px 0px rgba(0,0,0,0.75);
   }
 }
+
+
+/*sm*/
+@media (min-width: 576px) {
+
+}
+
+/*md*/
+@media (min-width: 768px) {
+}
+
+/*lg*/
+@media (min-width: 992px) {
+
+}
+
+/*xlg*/
+@media (min-width: 1200px) { }

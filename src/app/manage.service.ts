@@ -51,7 +51,7 @@ export class ManageService {
       // store one file
       var file = tempFilesArray[i];
 
-      console.log("FILE:", file);
+      // console.log("FILE:", file);
 
       // append form data
       formData.append('files', file);
@@ -63,7 +63,7 @@ export class ManageService {
         formData
       )
         .subscribe(data => {
-          console.log("UPLOAD DATA:", data);
+          // console.log("UPLOAD DATA:", data);
 
           // save the file to be attached to an opportunity
           this.filesArray.push(data.file);
@@ -91,7 +91,7 @@ export class ManageService {
     // store file
     var file = event.target.files[0];
 
-    console.log("FILE:", file);
+    // console.log("FILE:", file);
 
     // append form data
     formData.append('profile_image', file);
@@ -148,7 +148,7 @@ export class ManageService {
       })
     };
 
-    return this.http.post<UpdateJobTypeResponse>(
+    return this.http.post<MessageResponse>(
       API_URL + '/api/' + user_id + '/job/' + jobs_id + '/update/' + job_type_id,
       httpOptions
     )
@@ -220,7 +220,7 @@ export class ManageService {
       })
     };
 
-    return this.http.post<DeleteFileResponse>(
+    return this.http.post<MessageResponse>(
       API_URL + '/api/' + user_id + '/delete/file',
       {
         'file_name': file_name,
@@ -264,7 +264,7 @@ export class ManageService {
     };
 
     // call api
-    return this.http.post<DeleteJobResponse>(
+    return this.http.post<MessageResponse>(
       API_URL + '/api/' + user_id + '/delete/job',
       {
         'jobs_id': jobs_id
@@ -412,24 +412,13 @@ export interface GetJobsResponse {
   data: Job[]
 }
 
-export interface UpdateJobTypeResponse {
-  message: string
-}
-
-export interface DeleteFileResponse {
-  message: string
-}
-
-export interface DeleteJobResponse {
-  message: string
-}
-
 // interface to get an expected response from the api
 // when we call the update job endpoint
 export interface UpdateJobResponse {
   message: string,
   data: Job
 }
+
 
 interface GetUserResponse {
   message: string,

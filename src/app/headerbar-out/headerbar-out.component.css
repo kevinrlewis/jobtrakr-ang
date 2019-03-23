@@ -35,3 +35,11 @@ a {
   font-size: 150%;
   z-index: -1;
 }
+
+/*xs*/
+@media (max-width: 576px) {
+  nav {
+    z-index: 1;
+    background-color: #000000;
+  }
+}

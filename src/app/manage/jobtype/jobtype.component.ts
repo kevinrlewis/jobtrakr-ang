@@ -115,12 +115,13 @@ const jobTypeMap = {
   ]
 })
 export class JobtypeComponent implements OnInit, AfterViewInit {
+  // states that control the animations
   state:string = 'closed';
   addJobState:string = 'up';
 
+  // variables retrieved from parent component
   // user information retrieved from the parent component
   @Input() user: User;
-
   // job type retrieved from the parent component
   @Input() jobType: number;
 
@@ -165,9 +166,11 @@ export class JobtypeComponent implements OnInit, AfterViewInit {
   @Input() displaySettings = false;
   @Input() displayEdit = false;
 
-  // error messages during the add job process
+  // reaction messages
   validationMessage = [];
-  displayMessage: boolean;
+  displayMessage: boolean = false;
+  displayDeleteSuccessMessage: boolean = false;
+  displayDeleteFailureMessage: boolean = false;
 
   // current job to edit
   jobToEdit: Job = null;
@@ -182,10 +185,9 @@ export class JobtypeComponent implements OnInit, AfterViewInit {
     private activatedRoute: ActivatedRoute,
     private change: ChangeDetectorRef
   ) {
+    // intialize animation state variables
     this.state = 'closed';
     this.addJobState = 'up';
-    // initialize the observable to watch the jobsArray
-    // this.jobsObservable = of(this.jobsArray);
   }
 
   ngOnInit() {
@@ -202,7 +204,7 @@ export class JobtypeComponent implements OnInit, AfterViewInit {
       'pocs': this.fb.array([])
     });
 
-
+    // determine the fragment
     this.activatedRoute.fragment.subscribe( fragment => {
       this.jobType = this.jobFragmentsToIdMap[fragment];
       // get all user jobs to display
@@ -210,6 +212,7 @@ export class JobtypeComponent implements OnInit, AfterViewInit {
     });
   }
 
+  // handle changes when page is initialized
   ngAfterViewInit() {
     this.state = 'open';
     this.change.detectChanges();
@@ -240,7 +243,7 @@ export class JobtypeComponent implements OnInit, AfterViewInit {
     retrieve the emit from the child component to close the settings box
   */
   settingsClose(val: boolean) {
-    console.log('parent closing settings...');
+    // console.log('parent closing settings...');
     this.displaySettings = val;
   }
 
@@ -259,7 +262,7 @@ export class JobtypeComponent implements OnInit, AfterViewInit {
       // check if any files are attached
       // if so then create the string to pass to db
       var temp = this.manage.formatFileNamePayload(this.filesArray);
-      console.log('formatFileNamePayload:', temp);
+      // console.log('formatFileNamePayload:', temp);
 
       // create the body to be sent
       var body = this.addForm.value;
@@ -274,7 +277,7 @@ export class JobtypeComponent implements OnInit, AfterViewInit {
         JSON.stringify(body)
       ).pipe(
         map(({ data }) => {
-          console.log(data);
+          // console.log(data);
           return data;
         }),
         switchMap((insert_job) => {
@@ -288,8 +291,8 @@ export class JobtypeComponent implements OnInit, AfterViewInit {
       this.jobsObservable = forkJoin(this.jobsObservable, responseObservable)
         .pipe(
           map(([a1, a2]) => {
-            console.log('a1:', a1);
-            console.log('a2:', a2);
+            // console.log('a1:', a1);
+            // console.log('a2:', a2);
             a1 = (a1 === null) ? [] : a1;
             a2 = (a2 === null) ? [] : a2;
             var tempSet = new Set([...a1, ...a2]);
@@ -306,6 +309,7 @@ export class JobtypeComponent implements OnInit, AfterViewInit {
     }
   }
 
+  // update the observable with the new observable of jobs
   onObservableUpdate(jobs: Observable<Array<Job>>) {
     this.jobsObservable = jobs;
   }
@@ -319,7 +323,7 @@ export class JobtypeComponent implements OnInit, AfterViewInit {
     // save the file with the specific job type
     this.filesArray = this.manage.saveFile(event, 2);
 
-    console.log('onFileChange:', this.filesArray);
+    // console.log('onFileChange:', this.filesArray);s
   }
 
   /*
@@ -439,7 +443,7 @@ export class JobtypeComponent implements OnInit, AfterViewInit {
   */
   onClickEdit(index: number) {
     this.jobsObservable.subscribe(data => {
-      console.log('editting...', index);
+      // console.log('editting...', index);
       this.jobsArray = data;
       this.displayEdit = true;
       this.jobToEdit = this.jobsArray[index];
@@ -450,14 +454,18 @@ export class JobtypeComponent implements OnInit, AfterViewInit {
     when the user clicks the delete button on a specific job
   */
   onClickDelete(job: Job) {
-    console.log('deleting...', job);
+    this.displayDeleteFailureMessage = false;
+    this.displayDeleteSuccessMessage = false;
+    // console.log('deleting...', job);
     // call function in manage service to grab jobs based on job type and user id
     this.manage.deleteJob(job.user_id, job.jobs_id).subscribe(data => {
-      console.log(data);
+      // console.log(data);
+      this.displayDeleteSuccessMessage = true;
     },
     // TODO: display message if there was an error retrieving jobs
     error => {
-      console.log(error);
+      // console.log(error);
+      this.displayDeleteFailureMessage = true;
     });
 
     // filter out deleted value

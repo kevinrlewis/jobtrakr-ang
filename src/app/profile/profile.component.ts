@@ -21,7 +21,6 @@ import { ManageService } from './../manage.service';
   styleUrls: ['./profile.component.css']
 })
 export class ProfileComponent implements OnInit {
-
   userId: number;
   user: User = {} as any;
   defaultProfileImageKey = "default_profile_image.png"
@@ -32,16 +31,16 @@ export class ProfileComponent implements OnInit {
   profileUserId: number;
   profileUser: User = {} as any;
 
+  // observables
   profileUserObservable: Observable<User>;
-
   jobsObservable: Observable<Array<Job>>;
   opportunitiesObservable: Observable<Array<Job>>;
   appliedObservable: Observable<Array<Job>>;
   interviewsObservable: Observable<Array<Job>>;
   offersObservable: Observable<Array<Job>>;
-
   usersObservable: Observable<Array<User>>;
 
+  // id token
   token: string;
 
   // boolean trigger values
@@ -59,9 +58,7 @@ export class ProfileComponent implements OnInit {
 
   ngOnInit() {
     this.token = this.cookieService.get('SESSIONID');
-
     this.userId = jwt_decode(this.token).sub.toString();
-
     this.getCurrentUserData();
 
     this.activatedRoute.params.subscribe(params => {
@@ -93,7 +90,7 @@ export class ProfileComponent implements OnInit {
             return getJobs;
           }),
           switchMap(({ data }) => {
-            console.log(data);
+            // console.log(data);
             return of(data);
           })
         );
@@ -117,7 +114,7 @@ export class ProfileComponent implements OnInit {
   getCurrentUserData() {
     // get user data
     this.manage.getUser(this.userId).subscribe(data => {
-      console.log(data);
+      // console.log(data);
 
       // set this component's user to the data returned
       this.user = data.data;

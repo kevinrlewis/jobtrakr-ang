@@ -32,6 +32,8 @@ export class JobtypeSettingsComponent implements OnInit {
   // what we want to relay the parent component
   @Output() displaySettingsChange = new EventEmitter<boolean>();
   @Output() jobsArrayUpdate = new EventEmitter<Observable<Array<Job>>>();
+
+  // observables
   jobsObservable: Observable<Array<Job>>;
 
   // font awesome icons
@@ -75,6 +77,7 @@ export class JobtypeSettingsComponent implements OnInit {
     }
   }
 
+  // getter to retrieve update form data
   get formData() {
     return (<FormArray>this.updateForm.controls['jobs']);
   }

@@ -60,6 +60,7 @@ export class AuthService {
 
 }
 
+// interface for response that we expect to receive
 interface LoginResponse {
   message: string,
   id: number

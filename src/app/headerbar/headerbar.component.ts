@@ -41,9 +41,7 @@ export class HeaderbarComponent implements OnInit {
     this.userId = jwt_decode(this.token).sub;
   }
 
-  ngOnInit() {
-
-  }
+  ngOnInit() {}
 
   // handle a click when the user wants to go to manage
   manageClick() {
@@ -66,6 +64,7 @@ export class HeaderbarComponent implements OnInit {
     this.router.navigate(['/login']);
   }
 
+  // mobile hamburger menu
   toggleHamburgerMenu() {
     document.getElementById('overlay').style.width = '100%';
     this.displayHamburgerMenu = !this.displayHamburgerMenu;

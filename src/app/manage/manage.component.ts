@@ -30,10 +30,7 @@ import { faQuestionCircle } from '@fortawesome/free-solid-svg-icons';
 const httpOptions = {
   headers: new HttpHeaders({
     'Content-Type': 'application/json',
-    // 'Access-Control-Allow-Credentials': 'true'
   }),
-  // withCredentials: true,
-  // credentials: 'include'
 };
 
 const API_URL = environment.apiUrl;
@@ -80,8 +77,11 @@ const POSSIBLE_JOB_TYPES = ['opportunity', 'applied', 'interview', 'offer'];
   ]
 })
 export class ManageComponent implements OnInit, AfterViewInit {
+  // animation state variables
   state:string = 'closed';
   jobTypeState:string = 'closed';
+
+  // font awesome icones
   faBars = faBars;
   faTh = faTh;
   faQuestionCircle = faQuestionCircle;
@@ -122,7 +122,6 @@ export class ManageComponent implements OnInit, AfterViewInit {
   offerObservable: Observable<Array<Job>>;
   jobsObservable: Observable<Array<Job>>;
 
-  //
   droppedData: string;
 
   // profile image for header
@@ -200,7 +199,7 @@ export class ManageComponent implements OnInit, AfterViewInit {
       API_URL + '/api/user/id/' + this.id,
       httpOptions
     ).subscribe(data => {
-      console.log(data);
+      // console.log(data);
       if(data.data === null) {
         this.cookieService.delete('SESSIONID', '/');
         this.router.navigate(['/login']);
@@ -238,7 +237,7 @@ export class ManageComponent implements OnInit, AfterViewInit {
   }
 
   onJobDrop(event:any): void {
-    console.log(event.nativeEvent);
+    // console.log(event.nativeEvent);
     var old_job_type = 0;
     var new_job_type = "";
 
@@ -279,7 +278,7 @@ export class ManageComponent implements OnInit, AfterViewInit {
   */
   moveJob(job: Job, oldJobTypeId: number, newJobType: string) {
     var oldJobType = this.jobIdToNameMap[oldJobTypeId];
-    console.log("old job type:", oldJobType, "| new job type:", newJobType);
+    // console.log("old job type:", oldJobType, "| new job type:", newJobType);
     try {
       // determine index of the job we are removing from the old array
       var index = this.jobMap[oldJobType].indexOf(job);
@@ -304,7 +303,7 @@ export class ManageComponent implements OnInit, AfterViewInit {
     // call api
     this.manage.updateJobType(job.user_id, job.jobs_id, job.job_type_id)
       .subscribe(data => {
-        console.log(data);
+        // console.log(data);
       });
   }
 
@@ -420,7 +419,7 @@ export class ManageComponent implements OnInit, AfterViewInit {
       // call helper function to reset the job arrays
       this.resetJobsArrays();
 
-      console.log('/api/job/id response', data);
+      // console.log('/api/job/id response', data);
       // store all jobs in array
       this.jobsArray = data.data;
 

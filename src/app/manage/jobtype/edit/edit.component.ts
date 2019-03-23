@@ -26,18 +26,25 @@ import { Contact } from './../../../../models/contact.model';
 })
 export class EditComponent implements OnInit {
 
+  // variables that we receive from the parent component
   @Input() job: Job;
   @Input() displayEdit: boolean;
   @Input() user: User;
   @Input() jobsArray: Job[];
 
+  // variables we relay back to the parent component
   @Output() displayEditChange = new EventEmitter<boolean>();
   @Output() jobsArrayUpdate = new EventEmitter<Observable<Array<Job>>>();
+
+  // observables
   jobsObservable: Observable<Array<Job>>;
+  attachmentsObservable: Observable<Array<any>>;
+  contactsObservable: Observable<Array<any>>;
 
   // font awesome icons
   faFileDownload = faFileDownload;
 
+  // form variables
   editForm: FormGroup;
   existingContacts: FormArray;
   newContacts: FormArray;
@@ -47,9 +54,7 @@ export class EditComponent implements OnInit {
   notes: string;
   files: string;
 
-  attachmentsObservable: Observable<Array<any>>;
-  contactsObservable: Observable<Array<any>>;
-
+  // reaction messages
   displayMessage: boolean;
   validationMessage = [];
 
@@ -83,10 +88,6 @@ export class EditComponent implements OnInit {
     }
   }
 
-  // getExistingContacts():FormArray {
-  //   return <FormArray>this.editForm.get('existingContacts');
-  // }
-
   /*
     create contact form
   */
@@ -108,6 +109,9 @@ export class EditComponent implements OnInit {
     this.existingContacts.push(this.createPoc(name, title, email, phone, notes));
   }
 
+  /*
+    adding another contact, initialization
+  */
   addNewContactForm(): void {
     this.newContacts = this.editForm.get('newContacts') as FormArray;
     this.newContacts.push(this.createPoc());
@@ -211,7 +215,7 @@ export class EditComponent implements OnInit {
         this.job.jobs_id,
         this.editForm.value
       ).subscribe(data => {
-        console.log(data);
+        // console.log(data);
         // set the job to the updated job
         if(this.jobsArray.indexOf(this.job) > -1) {
           // update job within the array
@@ -224,7 +228,7 @@ export class EditComponent implements OnInit {
         // close the edit component
         this.forceClose();
       }, error => {
-        console.log(error);
+        // console.log(error);
         // display error
         if(error.status !== 200) {
           this.validationMessage.push('Error updating job, please retry.');
@@ -240,9 +244,9 @@ export class EditComponent implements OnInit {
     the function calls the api through a function in the manage.service.ts file
   */
   removeAttachment(attachment) {
-    console.log('removing attachment:', attachment);
+    // console.log('removing attachment:', attachment);
     this.manage.deleteFile(this.user.user_id, this.job.jobs_id, attachment.file_name).subscribe(data => {
-      console.log('removeAttachment:', data);
+      // console.log('removeAttachment:', data);
       // if the file was successfully removed from job/db and deleted from s3
       if(data.message === "Success") {
         // remove attachment from array

@@ -29,11 +29,21 @@
 </div>
 <div class="row">
   <div class="justify-content-center col-12 validation-message" *ngIf="displayMessage">
-    <div class="alert alert-danger">
+    <div class="alert alert-danger">false
       <li class="" *ngFor="let message of validationMessage">
         {{message}}
       </li>
     </div>
+  </div>
+  <div class="justify-content-center col-12 detached-alert fixed-bottom">
+    <a class="alert alert-danger row justify-content-between" *ngIf="displayDeleteFailureMessage" (click)="displayDeleteFailureMessage=!displayDeleteFailureMessage">
+      <span class="col-auto">Failed to delete job. Please retry.</span>
+      <fa-icon class="col-auto" [icon]="faTimes" size="xs"></fa-icon>
+    </a>
+    <a class="alert alert-success row justify-content-between" *ngIf="displayDeleteSuccessMessage" (click)="displayDeleteSuccessMessage=!displayDeleteSuccessMessage">
+      <span class="col-auto">Deleted job successfully.</span>
+      <fa-icon class="col-auto" [icon]="faTimes" size="xs"></fa-icon>
+    </a>
   </div>
   <div class="col-12 op-area" *ngIf="displayAddForm">
     <div class="row add-jobs">

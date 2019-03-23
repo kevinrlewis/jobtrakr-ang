@@ -25,8 +25,19 @@
   width: 25px;
 }
 
+.main-profile-image {
+  border: 0;
+}
+
 /*xs*/
 @media (max-width: 576px) {
+  .user {
+    padding: 0.25rem;
+    background-color: rgba(50, 153, 204, 0.25);
+    -webkit-box-shadow: 4px 4px 0px 0px rgba(0,0,0,0.75);
+    -moz-box-shadow: 4px 4px 0px 0px rgba(0,0,0,0.75);
+    box-shadow: 4px 4px 0px 0px rgba(0,0,0,0.75);
+  }
 }
 
 /*sm*/
