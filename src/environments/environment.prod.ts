@@ -1,5 +1,5 @@
 export const environment = {
   production: true,
-  apiUrl: 'localhost:3000',
+  apiUrl: 'https://jobtrak.kevinrlewis.com:3000',
   s3FileBucket: 'jobtrak-prod'
 };
