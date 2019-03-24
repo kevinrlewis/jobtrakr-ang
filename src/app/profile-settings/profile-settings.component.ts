@@ -61,7 +61,7 @@ export class ProfileSettingsComponent implements OnInit {
   // failure alerts
   sharingFailureAlert = false;
   editProfileFailureAlert = false;
-  displayDeleteError = true;
+  displayDeleteError = false;
 
   // watch changes
   emailHasChanged = false;
