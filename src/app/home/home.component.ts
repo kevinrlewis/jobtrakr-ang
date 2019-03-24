@@ -57,6 +57,7 @@ export class HomeComponent implements OnInit {
     router.events.subscribe((val) => {
       document.body.style.background = 'url(\'../../assets/home1.jpg\') no-repeat center center fixed';
       document.body.style.backgroundSize = 'cover';
+      document.body.style.webkitBackgroundSize = 'cover';
       document.body.style.height = '100%';
     });
   }
