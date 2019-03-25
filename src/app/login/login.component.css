@@ -84,6 +84,10 @@ form > .form-group {
     position: relative;
   }
 
+  .home-title {
+    margin: 0;
+  }
+
   .action-area {
     margin-top: 0%;
   }

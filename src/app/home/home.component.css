@@ -82,13 +82,18 @@ form > .form-group {
   }
 
   #logoTitle {
-    font-size: 500%;
+    font-size: 250%;
   }
 
   .logo-title {
     position: fixed;
     bottom: 0%;
     left: 0%;
+  }
+
+  .home-title {
+    margin-top: 0rem;
+    margin-bottom: 0rem;
   }
 
   .action-area {
