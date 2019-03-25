@@ -1,4 +1,4 @@
-import { Component, OnInit, HostListener } from '@angular/core';
+import { Component, OnInit, HostListener, OnDestroy, AfterViewInit } from '@angular/core';
 import { Router, RouterEvent, NavigationEnd } from '@angular/router';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { HttpClient, HttpClientModule, HttpHeaders } from '@angular/common/http';
@@ -21,7 +21,7 @@ const API_URL = environment.apiUrl;
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css']
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
   // font awesome icons
   faLayerGroup = faLayerGroup;
@@ -70,6 +70,14 @@ export class HomeComponent implements OnInit {
       'firstName': [this.firstname, [Validators.required]],
       'lastName': [this.lastname, [Validators.required]]
     });
+  }
+
+  ngAfterViewInit() {
+    document.querySelector('body').classList.add('image-background');
+  }
+
+  ngOnDestroy() {
+    document.querySelector('body').classList.remove('image-background');
   }
 
   onSubmit() {

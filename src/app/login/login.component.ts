@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy, AfterViewInit } from '@angular/core';
 import { Router, RouterEvent, NavigationEnd } from '@angular/router';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
@@ -10,7 +10,7 @@ import { CookieService } from 'ngx-cookie-service';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent implements OnInit, OnDestroy, AfterViewInit {
 
   // login form variables
   loginForm:FormGroup;
@@ -45,6 +45,14 @@ export class LoginComponent implements OnInit {
       'email': [this.email, [Validators.required, Validators.email]],
       'password': [this.password, [Validators.required]],
     });
+  }
+
+  ngAfterViewInit() {
+    document.querySelector('body').classList.add('image-background');
+  }
+
+  ngOnDestroy() {
+    document.querySelector('body').classList.remove('image-background');
   }
 
   onSubmit() {

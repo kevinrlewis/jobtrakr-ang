@@ -91,6 +91,12 @@ hr {
   }
 }
 
+.image-background {
+  background: url('./assets/home1.jpg') no-repeat center center fixed;
+  background-size: cover;
+  height: 100%;
+}
+
 
 /*sm*/
 @media (min-width: 576px) {
