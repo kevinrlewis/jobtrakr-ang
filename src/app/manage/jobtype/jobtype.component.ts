@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, HostListener, AfterViewInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, Input, HostListener, AfterViewInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { CookieService } from 'ngx-cookie-service';
 import * as jwt_decode from "jwt-decode";
 import { Router, RouterEvent, NavigationEnd, ActivatedRoute } from '@angular/router';
@@ -114,7 +114,7 @@ const jobTypeMap = {
     ])
   ]
 })
-export class JobtypeComponent implements OnInit, AfterViewInit {
+export class JobtypeComponent implements OnInit, AfterViewInit, OnDestroy {
   // states that control the animations
   state:string = 'closed';
   addJobState:string = 'up';
@@ -216,6 +216,11 @@ export class JobtypeComponent implements OnInit, AfterViewInit {
   ngAfterViewInit() {
     this.state = 'open';
     this.change.detectChanges();
+    document.querySelector('body').classList.add('white-background');
+  }
+
+  ngOnDestroy() {
+    document.querySelector('body').classList.remove('white-background');
   }
 
   /*

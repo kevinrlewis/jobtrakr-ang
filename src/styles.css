@@ -97,6 +97,10 @@ hr {
   height: 100%;
 }
 
+.white-background {
+  background: rgba(255, 255, 255, 1);
+}
+
 
 /*sm*/
 @media (min-width: 576px) {
