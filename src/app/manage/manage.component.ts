@@ -143,8 +143,9 @@ export class ManageComponent implements OnInit, AfterViewInit {
     this.id = this.email = this.firstName = this.lastName = "";
 
     router.events.subscribe((val) => {
-        document.body.style.background = 'rgb(255, 255, 255, 1)';
-        // document.body.style.webkitBackground = 'rgb(255, 255, 255, 1)';
+        let element = document.getElementsByClassName("background") as HTMLCollectionOf<HTMLElement>;
+        element[0].style.background = 'rgb(255, 255, 255, 1)';
+        // document.body.style.background = 'rgb(255, 255, 255, 1)';
     });
 
     // initialize the observables
