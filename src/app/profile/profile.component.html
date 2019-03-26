@@ -1,3 +1,4 @@
+<title>{{(profileUserObservable | async)?.first_name}} {{(profileUserObservable | async)?.last_name}} | JobTrakMe</title>
 <div class="container">
   <app-headerbar [name]="user.first_name + ' ' + user.last_name" [signedProfileImageUrl]="userSignedProfileImageUrl" *ngIf="userSignedProfileImageUrl"></app-headerbar>
   <br>

@@ -5,7 +5,7 @@ import { Router, RouterEvent, NavigationEnd, ActivatedRoute } from '@angular/rou
 import { FormGroup, FormBuilder, Validators, FormControl, FormArray } from '@angular/forms';
 import { HttpClient, HttpClientModule, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
-import { from, of, forkJoin, combineLatest } from 'rxjs';
+import { from, of, forkJoin, combineLatest, empty } from 'rxjs';
 import { filter, map, merge, switchMap, pairwise, catchError,
   concat, mergeAll, combineAll, zip, concatAll, share, shareReplay,
   toArray } from 'rxjs/operators';
@@ -275,7 +275,7 @@ export class JobtypeComponent implements OnInit, AfterViewInit, OnDestroy {
       body.userId = this.user.user_id;
       body.files = temp;
 
-      console.log(JSON.stringify(body));
+      // console.log(JSON.stringify(body));
       // get the response of add a new job
       // convert the returned job to an array to merge
       var responseObservable = this.manage.addJob(

@@ -1,3 +1,4 @@
+<title>Settings | JobTrakMe</title>
 <div class="container">
   <app-headerbar [name]="user.first_name + ' ' + user.last_name" [signedProfileImageUrl]="signedProfileImageUrl" *ngIf="signedProfileImageUrl"></app-headerbar>
   <a *ngIf="displayDeleteError" class="row sticky-top fixed-top alert alert-danger justify-content-between" (click)="displayDeleteError=false">

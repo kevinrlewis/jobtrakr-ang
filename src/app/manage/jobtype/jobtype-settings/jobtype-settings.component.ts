@@ -107,7 +107,7 @@ export class JobtypeSettingsComponent implements OnInit {
       for(var i = len - 1; i >= 0; i--) {
         // if job should be removed then remove it
         if(selectedJobs.includes(this.jobsArray[i].jobs_id)) {
-          console.log('removing:', i, ' job:', this.jobsArray[i]);
+          // console.log('removing:', i, ' job:', this.jobsArray[i]);
           this.jobsArray.splice(i, 1);
         }
       }
@@ -118,7 +118,7 @@ export class JobtypeSettingsComponent implements OnInit {
       // close settings
       this.forceClose();
     }, error => {
-      console.log(error);
+      // console.log(error);
       // display error
       this.message = 'Error bulk updating jobs, please retry.';
       this.displayMessage = true;
