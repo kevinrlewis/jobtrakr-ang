@@ -59,6 +59,23 @@ hr {
   margin-bottom: 0;
 }
 
+.move:hover {
+  color: var(--success)!important;
+}
+
+input[type="file"] {
+  display: none;
+}
+
+.form-label {
+  border-radius: 2px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, .6);
+}
+
+.form-label:hover {
+  cursor: pointer
+}
+
 /*xs*/
 @media (max-width: 576px) {
   .description {
@@ -67,6 +84,26 @@ hr {
 
   .dropdown > button {
     width: 100%;
+  }
+
+  .move {
+    box-shadow: 0 1px 4px rgba(0, 0, 0, .6);
+    border-radius: 2px;
+    background-color: #6c757d;
+    color: #FFFFFF!important;
+    margin-bottom: 0.5rem;
+  }
+
+  .edit {
+    box-shadow: 0 1px 4px rgba(0, 0, 0, .6);
+    border-radius: 2px;
+    background-color: #ffc107;
+  }
+
+  .remove {
+    box-shadow: 0 1px 4px rgba(0, 0, 0, .6);
+    border-radius: 2px;
+    background-color: #dc3545;
   }
 }
 

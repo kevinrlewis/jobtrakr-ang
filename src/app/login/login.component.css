@@ -1,6 +1,10 @@
 ::placeholder {
-  color: #FFFFFF;
+  /* color: #FFFFFF; */
   opacity: 0.65;
+}
+
+.paper-card {
+  padding: 3rem!important;
 }
 
 a:hover {
@@ -14,7 +18,7 @@ h1 {
 }
 
 .title {
-  color: #FFFFFF;
+  /* color: #FFFFFF; */
   text-align: center;
   transform: translateY(-50%);
   font-size: 300%;
@@ -30,7 +34,7 @@ h1 {
 }
 
 .logo-title {
-  color: #FFFFFF;
+  /* color: #FFFFFF; */
   font-family: 'adamas-regular';
   /* transform: translateY(22%); */
   margin-top: 10%;
@@ -43,16 +47,16 @@ h1 {
 
 .form-control {
   border: 0;
-  border-bottom: 1px solid #FFFFFF;
+  border-bottom: 1px solid #000000;
   border-radius: 0;
   background-color: transparent;
-  color: #FFFFFF;
+  color: #000000;
   margin-top: 1rem;
   margin-bottom: 1rem;
 }
 
 .form-control:focus {
-  box-shadow: -0.2rem 0 0 0 rgba(0,255,0,.25)
+  box-shadow: -0.2rem 0 0 0 rgba(0,0,0,.25)
 }
 
 form > .form-group {
@@ -61,7 +65,7 @@ form > .form-group {
 }
 
 .home-title {
-  color: #FFFFFF;
+  /* color: #FFFFFF; */
   margin-top: 2rem;
   margin-bottom: 2rem;
 }

@@ -12,7 +12,7 @@
 }
 
 .other-user:hover {
-  background-color: rgba(50, 153, 204, 0.25);
+  /* background-color: rgba(50, 153, 204, 0.25); */
 }
 
 .btn-sm {
@@ -34,9 +34,9 @@
   .user {
     padding: 0.25rem;
     background-color: rgba(50, 153, 204, 0.25);
-    -webkit-box-shadow: 4px 4px 0px 0px rgba(0,0,0,0.75);
+    /* -webkit-box-shadow: 4px 4px 0px 0px rgba(0,0,0,0.75);
     -moz-box-shadow: 4px 4px 0px 0px rgba(0,0,0,0.75);
-    box-shadow: 4px 4px 0px 0px rgba(0,0,0,0.75);
+    box-shadow: 4px 4px 0px 0px rgba(0,0,0,0.75); */
   }
 }
 

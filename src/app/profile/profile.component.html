@@ -24,7 +24,7 @@
     <div class="row" *ngIf="profileUser && !profileUser.is_private && profileUser.share_opportunities === 1">
       <h4 class="col-12 job-header">Opportunities</h4>
       <div class="col-12 container">
-        <div class="row job" *ngFor="let job of opportunitiesObservable | async">
+        <div class="row job paper-card" *ngFor="let job of opportunitiesObservable | async">
           <span class="col-8">{{job.company_name}}
             <small> {{job.job_title}}</small>
           </span>
@@ -37,7 +37,7 @@
     <div class="row" *ngIf="profileUser && !profileUser.is_private && profileUser.share_applied === 1">
       <h4 class="col-12 job-header">Applied</h4>
       <div class="col-12 container">
-        <div class="row job" *ngFor="let job of appliedObservable | async">
+        <div class="row job paper-card" *ngFor="let job of appliedObservable | async">
           <span class="col-8">{{job.company_name}}
             <small> {{job.job_title}}</small>
           </span>
@@ -50,7 +50,7 @@
     <div class="row" *ngIf="profileUser && !profileUser.is_private && profileUser.share_interviews === 1">
       <h4 class="col-12 job-header">Interviews</h4>
       <div class="col-12 container">
-        <div class="row job" *ngFor="let job of interviewsObservable | async">
+        <div class="row job paper-card" *ngFor="let job of interviewsObservable | async">
           <span class="col-8">{{job.company_name}}
             <small> {{job.job_title}}</small>
           </span>
@@ -63,7 +63,7 @@
     <div class="row" *ngIf="profileUser && !profileUser.is_private && profileUser.share_offers === 1">
       <h4 class="col-12 job-header">Offers</h4>
       <div class="col-12 container">
-        <div class="row job" *ngFor="let job of offersObservable | async">
+        <div class="row job paper-card" *ngFor="let job of offersObservable | async">
           <span class="col-8">{{job.company_name}}
             <small> {{job.job_title}}</small>
           </span>
@@ -80,7 +80,7 @@
       <h3>Other users:</h3>
     </div>
     <div class="d-inline-flex other-user" *ngFor="let user of usersObservable | async">
-      <a class="user" (click)="userClick(user.user_id)">
+      <a class="user paper-card" (click)="userClick(user.user_id)">
         <span class="" style="padding-right: 0.5rem;">
           <img [src]="manage.getAttachment(user.profile_image_file_id === null ? null : user.profile_image_file_id.file_name)" class="profile-image rounded-0">
         </span>

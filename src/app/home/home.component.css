@@ -1,10 +1,14 @@
 ::placeholder {
-  color: #FFFFFF;
+  /* color: #FFFFFF; */
   opacity: 0.65;
 }
 
+.paper-card {
+  padding: 3rem!important;
+}
+
 .about-link {
-  color: #FFFFFF!important;
+  /* color: #FFFFFF!important; */
   margin-top: 1rem;
   font-size: 150%;
 }
@@ -29,7 +33,7 @@ hr {
 }
 
 .logo-title {
-  color: #FFFFFF;
+  /* color: #FFFFFF; */
   font-family: 'adamas-regular';
   /* transform: translateY(22%); */
   margin-top: 10%;
@@ -48,17 +52,16 @@ hr {
 
 .form-control {
   border: 0;
-  border-bottom: 1px solid #FFFFFF;
+  border-bottom: 1px solid;
   border-radius: 0;
   background-color: transparent;
-  color: #FFFFFF;
+  /* color: #FFFFFF; */
   margin-top: 0.5rem;
   margin-bottom: 0.5rem;
 }
 
 .form-control:focus {
-  box-shadow: -0.2rem 0 0 0 rgba(0,255,0,.25)
-
+  box-shadow: -0.2rem 0 0 0 rgba(0,0,0,.25);
 }
 
 form > .form-group {
@@ -67,7 +70,7 @@ form > .form-group {
 }
 
 .home-title {
-  color: #FFFFFF;
+  /* color: #FFFFFF; */
   margin-top: 2rem;
   margin-bottom: 2rem;
 }

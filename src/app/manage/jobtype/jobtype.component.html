@@ -69,7 +69,7 @@
         <hr>
         <div>
           <small class="heading">Contacts</small>
-          <a class="btn btn-sm btn-success" style="line-height: 0.75; margin: 0.25rem; margin-left: 0.5rem; color: #FFFFFF;" (click)="addPocForm()">+ Add Contact</a>
+          <a class="btn btn-sm btn-success" style="border-radius: 2px; box-shadow: 0 1px 4px rgba(0, 0, 0, .6); line-height: 0.75; margin: 0.25rem; margin-left: 0.5rem; color: #FFFFFF;" (click)="addPocForm()">+ Add Contact</a>
         </div>
         <div class="row poc-area" style="margin-left: 0; margin-right: 0;">
           <div class="col-12" formArrayName="pocs" *ngFor="let poc of addForm.get('pocs').controls; let i = index;">
@@ -96,7 +96,9 @@
         <hr>
         <small class="heading">Attachments</small>
         <div class="form-group col-12">
-          <label class="form-label" for="jobAttachments"></label>
+          <label class="form-label btn-sm btn-warning" for="jobAttachments">
+            <fa-icon [icon]="faCloudUploadAlt" style="padding-right: 0.4rem;"></fa-icon>Upload Attachment
+          </label>
           <input type="file"
             formControlName="files"
             class="form-control-file"
@@ -115,7 +117,7 @@
 </div>
 <div class="row" *ngFor="let job of jobsObservable | async; let i = index;">
   <div class="container job-container">
-    <div class="row job" (click)="job.more = !job.more">
+    <div class="row job paper-card" (click)="job.more = !job.more">
       <h4 class="col-8">{{job.company_name}}
         <small> {{job.job_title}}</small>
       </h4>
@@ -139,24 +141,39 @@
         <div class="row">
           <div class="col-12">Contacts:
             <div *ngFor="let contact of job.contacts" class="row contact">
-              <span class="col-auto">{{contact.name}}</span>
-              <span class="col-auto">{{contact.job_title}}</span>
+              <span class="col-6 col-sm-2">{{contact.name}}</span>
+              <span class="col-6 col-sm-2">{{contact.job_title}}</span>
+              <span class="col-12 col-sm-2">{{contact.email}}</span>
+              <span class="col-12 col-sm-2">{{contact.phone_number}}</span>
+              <span class="col-12 col-sm-2">{{contact.notes}}</span>
+              <hr>
             </div>
           </div>
         </div>
         <div class="row justify-content-end">
-          <a class="remove col-auto" (click)="onClickDelete(job)">
+          <a class="move col-12 col-sm-auto text-center" *ngIf="jobType === 2" (click)="onClickMove(1, job.jobs_id)">
+            Move To Opportunities
+          </a>
+          <a class="move col-12 col-sm-auto text-center" *ngIf="jobType === 1 || jobType === 3" (click)="onClickMove(2, job.jobs_id)">
+            Move To Applied
+          </a>
+          <a class="move col-12 col-sm-auto text-center" *ngIf="jobType === 2 || jobType === 4" (click)="onClickMove(3, job.jobs_id)">
+            Move To Interviews
+          </a>
+          <a class="move col-12 col-sm-auto text-center" *ngIf="jobType === 3" (click)="onClickMove(4, job.jobs_id)">
+            Move To Offers
+          </a>
+          <a class="remove col-4 col-sm-auto text-center" (click)="onClickDelete(job)">
             <fa-icon [icon]="faTimes" size="s"></fa-icon>
             Delete
           </a>
-          <a class="edit col-auto" (click)="onClickEdit(i)">
+          <a class="edit col-4 offset-4 offset-sm-0 col-sm-auto text-center" (click)="onClickEdit(i)">
             <fa-icon [icon]="faEdit" size="s"></fa-icon>
             Edit
           </a>
         </div>
       </div>
     </div>
-    <hr>
   </div>
 </div>
 <br>

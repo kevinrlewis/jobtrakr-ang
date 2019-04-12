@@ -7,8 +7,12 @@ nav {
   align-self: baseline;
 }
 
+.navbar-light a {
+  color: #000000;
+}
+
 .navbar-brand {
-  color: #FFFFFF;
+  /* color: #FFFFFF; */
   font-family: 'adamas-regular';
   font-size: 250%;
   padding: 0;
@@ -19,12 +23,12 @@ nav {
 }
 
 a:hover {
-  color: #FFFFFF;
+  color: #000000;
   text-decoration: none;
 }
 
 a {
-  color: #FFFFFF;
+  color: #000000;
 }
 
 .abs {
@@ -40,6 +44,6 @@ a {
 @media (max-width: 576px) {
   nav {
     z-index: 1;
-    background-color: #000000;
+    /* background-color: #000000; */
   }
 }

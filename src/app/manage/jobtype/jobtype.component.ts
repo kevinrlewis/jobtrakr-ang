@@ -31,7 +31,10 @@ import {
   faEdit,
   faCog,
   faFileDownload,
-  faPlus
+  faPlus,
+  faAngleLeft,
+  faAngleRight,
+  faCloudUploadAlt
 } from '@fortawesome/free-solid-svg-icons';
 
 const httpOptions = {
@@ -41,6 +44,9 @@ const httpOptions = {
 };
 
 const jobTypeArr = ['opportunities', 'applied', 'interviews', 'offers'];
+const jobTypeActionArr = ['opportunity', 'applied', 'interviews', 'offers'];
+const jobIdMap = { 'opportunity': 1, 'applied': 2, 'interview': 3, 'offer': 4 };
+const jobIdToNameMap = { 1: 'opportunity', 2: 'applied', 3: 'interview', 4: 'offer' };
 
 /*
   modify titles and descriptions here or add dynamic fields
@@ -50,22 +56,26 @@ const jobTypeMap = {
   1: {
     job_type_name: 'opportunity',
     title: 'Opportunities',
-    description: 'Store jobs that you wish to apply to or plan to apply to here.'
+    description: 'Store jobs that you wish to apply to or plan to apply to here.',
+    button_desc: "I've Found An Opportunity"
   },
   2: {
     job_type_name: 'applied',
     title: 'Applied',
-    description: 'Once you have applied to a job, move the applied job here or add it.'
+    description: 'Once you have applied to a job, move the applied job here or add it.',
+    button_desc: "I've Applied"
   },
   3: {
     job_type_name: 'interview',
     title: 'Interviews',
-    description: 'As you start interviewing for jobs, add or move them here to track your progression.'
+    description: 'As you start interviewing for jobs, add or move them here to track your progression.',
+    button_desc: "I'm Interviewing"
   },
   4: {
     job_type_name: 'offer',
     title: 'Offers',
-    description: 'Once you have received some form of offer, add or move the job here.'
+    description: 'Once you have received some form of offer, add or move the job here.',
+    button_desc: "I've Received An Offer"
   }
 };
 
@@ -141,6 +151,9 @@ export class JobtypeComponent implements OnInit, AfterViewInit, OnDestroy {
   faCog = faCog;
   faFileDownload = faFileDownload;
   faPlus = faPlus;
+  faAngleLeft = faAngleLeft;
+  faAngleRight = faAngleRight;
+  faCloudUploadAlt = faCloudUploadAlt;
 
   // form variables
   addForm: FormGroup;
@@ -477,6 +490,21 @@ export class JobtypeComponent implements OnInit, AfterViewInit, OnDestroy {
     this.jobsObservable = this.jobsObservable.pipe(
       map(jobs => { return jobs.filter(j => j.jobs_id !== job.jobs_id); })
     );
+  }
+
+  /*
+    function to move a job to a different job type without using the manage grid
+  */
+  onClickMove(desiredJobType: number, jobsId: number) {
+    console.log(this.user);
+    this.manage.updateJobType(this.user.user_id, jobsId, desiredJobType)
+      .subscribe(data => {
+        console.log(data);
+        // filter out the moved value
+        this.jobsObservable = this.jobsObservable.pipe(
+          map(jobs => { return jobs.filter(j => j.jobs_id !== jobsId); })
+        );
+      });
   }
 
 }

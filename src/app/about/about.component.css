@@ -1,18 +1,5 @@
-.svg-rect {
-  fill: white;
-}
-
-/* .svg-rect-mask {
-  fill: white;
-} */
-
-.svg-back {
-  position: fixed;
-  z-index: 0;
-}
-
 .content {
-  color: #FFFFFF!important;
+  /* color: #FFFFFF!important; */
   top: 5%;
   position: fixed;
 }

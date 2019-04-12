@@ -20,7 +20,7 @@ export class AboutComponent implements OnInit {
     private cookieService: CookieService
   ) {
     router.events.subscribe((val) => {
-        document.body.style.background = 'url(\'../../assets/home1.jpg\') no-repeat center center fixed';
+        // document.body.style.background = 'url(\'../../assets/home1.jpg\') no-repeat center center fixed';
         document.body.style.backgroundSize = 'cover';
         document.body.style.height = '100%';
     });
