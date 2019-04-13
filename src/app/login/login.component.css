@@ -81,6 +81,7 @@ form > .form-group {
 
   #logoTitle {
     font-size: 800%;
+    display: none;
   }
 
   .logo-title {
