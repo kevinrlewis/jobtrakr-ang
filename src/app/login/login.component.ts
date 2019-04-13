@@ -56,8 +56,8 @@ export class LoginComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   focus(event) {
-    console.log(event);
     event.srcElement.focus();
+    event.srcElement.scrollIntoView();
   }
 
   onSubmit() {
