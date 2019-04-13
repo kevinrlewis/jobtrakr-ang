@@ -38,10 +38,10 @@
   <div class="row action-area justify-content-center">
     <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="col-12 col-sm-10">
       <div class="form-group">
-        <input id="emailInput" type="email" class="form-control" placeholder="E-mail" formControlName="email" autofocus>
+        <input id="emailInput" type="email" class="form-control" placeholder="E-mail" formControlName="email" autofocus (click)="focus($event)">
       </div>
       <div class="form-group">
-        <input id="passwordInput" type="password" class="form-control" placeholder="Password" formControlName="password">
+        <input id="passwordInput" type="password" class="form-control" placeholder="Password" formControlName="password" (click)="focus($event)">
       </div>
       <button type="submit" class="btn btn-outline-dark col-12" style="margin-top: 1rem;">Submit</button>
     </form>

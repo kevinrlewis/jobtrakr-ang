@@ -55,6 +55,11 @@ export class LoginComponent implements OnInit, OnDestroy, AfterViewInit {
     document.querySelector('body').classList.remove('image-background');
   }
 
+  focus(event) {
+    console.log(event);
+    event.srcElement.focus();
+  }
+
   onSubmit() {
     // validate form
     var validated = this.validateLoginForm(this.loginForm);
