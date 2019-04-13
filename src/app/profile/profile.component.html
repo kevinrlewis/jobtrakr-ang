@@ -63,7 +63,7 @@
     <div class="row" *ngIf="profileUser && !profileUser.is_private && profileUser.share_offers === 1">
       <h4 class="col-12 job-header">Offers</h4>
       <div class="col-12 container">
-        <div class="row job paper-card" *ngFor="let job of offersObservable | async">
+        <div class="row job paper-card" style="cursor: default!important;" *ngFor="let job of offersObservable | async">
           <span class="col-8">{{job.company_name}}
             <small> {{job.job_title}}</small>
           </span>

@@ -192,7 +192,7 @@ export class ManageService {
   /*
     get a signed url from aws for a specific key in S3
   */
-  getAttachment(key):any {
+  getAttachment(key, name):any {
     // initialize s3 with credentials
     var s3 = new AWS.S3(cred);
 
@@ -201,7 +201,8 @@ export class ManageService {
     var params = {
       Bucket: environment.s3FileBucket,
       Expires: 60*60,
-      Key: key
+      Key: key,
+      ResponseContentDisposition: 'attachment; filename=' + name
     };
 
     // call the s3 method to get the signed url

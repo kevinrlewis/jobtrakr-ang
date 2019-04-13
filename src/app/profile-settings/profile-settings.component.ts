@@ -122,9 +122,9 @@ export class ProfileSettingsComponent implements OnInit {
 
         // update the profile image src url with a signed s3 url
         if(this.user.profile_image_file_id === null) {
-          this.signedProfileImageUrl = this.manage.getAttachment(this.defaultProfileImageKey);
+          this.signedProfileImageUrl = this.manage.getAttachment(this.defaultProfileImageKey, this.defaultProfileImageKey);
         } else {
-          this.signedProfileImageUrl = this.manage.getAttachment(this.user.profile_image_file_id.file_name);
+          this.signedProfileImageUrl = this.manage.getAttachment(this.user.profile_image_file_id.file_name, this.user.profile_image_file_id.original_name);
         }
       }
     });
@@ -241,9 +241,8 @@ export class ProfileSettingsComponent implements OnInit {
     // save profile image to database and assign the user to it
     this.manage.saveProfileImage(event, this.user_id)
       .subscribe(data => {
-        // console.log(data);
         // update the current profile image src url
-        this.signedProfileImageUrl = this.manage.getAttachment(data.file);
+        this.signedProfileImageUrl = this.manage.getAttachment(data.file, data.file);
         this.displayImageUpdate = true;
       });
   }

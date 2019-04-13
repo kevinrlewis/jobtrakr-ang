@@ -35,7 +35,7 @@
       <div class="container-fluid col-12 home-buttons">
         <form [formGroup]="signupForm" (ngSubmit)="onSubmit()">
           <div class="form-group row">
-            <input id="email" type="text" class="form-control" placeholder="E-mail" formControlName="email">
+            <input id="email" type="text" class="form-control" placeholder="E-mail" formControlName="email" autofocus>
           </div>
           <div class="form-group row">
             <input id="passwordInput" type="password" class="form-control" placeholder="Password" formControlName="password">

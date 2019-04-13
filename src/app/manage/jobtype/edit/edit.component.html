@@ -95,7 +95,7 @@
           id="jobAttachments"
           multiple/>
         <div class="row attachment" *ngFor="let attachment of attachmentsObservable | async">
-          <a class="col-8 mr-auto attachment" (click)="getFile(attachment.file_path)">{{attachment.original_name}}
+          <a class="col-8 mr-auto attachment" (click)="getFile(attachment.file_path, attachment.original_name)">{{attachment.original_name}}
             <fa-icon [icon]="faFileDownload" size="xs"></fa-icon>
           </a>
           <a class="col-auto btn btn-danger" (click)="removeAttachment(attachment)">Remove</a>

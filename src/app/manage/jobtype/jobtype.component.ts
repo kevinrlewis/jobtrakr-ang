@@ -444,13 +444,13 @@ export class JobtypeComponent implements OnInit, AfterViewInit, OnDestroy {
   /*
     get a file from s3 to download
   */
-  getFile(file_path) {
+  getFile(file_path, original_name) {
     // get path of the url
     var l = document.createElement("a");
     l.href = file_path;
 
     // get the pre signed url by passing the url without the initial slash
-    var url = this.manage.getAttachment(l.pathname.substring(1));
+    var url = this.manage.getAttachment(l.pathname.substring(1), original_name);
 
     // open file in new tab (should download it)
     window.open(url);

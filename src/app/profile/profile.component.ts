@@ -73,9 +73,9 @@ export class ProfileComponent implements OnInit {
 
           // update the profile image src url with a signed s3 url
           if(this.profileUser.profile_image_file_id === null) {
-            this.userLookupSignedProfileImageUrl = this.manage.getAttachment(this.defaultProfileImageKey);
+            this.userLookupSignedProfileImageUrl = this.manage.getAttachment(this.defaultProfileImageKey, this.defaultProfileImageKey);
           } else {
-            this.userLookupSignedProfileImageUrl = this.manage.getAttachment(this.profileUser.profile_image_file_id.file_name);
+            this.userLookupSignedProfileImageUrl = this.manage.getAttachment(this.profileUser.profile_image_file_id.file_name, this.profileUser.profile_image_file_id.original_name);
           }
 
           return this.profileUser;
@@ -121,9 +121,9 @@ export class ProfileComponent implements OnInit {
 
       // update the profile image src url with a signed s3 url
       if(this.user.profile_image_file_id === null) {
-        this.userSignedProfileImageUrl = this.manage.getAttachment(this.defaultProfileImageKey);
+        this.userSignedProfileImageUrl = this.manage.getAttachment(this.defaultProfileImageKey, this.defaultProfileImageKey);
       } else {
-        this.userSignedProfileImageUrl = this.manage.getAttachment(this.user.profile_image_file_id.file_name);
+        this.userSignedProfileImageUrl = this.manage.getAttachment(this.user.profile_image_file_id.file_name, this.user.profile_image_file_id.original_name);
       }
     });
   }

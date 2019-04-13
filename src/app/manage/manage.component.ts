@@ -214,9 +214,9 @@ export class ManageComponent implements OnInit, AfterViewInit {
 
         // update the profile image src url with a signed s3 url
         if(this.user.profile_image_file_id === null) {
-          this.signedProfileImageUrl = this.manage.getAttachment(this.defaultProfileImageKey);
+          this.signedProfileImageUrl = this.manage.getAttachment(this.defaultProfileImageKey, this.defaultProfileImageKey);
         } else {
-          this.signedProfileImageUrl = this.manage.getAttachment(this.user.profile_image_file_id.file_name);
+          this.signedProfileImageUrl = this.manage.getAttachment(this.user.profile_image_file_id.file_name, this.user.profile_image_file_id.original_name);
         }
       }
     });
