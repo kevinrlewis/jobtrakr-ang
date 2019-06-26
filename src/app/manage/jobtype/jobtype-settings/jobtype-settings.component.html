@@ -15,7 +15,7 @@
     <div class="row header">
       <p class="col-12">Remove Jobs:</p>
     </div>
-    <form [formGroup]="updateForm" (ngSubmit)="updateFormSubmit()" class="row">
+    <form [formGroup]="updateForm" (ngSubmit)="updateFormSubmit()" *ngIf="jobsArray !== null" class="row">
       <div class="col-11 pretty p-smooth p-svg" formArrayName="jobs" *ngFor="let job of formData.controls; let i = index">
         <div class="row">
           <input class="col-12" type="checkbox" [formControlName]="i">

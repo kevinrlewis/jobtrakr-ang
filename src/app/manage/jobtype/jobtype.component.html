@@ -18,11 +18,14 @@
       {{jobTypeMap[jobType].title}}
     </button>
     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-      <a class="dropdown-item" *ngFor="let jobtype of jobTypeArr" href="manage/{{user.user_id}}#{{jobtype}}">{{jobtype}}</a>
+      <a class="dropdown-item" *ngFor="let jobtype of jobTypeArr" href="manage/{{user.user_id}}#{{jobtype}}">
+        {{jobtype}}
+        <span class="badge badge-secondary">{{jobTypeCounts[jobType]}}</span>
+      </a>
     </div>
   </div>
   <div class="action-buttons col-12 col-sm-auto text-right">
-    <button class="col-auto btn btn-sm btn-outline-success" style="margin-right: 0.15rem;" (click)="toggleAddForm()">
+    <button *ngIf="jobType !== 5" class="col-auto btn btn-sm btn-outline-success" style="margin-right: 0.15rem;" (click)="toggleAddForm()">
       <fa-icon class="add-btn-icon" [icon]="faPlus"></fa-icon>
     </button>
     <button class="col-auto btn btn-sm btn-outline-info" (click)="toggleSettings()"><fa-icon [icon]="faCog"></fa-icon></button>
@@ -151,6 +154,9 @@
           </div>
         </div>
         <div class="row justify-content-end">
+          <a class="remove col-12 col-sm-auto text-center" (click)="onClickMove(5, job.jobs_id)">
+            Archive
+          </a>
           <a class="move col-12 col-sm-auto text-center" *ngIf="jobType === 2" (click)="onClickMove(1, job.jobs_id)">
             Move To Opportunities
           </a>

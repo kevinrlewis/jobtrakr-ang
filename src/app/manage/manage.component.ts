@@ -35,7 +35,7 @@ const httpOptions = {
 
 const API_URL = environment.apiUrl;
 
-const POSSIBLE_JOB_TYPES = ['opportunity', 'applied', 'interview', 'offer'];
+const POSSIBLE_JOB_TYPES = ['opportunity', 'applied', 'interview', 'offer', 'archive'];
 
 @Component({
   selector: 'app-manage',
@@ -100,6 +100,7 @@ export class ManageComponent implements OnInit, AfterViewInit {
   applied_active: boolean;
   interviews_active: boolean;
   offers_active: boolean;
+  archive_active: boolean;
   show_buttons: boolean;
   show_grid: boolean;
 
@@ -109,11 +110,13 @@ export class ManageComponent implements OnInit, AfterViewInit {
   appliedArray: Job[] = [];
   interviewArray: Job[] = [];
   offerArray: Job[] = [];
+  archiveArray: Job[] = [];
 
   // constant maps
-  jobMap = { 'opportunity': this.opportunitiesArray, 'applied': this.appliedArray, 'interview': this.interviewArray, 'offer': this.offerArray };
-  jobIdMap = { 'opportunity': 1, 'applied': 2, 'interview': 3, 'offer': 4 };
-  jobIdToNameMap = { 1: 'opportunity', 2: 'applied', 3: 'interview', 4: 'offer' };
+  jobTypeCounts = { };
+  jobMap = { 'opportunity': this.opportunitiesArray, 'applied': this.appliedArray, 'interview': this.interviewArray, 'offer': this.offerArray, 'archive': this.archiveArray };
+  jobIdMap = { 'opportunity': 1, 'applied': 2, 'interview': 3, 'offer': 4, 'archive': 5 };
+  jobIdToNameMap = { 1: 'opportunity', 2: 'applied', 3: 'interview', 4: 'offer', 5: 'archive' };
 
   // observables for the job arrays
   opportunitiesObservable: Observable<Array<Job>>;
@@ -121,6 +124,7 @@ export class ManageComponent implements OnInit, AfterViewInit {
   interviewObservable: Observable<Array<Job>>;
   offerObservable: Observable<Array<Job>>;
   jobsObservable: Observable<Array<Job>>;
+  archiveObservable: Observable<Array<Job>>;
 
   droppedData: string;
 
@@ -153,6 +157,7 @@ export class ManageComponent implements OnInit, AfterViewInit {
     this.appliedObservable = of(this.jobMap['applied']);
     this.interviewObservable = of(this.jobMap['interview']);
     this.offerObservable = of(this.jobMap['offer']);
+    this.archiveObservable = of(this.jobMap['archive']);
     this.jobsObservable = of(this.jobsArray);
   }
 
@@ -178,6 +183,9 @@ export class ManageComponent implements OnInit, AfterViewInit {
       } else if (frag === 'offers') {
         // this.offers_active = true;
         this.job_type_view = 4;
+      // if archive then display archive component
+      } else if (frag === 'archive') {
+        this.job_type_view = 5;
       // otherwise set initial variables and show the buttons
       } else {
         this.job_type_view = 0;
@@ -223,7 +231,6 @@ export class ManageComponent implements OnInit, AfterViewInit {
 
     // call the helper function to refresh the jobs within the grid
     this.refreshJobs();
-
   }
 
   ngAfterViewInit() {
@@ -235,7 +242,7 @@ export class ManageComponent implements OnInit, AfterViewInit {
     set initial variables
   */
   setInitVariables() {
-    this.opportunities_active = this.applied_active = this.interviews_active = this.offers_active = false;
+    this.opportunities_active = this.applied_active = this.interviews_active = this.offers_active = this.archive_active = false;
   }
 
   onJobDrop(event:any): void {
@@ -255,6 +262,7 @@ export class ManageComponent implements OnInit, AfterViewInit {
     path.forEach(function(el:HTMLDivElement) {
       // set undefined values to an empty string
       let temp_id = (el.id === undefined) ? "" : el.id;
+
       // check if the div contains the id we are looking for
       if(temp_id !== "" && temp_id.substring(temp_id.length - 8) === "DropArea") {
         // retrieve desired element attribute values
@@ -318,15 +326,33 @@ export class ManageComponent implements OnInit, AfterViewInit {
 
     // store length of array
     var length_arr = POSSIBLE_JOB_TYPES.length;
+    var reconstruct_arr = [];
 
+    // length of temp
+    var temp_length = temp.length;
+    // iterate both the temp array and possible job types
+    // to then determine and reconstruct what job types
+    // are in the DropScope
+    for(var i = 0; i < temp_length; i++) {
+      for(var j = 0; j < length_arr; j++) {
+        if(POSSIBLE_JOB_TYPES[j].includes(temp[i])) {
+          reconstruct_arr.push(POSSIBLE_JOB_TYPES[j]);
+        }
+      }
+    }
+
+    // length of reconstructed array
+    var reconstruct_arr_len = reconstruct_arr.length;
     // iterate possible job types
     for(var i = 0; i < length_arr; i++) {
       // if the string does not contain one of the POSSIBLE_JOB_TYPES
       // then return that type
-      if(!temp.includes(POSSIBLE_JOB_TYPES[i])) {
+      if(!reconstruct_arr.includes(POSSIBLE_JOB_TYPES[i])) {
         return POSSIBLE_JOB_TYPES[i];
       }
     }
+    // reset array
+    reconstruct_arr = [];
   }
 
   /*
@@ -373,6 +399,17 @@ export class ManageComponent implements OnInit, AfterViewInit {
     // this.offers_active = !this.offers_active;
     this.show_buttons = false;
     this.router.navigate([this.router.url], { fragment: 'offers' });
+    this.jobTypeState = 'open';
+    this.change.detectChanges();
+  }
+
+  /*
+    when the archive button is clicked
+    display the archive component
+  */
+  toggleArchiveActive() {
+    this.show_buttons = false;
+    this.router.navigate([this.router.url], { fragment: 'archive' });
     this.jobTypeState = 'open';
     this.change.detectChanges();
   }
@@ -463,6 +500,7 @@ export class ManageComponent implements OnInit, AfterViewInit {
     this.appliedObservable = of(this.jobMap['applied']);
     this.interviewObservable = of(this.jobMap['interview']);
     this.offerObservable = of(this.jobMap['offer']);
+    this.archiveObservable = of(this.jobMap['archive']);
   }
 }
 

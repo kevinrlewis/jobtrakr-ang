@@ -43,10 +43,10 @@ const httpOptions = {
   })
 };
 
-const jobTypeArr = ['opportunities', 'applied', 'interviews', 'offers'];
-const jobTypeActionArr = ['opportunity', 'applied', 'interviews', 'offers'];
-const jobIdMap = { 'opportunity': 1, 'applied': 2, 'interview': 3, 'offer': 4 };
-const jobIdToNameMap = { 1: 'opportunity', 2: 'applied', 3: 'interview', 4: 'offer' };
+const jobTypeArr = ['opportunities', 'applied', 'interviews', 'offers', 'archive'];
+const jobTypeActionArr = ['opportunity', 'applied', 'interviews', 'offers', 'archive'];
+const jobIdMap = { 'opportunity': 1, 'applied': 2, 'interview': 3, 'offer': 4, 'archive': 5 };
+const jobIdToNameMap = { 1: 'opportunity', 2: 'applied', 3: 'interview', 4: 'offer', 5: 'archive' };
 
 /*
   modify titles and descriptions here or add dynamic fields
@@ -76,6 +76,12 @@ const jobTypeMap = {
     title: 'Offers',
     description: 'Once you have received some form of offer, add or move the job here.',
     button_desc: "I've Received An Offer"
+  },
+  5: {
+    job_type_name: 'archive',
+    title: 'Archived',
+    description: 'This is where the jobs you have archived or no longer need to track go.',
+    button_desc: "I'm Archived"
   }
 };
 
@@ -134,12 +140,14 @@ export class JobtypeComponent implements OnInit, AfterViewInit, OnDestroy {
   @Input() user: User;
   // job type retrieved from the parent component
   @Input() jobType: number;
+  // variable for job type counts
+  @Input() jobTypeCounts: [];
 
   // initialize the jobTypeMap constant as part of this component
   jobTypeMap = jobTypeMap;
-  jobFragmentsToIdMap = { 'opportunities': 1, 'applied': 2, 'interviews': 3, 'offers': 4 };
-  jobNameToIdMap = { 'opportunity': 1, 'applied': 2, 'interview': 3, 'offer': 4 };
-  jobIdToNameMap = { 1: 'opportunity', 2: 'applied', 3: 'interview', 4: 'offer' };
+  jobFragmentsToIdMap = { 'opportunities': 1, 'applied': 2, 'interviews': 3, 'offers': 4, 'archive': 5 };
+  jobNameToIdMap = { 'opportunity': 1, 'applied': 2, 'interview': 3, 'offer': 4, 'archive': 5 };
+  jobIdToNameMap = { 1: 'opportunity', 2: 'applied', 3: 'interview', 4: 'offer', 5: 'archive' };
 
   jobTypeArr = jobTypeArr;
 

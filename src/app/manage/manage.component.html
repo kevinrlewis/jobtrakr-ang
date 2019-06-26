@@ -7,7 +7,7 @@
     </h5>
     <button class="btn btn-outline-danger offset-6 col-2">Logout</button>
   </div> -->
-  <app-jobtype *ngIf="user && job_type_view != 0" [user]="user" [jobType]="job_type_view"></app-jobtype>
+  <app-jobtype *ngIf="user && job_type_view != 0" [user]="user" [jobType]="job_type_view" [jobTypeCounts]="jobTypeCounts"></app-jobtype>
   <div class="options row justify-content-end" *ngIf="!isSubComponentActive()">
     <a class="col-auto text-right" (click)="selectButtons()"><fa-icon [icon]="faBars" size="lg"></fa-icon></a>
     <a class="col-auto text-left" (click)="selectGrid()"><fa-icon [icon]="faTh" size="lg"></fa-icon></a>
@@ -33,26 +33,31 @@
         <span id="offersSpan">Offers</span>
       </button>
     </div>
+    <div class="row archive-section-button">
+      <button class="btn col-12" (click)="toggleArchiveActive()">
+        <span id="archiveSpan">Archive</span>
+      </button>
+    </div>
   </div>
 </div>
 <div class="container-fluid grid-view" *ngIf="!isSubComponentActive() && show_grid">
   <div class="row header text-center">
-    <span class="col-3" id="opportunitiesSpanHeader"><a (click)="toggleOpportunitiesActive()">Opportunities</a></span>
-    <span class="col-3" id="appliedSpanHeader"><a (click)="toggleAppliedActive()">Applied</a></span>
-    <span class="col-3" id="interviewsSpanHeader"><a (click)="toggleInterviewsActive()">Interviews</a></span>
-    <span class="col-3" id="offersSpanHeader"><a (click)="toggleOffersActive()">Offers</a></span>
+    <a class="col-3" id="opportunitiesSpanHeader" (click)="toggleOpportunitiesActive()">Opportunities</a>
+    <a class="col-3" id="appliedSpanHeader" (click)="toggleAppliedActive()">Applied</a>
+    <a class="col-3" id="interviewsSpanHeader" (click)="toggleInterviewsActive()">Interviews</a>
+    <a class="col-3" id="offersSpanHeader" (click)="toggleOffersActive()">Offers</a>
   </div>
   <!-- <p>{{droppedData}}</p> -->
   <div class="row grid-items">
     <div id="opportunityDropArea" class="col-3"
       droppable
-      [dropScope]="['applied', 'interview', 'offer']"
+      [dropScope]="['appl', 'inter', 'off', 'archive']"
       [dragOverClass]="'drop-over-active-opportunities'"
       (onDrop)="onJobDrop($event)">
       <div class="row shadow-lg" *ngFor="let opp of opportunitiesObservable | async"
         draggable
         [dragClass]="'drag-over-active'"
-        [dragScope]="'opportunity'"
+        [dragScope]="'opp'"
         [dragData]="opp">
       <!-- <div class="row shadow-lg" *ngFor="let opp of opportunitiesArray" draggable [dragScope]="'opportunity'" [dragData]="opp"> -->
         <h5 class="col-12">{{opp.company_name}}</h5>
@@ -62,14 +67,14 @@
     </div>
     <div id="appliedDropArea" class="col-3"
       droppable
-      [dropScope]="['opportunity', 'interview', 'offer']"
+      [dropScope]="['opp', 'inter', 'off', 'archive']"
       [dragOverClass]="'drop-over-active-applied'"
       (onDrop)="onJobDrop($event)">
       <!-- <div class="row shadow-lg" *ngFor="let app of appliedArray" draggable [dragScope]="'applied'" [dragData]="app"> -->
       <div class="row shadow-lg" *ngFor="let app of appliedObservable | async"
         draggable
         [dragClass]="'drag-over-active'"
-        [dragScope]="'applied'"
+        [dragScope]="'appl'"
         [dragData]="app">
         <h5 class="col-12">{{app.company_name}}</h5>
         <p class="col-12">{{app.job_title}}</p>
@@ -78,14 +83,14 @@
     </div>
     <div id="interviewDropArea" class="col-3"
       droppable
-      [dropScope]="['applied', 'opportunity', 'offer']"
+      [dropScope]="['appl', 'opp', 'off', 'archive']"
       [dragOverClass]="'drop-over-active-interviews'"
       (onDrop)="onJobDrop($event)">
       <!-- <div class="row shadow-lg" *ngFor="let inter of interviewArray" draggable [dragClass]="'drag-over-active'" [dragScope]="'interview'" [dragData]="inter"> -->
       <div class="row shadow-lg" *ngFor="let inter of interviewObservable | async"
         draggable
         [dragClass]="'drag-over-active'"
-        [dragScope]="'interview'"
+        [dragScope]="'inter'"
         [dragData]="inter">
         <h5 class="col-12">{{inter.company_name}}</h5>
         <p class="col-12">{{inter.job_title}}</p>
@@ -94,18 +99,69 @@
     </div>
     <div id="offerDropArea" class="col-3"
       droppable
-      [dropScope]="['applied', 'interview', 'opportunity']"
+      [dropScope]="['appl', 'inter', 'opp', 'archive']"
       [dragOverClass]="'drop-over-active-offers'"
       (onDrop)="onJobDrop($event)">
       <!-- <div class="row shadow-lg" *ngFor="let off of offerArray" draggable [dragScope]="'offer'" [dragData]="off"> -->
       <div class="row shadow-lg" *ngFor="let off of offerObservable | async"
         draggable
         [dragClass]="'drag-over-active'"
-        [dragScope]="'offer'"
+        [dragScope]="'off'"
         [dragData]="off">
         <h5 class="col-12">{{off.company_name}}</h5>
         <p class="col-12">{{off.job_title}}</p>
         <small class="col-12 text-right">{{off.create_datetime | date:'MM/dd/yy'}}</small>
+      </div>
+    </div>
+  </div>
+  <br>
+  <div class="row footer text-center">
+    <a class="col-12" id="archiveSpanFooter" (click)="toggleArchiveActive()">Archived</a>
+  </div>
+  <div class="row">
+    <div id="archiveDropArea" class="col-12"
+      droppable
+      [dropScope]="['appl','inter','off','opp']"
+      [dragOverClass]="'drop-over-active-archive'"
+      (onDrop)="onJobDrop($event)">
+      <div class="row job shadow-lg" *ngFor="let job of archiveObservable | async"
+        draggable
+        [dragClass]="'drag-over-active'"
+        [dragScope]="'archive'"
+        [dragData]="job">
+        <h4 class="col-8">{{job.company_name}}
+          <small> {{job.job_title}}</small>
+        </h4>
+        <small class="col-4 text-right">{{job.create_datetime | date:'MMMM d, y h:mm a'}}</small>
+        <div class="more col-12">
+          <div class="row">
+            <a href="{{job.link}}" target="_blank" class="col-auto">Job posting</a>
+          </div>
+          <div class="row">
+            <p class="col-12">Notes: {{job.notes}}</p>
+          </div>
+          <div class="row">
+            <div class="col-12">Attachments:
+              <div *ngFor="let attachment of job.attachments">
+                <a class="col-auto attachment" (click)="getFile(attachment.file_path, attachment.original_name)">{{attachment.original_name}}
+                  <fa-icon [icon]="faFileDownload" size="xs"></fa-icon>
+                </a>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-12">Contacts:
+              <div *ngFor="let contact of job.contacts" class="row contact">
+                <span class="col-6 col-sm-2">{{contact.name}}</span>
+                <span class="col-6 col-sm-2">{{contact.job_title}}</span>
+                <span class="col-12 col-sm-2">{{contact.email}}</span>
+                <span class="col-12 col-sm-2">{{contact.phone_number}}</span>
+                <span class="col-12 col-sm-2">{{contact.notes}}</span>
+                <hr>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
