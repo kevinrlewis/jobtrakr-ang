@@ -1,29 +1,18 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CookieService } from 'ngx-cookie-service';
 import * as jwt_decode from "jwt-decode";
-import { Router, RouterEvent, NavigationEnd } from '@angular/router';
-import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
-import { HttpClient, HttpClientModule, HttpHeaders } from '@angular/common/http';
+import { Router } from '@angular/router';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 
-import { Job } from './../../models/job.model';
 import { User } from './../../models/user.model';
-import { File } from './../../models/file.model';
 
 import { faQuestionCircle, faTimes } from '@fortawesome/free-solid-svg-icons';
 
 import { ManageService } from './../manage.service';
 
-const httpOptions = {
-  headers: new HttpHeaders({
-    'Content-Type': 'application/json',
-  }),
-};
-
-const API_URL = environment.apiUrl;
-
 // const imgPath = './../../../.profile_images/default_profile.png';
-const imgPath = './../../assets/.profile_images/default_profile.png';
 
 @Component({
   selector: 'app-profile',
@@ -84,7 +73,7 @@ export class ProfileSettingsComponent implements OnInit {
   ngOnInit() {
     this.token = this.cookieService.get('SESSIONID');
     // console.log("cookies: ", this.cookieService.getAll());
-    this.user_id = jwt_decode(this.token).sub.toString();
+    this.user_id = jwt_decode(this.token)['sub'].toString();
 
     // set values retrieved from user
     this.sharingForm = this.fb.group({

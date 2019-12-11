@@ -1,17 +1,15 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CookieService } from 'ngx-cookie-service';
-import * as jwt_decode from "jwt-decode";
-import { Router, RouterEvent, NavigationEnd, ActivatedRoute } from '@angular/router';
-import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
-import { HttpClient, HttpClientModule, HttpHeaders } from '@angular/common/http';
-import { environment } from '../../environments/environment';
+import * as jwt_decode from 'jwt-decode';
+import { Router, ActivatedRoute } from '@angular/router';
+import { FormBuilder} from '@angular/forms';
+import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
-import { from, of, forkJoin, empty } from 'rxjs';
-import { filter, map, take, switchMap, flatMap, share } from 'rxjs/operators';
+import { of, empty } from 'rxjs';
+import { map, switchMap  } from 'rxjs/operators';
 
 import { Job } from './../../models/job.model';
 import { User } from './../../models/user.model';
-import { File } from './../../models/file.model';
 
 import { ManageService } from './../manage.service';
 
@@ -58,7 +56,7 @@ export class ProfileComponent implements OnInit {
 
   ngOnInit() {
     this.token = this.cookieService.get('SESSIONID');
-    this.userId = jwt_decode(this.token).sub.toString();
+    this.userId = jwt_decode(this.token)['sub'].toString();
     this.getCurrentUserData();
 
     this.activatedRoute.params.subscribe(params => {

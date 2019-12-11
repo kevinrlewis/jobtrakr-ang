@@ -1,12 +1,10 @@
-import { Component, OnInit, Input, AfterViewInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ChangeDetectorRef } from '@angular/core';
 import { CookieService } from 'ngx-cookie-service';
-import * as jwt_decode from "jwt-decode";
-import { Router, RouterEvent, NavigationEnd, ActivatedRoute } from '@angular/router';
-import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
-import { HttpClient, HttpClientModule, HttpHeaders } from '@angular/common/http';
+import * as jwt_decode from 'jwt-decode';
+import { Router, ActivatedRoute } from '@angular/router';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 import { from, of } from 'rxjs';
-import { filter, map } from 'rxjs/operators'
 import { environment } from '../../environments/environment';
 import {
   trigger,
@@ -202,7 +200,7 @@ export class ManageComponent implements OnInit, AfterViewInit {
     });
 
     // get id from token
-    this.id = jwt_decode(this.token).sub.toString();
+    this.id = jwt_decode(this.token)['sub'].toString();
 
     // get user information
     this.http.get<GetUserResponse>(
@@ -427,7 +425,7 @@ export class ManageComponent implements OnInit, AfterViewInit {
     when the settings button tab is clicked
   */
   settingsClicked() {
-    this.router.navigate(['profile/' + jwt_decode(this.token).sub]);
+    this.router.navigate(['profile/' + jwt_decode(this.token)['sub']]);
   }
 
   /*

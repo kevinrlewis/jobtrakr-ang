@@ -24,8 +24,8 @@ export class AuthGuard implements CanActivate {
 
     // if the path does not equal the json web token then
     // redirect to the correct profile
-    if(next.url[1].path !== jwt_decode(token).sub) {
-      this.router.navigate(['manage/' + jwt_decode(token).sub]);
+    if(next.url[1].path !== jwt_decode(token)['sub']) {
+      this.router.navigate(['manage/' + jwt_decode(token)['sub']]);
       return false;
     }
     return true;

@@ -1,12 +1,7 @@
-import { Component, OnInit, Input, HostListener, EventEmitter, Output } from '@angular/core';
-import { CookieService } from 'ngx-cookie-service';
-import * as jwt_decode from "jwt-decode";
-import { Router, RouterEvent, NavigationEnd, ActivatedRoute } from '@angular/router';
-import { FormGroup, FormBuilder, Validators, FormControl, FormArray } from '@angular/forms';
-import { HttpClient, HttpClientModule, HttpHeaders } from '@angular/common/http';
+import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
+import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
 import { Observable } from 'rxjs/Observable';
-import { from, of } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
+import { of } from 'rxjs';
 
 // icons
 import {

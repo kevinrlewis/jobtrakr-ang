@@ -1,12 +1,7 @@
-import { Component, OnInit, Input, HostListener, EventEmitter, Output } from '@angular/core';
-import { CookieService } from 'ngx-cookie-service';
-import * as jwt_decode from "jwt-decode";
-import { Router, RouterEvent, NavigationEnd, ActivatedRoute } from '@angular/router';
-import { FormGroup, FormBuilder, Validators, FormControl, FormArray } from '@angular/forms';
-import { HttpClient, HttpClientModule, HttpHeaders } from '@angular/common/http';
+import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
+import { FormGroup, FormBuilder, FormControl, FormArray } from '@angular/forms';
 import { Observable } from 'rxjs/Observable';
-import { from, of, empty } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
+import { of } from 'rxjs';
 
 // icons
 import {
@@ -45,6 +40,9 @@ export class JobtypeSettingsComponent implements OnInit {
   // boolean to control displaying an error message
   displayMessage: boolean;
   message: string;
+
+  // boolean to hold the value of the all checkbox
+  isAllChecked: boolean = false;
 
   constructor(
     private fb: FormBuilder,
@@ -89,13 +87,23 @@ export class JobtypeSettingsComponent implements OnInit {
     this.displaySettingsChange.emit(false);
   }
 
+  allClick(e) {
+    this.isAllChecked = e.target.checked;
+  }
+
   /*
     function called when the updateForm has been submitted
   */
   updateFormSubmit() {
-    const selectedJobs = this.updateForm.value.jobs
-      .map((v, i) => v ? this.jobsArray[i].jobs_id : null)
-      .filter(v => v !== null);
+    var selectedJobs;
+    if(this.isAllChecked) {
+      selectedJobs = this.updateForm.value.jobs
+        .map((v, i) => this.jobsArray[i].jobs_id);
+    } else {
+      selectedJobs = this.updateForm.value.jobs
+        .map((v, i) => v ? this.jobsArray[i].jobs_id : null)
+        .filter(v => v !== null);
+    }
 
     // delete jobs by calling the api
     this.manage.deleteJobs(

@@ -1,21 +1,18 @@
-import { Component, OnInit, Input, HostListener, AfterViewInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, Input, AfterViewInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { CookieService } from 'ngx-cookie-service';
-import * as jwt_decode from "jwt-decode";
-import { Router, RouterEvent, NavigationEnd, ActivatedRoute } from '@angular/router';
-import { FormGroup, FormBuilder, Validators, FormControl, FormArray } from '@angular/forms';
-import { HttpClient, HttpClientModule, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
+import * as jwt_decode from 'jwt-decode';
+import { Router, ActivatedRoute } from '@angular/router';
+import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
-import { from, of, forkJoin, combineLatest, empty } from 'rxjs';
-import { filter, map, merge, switchMap, pairwise, catchError,
-  concat, mergeAll, combineAll, zip, concatAll, share, shareReplay,
-  toArray } from 'rxjs/operators';
+import { of, forkJoin } from 'rxjs';
+import { map, switchMap, shareReplay } from 'rxjs/operators';
 import {
   trigger,
   state,
   style,
   animate,
-  transition,
-  group
+  transition
 } from '@angular/animations';
 
 import { ManageService } from './../../manage.service';
@@ -360,8 +357,19 @@ export class JobtypeComponent implements OnInit, AfterViewInit, OnDestroy {
     // call api to get jobs, filter by job type
     this.jobsObservable = this.manage.getJobs(this.user.user_id)
       .pipe(
-        map(({ data }) => { return data;}),
-        map(jobs => (jobs != null) ? jobs.filter(job => job.job_type_id === this.jobType) : null)
+        map(({ data }) => {
+          return data;
+        }),
+        map(jobs => {
+          if(jobs != null) {
+          let sortedJobs = jobs.sort(function(a,b) {
+                return new Date(b.create_datetime).getTime() - new Date(a.create_datetime).getTime();
+            });
+            return sortedJobs.filter(job => job.job_type_id === this.jobType);
+          } else {
+            return null;
+          }
+        })
       );
   }
 
@@ -369,7 +377,7 @@ export class JobtypeComponent implements OnInit, AfterViewInit, OnDestroy {
     when the user clicks the x button, navigate back to the manage component
   */
   close() {
-    this.router.navigate(['manage/' + jwt_decode(this.token).sub]);
+    this.router.navigate(['manage/' + jwt_decode(this.token)['sub']]);
     this.resetAddForm();
   }
 

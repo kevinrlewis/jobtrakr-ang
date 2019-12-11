@@ -1,8 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpClientModule, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs/Observable';
-import { from, of } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../environments/environment';
 
 import { Job } from './../models/job.model';
@@ -33,12 +30,6 @@ export class ManageService {
     // reset filesArray
     this.filesArray = [];
 
-    // set content type
-    var httpOptions = {
-      headers: new HttpHeaders({
-        'Content-Type': 'multipart/form-data'
-      }),
-    };
 
     // retrieve files being uploaded
     var tempFilesArray = event.target.files;
@@ -78,12 +69,6 @@ export class ManageService {
     function to call api to upload a profile image and attach it to a user
   */
   saveProfileImage(event, user_id:number) {
-    // set content type
-    var httpOptions = {
-      headers: new HttpHeaders({
-        'Content-Type': 'multipart/form-data'
-      }),
-    };
 
     // set form data for the post request
     let formData: FormData = new FormData();
