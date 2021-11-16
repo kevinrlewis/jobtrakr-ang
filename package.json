@@ -35,7 +35,7 @@
     "angular-jwt": "^0.1.11",
     "aws-amplify": "^1.2.4",
     "aws-amplify-angular": "^4.1.1",
-    "aws-sdk": "^2.587.0",
+    "aws-sdk": "^2.814.0",
     "bootstrap": "^4.4.1",
     "core-js": "^3.4.8",
     "eslint": "^6.7.2",
